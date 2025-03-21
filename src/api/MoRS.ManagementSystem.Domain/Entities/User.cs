@@ -3,7 +3,7 @@ namespace MoRS.ManagementSystem.Domain.Entities;
 public class User
 {
     public int Id { get; set; }
-    
+
     public required string Name { get; set; }
     public required string Surname { get; set; }
     public required string Email { get; set; }
@@ -17,11 +17,11 @@ public class User
     public Role Role { get; set; } = null!;
 
     public ICollection<Announcement> Announcements { get; } = [];
-    public ICollection<Appointment> Appointments { get; } = [];
+    public ICollection<Appointment> CreatedAppointments { get; } = [];
     public ICollection<MalfunctionReport> MalfunctionReports { get; } = [];
     public ICollection<Notification> Notifications { get; } = [];
-    public ICollection<Payment> Payments { get;} = [];
-    public List<UserAppointment> UserAppointments { get; } = [];
-    public List<UserEmail> UserEmails { get;} = [];
-    
+    public ICollection<Payment> Payments { get; } = [];
+    public List<Appointment> AttendingAppointments { get; } = [];
+    public List<Email> Emails { get; } = [];
+
 }
