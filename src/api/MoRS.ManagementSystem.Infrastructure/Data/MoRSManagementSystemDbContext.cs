@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MoRS.ManagementSystem.Domain.Entities;
+using MoRS.ManagementSystem.Domain.Entities.Enums;
 
 namespace MoRS.ManagementSystem.Infrastructure.Data;
 
@@ -19,5 +20,38 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Time> Times { get; set; }
     public DbSet<User> Users { get; set; }
-    
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.BookedByUser)
+            .WithMany(u => u.CreatedAppointments)
+            .HasForeignKey(a => a.BookedByUserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.AttendingAppointments)
+            .WithMany(a => a.Attendees)
+            .UsingEntity(j => j.ToTable("UserAppointments"));
+
+        modelBuilder.Entity<Email>()
+            .HasMany(e => e.Users)
+            .WithMany(u => u.Emails)
+            .UsingEntity(j => j.ToTable("UserEmails"));
+
+        modelBuilder.Entity<MembershipFee>()
+            .Property(mf => mf.MembershipType)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Notification>()
+           .Property(n => n.Type)
+           .HasConversion<string>();
+
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.Property(p => p.PaymentMethod).HasConversion<string>();
+            entity.Property(p => p.Status).HasConversion<string>();
+        });
+    }
 }
