@@ -1,9 +1,10 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MoRS.ManagementSystem.Domain.Entities;
 
 public class UserAppointment
 {
-    [Key]
-    public int Id { get; set; }
+    public int? UserId { get; set; }
+    public int? AppointmentId { get; set; }
+    
+    public User? User { get; set; }
+    public Appointment? Appointment { get; set; }
 }

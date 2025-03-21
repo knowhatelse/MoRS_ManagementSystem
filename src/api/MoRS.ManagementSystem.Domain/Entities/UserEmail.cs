@@ -1,9 +1,10 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MoRS.ManagementSystem.Domain.Entities;
 
 public class UserEmail
 {
-    [Key]
-    public int Id { get; set; }
+    public int UserId { get; set; }
+    public int EmailId { get; set; }
+    
+    public User User { get; set; } = null!;
+    public Email Email { get; set; } = null!;
 }
