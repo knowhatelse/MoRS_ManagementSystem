@@ -14,7 +14,7 @@ public class Appointment
     public int AppointmentTypeId { get; set; }
     public AppointmentType AppointmentType { get; set; } = null!;
 
-    public int BookedByUserId { get; set; }
+    public int? BookedByUserId { get; set; }
     public User BookedByUser { get; set; } = null!;
 
     public List<User> Attendees { get; } = [];

@@ -1,8 +1,14 @@
+using MoRS.ManagementSystem.Infrastructure.Data;
 using Scalar.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<MoRSManagementSystemDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MoRSManagementSystemDatabase"));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

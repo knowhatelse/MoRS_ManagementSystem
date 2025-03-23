@@ -40,18 +40,21 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
             .WithMany(u => u.Emails)
             .UsingEntity(j => j.ToTable("UserEmails"));
 
-        modelBuilder.Entity<MembershipFee>()
-            .Property(mf => mf.MembershipType)
-            .HasConversion<string>();
-
         modelBuilder.Entity<Notification>()
            .Property(n => n.Type)
            .HasConversion<string>();
 
         modelBuilder.Entity<Payment>(entity =>
         {
+            entity.Property(e => e.Amount).HasPrecision(18, 4);
             entity.Property(p => p.PaymentMethod).HasConversion<string>();
             entity.Property(p => p.Status).HasConversion<string>();
+        });
+
+        modelBuilder.Entity<MembershipFee>(entity =>
+        {
+            entity.Property(mf => mf.MembershipType).HasConversion<string>();
+            entity.Property(e => e.Amount).HasPrecision(18, 4);
         });
     }
 }
