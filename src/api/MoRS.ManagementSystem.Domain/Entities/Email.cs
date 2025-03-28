@@ -6,5 +6,5 @@ public class Email
     public required string Subject { get; set; }
     public required string Body { get; set; }
 
-    public List<User> Users { get; } = [];
+    public List<User> Users { get; set; } = [];
 }

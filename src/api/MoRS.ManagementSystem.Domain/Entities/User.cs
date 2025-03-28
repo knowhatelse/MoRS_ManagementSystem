@@ -16,12 +16,12 @@ public class User
     public int RoleId { get; set; }
     public Role Role { get; set; } = null!;
 
-    public ICollection<Announcement> Announcements { get; } = [];
-    public ICollection<Appointment> CreatedAppointments { get; } = [];
-    public ICollection<MalfunctionReport> MalfunctionReports { get; } = [];
-    public ICollection<Notification> Notifications { get; } = [];
-    public ICollection<Payment> Payments { get; } = [];
-    public List<Appointment> AttendingAppointments { get; } = [];
-    public List<Email> Emails { get; } = [];
+    public ICollection<Announcement> Announcements { get; set; } = [];
+    public ICollection<Appointment> CreatedAppointments { get; set; } = [];
+    public ICollection<MalfunctionReport> MalfunctionReports { get; set; } = [];
+    public ICollection<Notification> Notifications { get; set; } = [];
+    public ICollection<Payment> Payments { get; set; } = [];
+    public List<Appointment> AttendingAppointments { get; set; } = [];
+    public List<Email> Emails { get; set; } = [];
 
 }

@@ -15,5 +15,5 @@ public class Payment
     public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    public ICollection<MembershipFee> MembershipFees { get; } = [];
+    public ICollection<MembershipFee> MembershipFees { get; set; } = [];
 }

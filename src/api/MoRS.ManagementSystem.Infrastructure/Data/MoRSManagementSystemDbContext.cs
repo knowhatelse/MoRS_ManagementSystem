@@ -18,7 +18,7 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
     public DbSet<ProfilePicture> ProfilePictures { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Room> Rooms { get; set; }
-    public DbSet<Time> Times { get; set; }
+    public DbSet<TimeSlot> Times { get; set; }
     public DbSet<User> Users { get; set; }
 
 

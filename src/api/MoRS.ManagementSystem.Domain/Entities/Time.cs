@@ -1,9 +1,9 @@
 namespace MoRS.ManagementSystem.Domain.Entities;
 
-public class Time
+public class TimeSlot
 {
     public int Id { get; set; }
-    
+
     public TimeSpan TimeFrom { get; set; }
     public TimeSpan TimeTo { get; set; }
 

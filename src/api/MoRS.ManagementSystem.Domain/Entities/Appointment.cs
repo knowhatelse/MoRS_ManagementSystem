@@ -17,5 +17,5 @@ public class Appointment
     public int? BookedByUserId { get; set; }
     public User BookedByUser { get; set; } = null!;
 
-    public List<User> Attendees { get; } = [];
+    public List<User> Attendees { get; set; } = [];
 }

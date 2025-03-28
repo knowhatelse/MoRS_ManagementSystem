@@ -6,6 +6,6 @@ public enum NotificationType
     Hitno,
     Podsjetnik,
     Upozorenje,
-    Uspješno,
-    Greška
+    Uspjesno,
+    Greska
 }

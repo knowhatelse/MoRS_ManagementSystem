@@ -12,7 +12,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(MoRSManagementSystemDbContext))]
-    [Migration("20250323232300_InitialMigration")]
+    [Migration("20250326233341_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -402,7 +402,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("MoRS.ManagementSystem.Domain.Entities.Time", b =>
+            modelBuilder.Entity("MoRS.ManagementSystem.Domain.Entities.TimeSlot", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -613,11 +613,11 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MoRS.ManagementSystem.Domain.Entities.Time", b =>
+            modelBuilder.Entity("MoRS.ManagementSystem.Domain.Entities.TimeSlot", b =>
                 {
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.AppointmentSchedule", "AppointmentSchedule")
                         .WithOne("Time")
-                        .HasForeignKey("MoRS.ManagementSystem.Domain.Entities.Time", "AppointmentScheduleId")
+                        .HasForeignKey("MoRS.ManagementSystem.Domain.Entities.TimeSlot", "AppointmentScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

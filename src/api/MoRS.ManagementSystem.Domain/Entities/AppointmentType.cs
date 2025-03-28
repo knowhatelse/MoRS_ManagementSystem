@@ -6,5 +6,5 @@ public class AppointmentType
     
     public required string Name { get; set; }
 
-    public ICollection<Appointment> Appointments { get; } = [];
+    public ICollection<Appointment> Appointments { get; set;} = [];
 }
