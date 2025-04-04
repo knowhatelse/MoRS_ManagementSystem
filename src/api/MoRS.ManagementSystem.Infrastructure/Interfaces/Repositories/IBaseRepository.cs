@@ -1,10 +1,10 @@
 namespace MoRS.ManagementSystem.Infrastructure.Interfaces.Repositories;
 
-public interface IBaseRepository<TEntitiy>
+public interface IBaseRepository<TEntity>
 {
-    Task<IEnumerable<TEntitiy>> GetAsync();
-    Task<TEntitiy?> GetByIdAsync(int id);
-    Task<TEntitiy> AddAsync(TEntitiy entity);
-    Task<TEntitiy> UpdateAsync(TEntitiy entity);
-    Task<bool> DeleteAsync(TEntitiy entitiy);
+    Task<IEnumerable<TEntity>> GetAsync();
+    Task<TEntity?> GetByIdAsync(int id);
+    Task<TEntity> AddAsync(TEntity entity);
+    Task<TEntity> UpdateAsync(TEntity entity);
+    Task<bool> DeleteAsync(TEntity entity);
 }
