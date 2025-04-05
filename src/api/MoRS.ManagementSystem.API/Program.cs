@@ -1,6 +1,7 @@
 using MoRS.ManagementSystem.Infrastructure.Data;
 using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using MoRS.ManagementSystem.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddDbContext<MoRSManagementSystemDbContext>(options =>
 });
 
 builder.Services.AddTransient<DataSeeder>();
+builder.Services.AddRepositoryServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
