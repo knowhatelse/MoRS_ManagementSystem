@@ -5,14 +5,13 @@ using MoRS.ManagementSystem.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<MoRSManagementSystemDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MoRSManagementSystemDatabase"));
-});
+var connectionString = builder.Configuration.GetConnectionString("MoRSManagementSystemDatabase");
 
-builder.Services.AddTransient<DataSeeder>();
-builder.Services.AddRepositoryServices();
+// Add services to the container.
+builder.Services
+    .AddMoRSManagementSystemDbContext(connectionString!)
+    .AddDataSeeder()
+    .AddRepositories();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

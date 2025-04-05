@@ -6,7 +6,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Extensions;
 
 public static class RepositoryServiceCollectionExtensions
 {
-    public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
