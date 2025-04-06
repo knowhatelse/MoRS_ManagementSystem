@@ -9,6 +9,7 @@ builder.Services.AddDataSeeder();
 builder.Services.AddRepositories();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
