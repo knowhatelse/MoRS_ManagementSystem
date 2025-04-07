@@ -19,8 +19,4 @@
     <ProjectReference Include="..\MoRS.ManagementSystem.Infrastructure\MoRS.ManagementSystem.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AutoMapperProfiles\" />
-  </ItemGroup>
-
 </Project>
