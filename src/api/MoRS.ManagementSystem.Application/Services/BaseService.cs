@@ -1,6 +1,6 @@
 using AutoMapper;
 using MoRS.ManagementSystem.Application.Interfaces.BaseInterfaces;
-using MoRS.ManagementSystem.Infrastructure.Interfaces.Repositories;
+using MoRS.ManagementSystem.Domain.Interfaces.BaseInterfaces;
 
 namespace MoRS.ManagementSystem.Application.Services;
 

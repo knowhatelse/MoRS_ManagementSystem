@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
+using MoRS.ManagementSystem.Domain.Interfaces.BaseInterfaces;
 using MoRS.ManagementSystem.Infrastructure.Data;
-using MoRS.ManagementSystem.Infrastructure.Interfaces.Repositories;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 

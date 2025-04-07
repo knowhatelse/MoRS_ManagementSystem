@@ -1,4 +1,4 @@
-namespace MoRS.ManagementSystem.Infrastructure.Interfaces.Repositories;
+namespace MoRS.ManagementSystem.Domain.Interfaces.BaseInterfaces;
 
 public interface IBaseRepository<TEntity>
 {
