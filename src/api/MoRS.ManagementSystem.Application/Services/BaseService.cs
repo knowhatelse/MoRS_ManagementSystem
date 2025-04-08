@@ -10,14 +10,14 @@ public class BaseService<TEntity, TResponse, TCreateRequest, TUpdateRequest>(IMa
     private readonly IMapper _mapper = mapper;
     private readonly IBaseRepository<TEntity> _repository = repository;
 
-    public async Task<TResponse> AddAsync(TCreateRequest request)
+    public virtual async Task<TResponse> AddAsync(TCreateRequest request)
     {
         var entity = _mapper.Map<TEntity>(request);
         var response = await _repository.AddAsync(entity);
         return _mapper.Map<TResponse>(response);
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public virtual async Task<bool> DeleteAsync(int id)
     {
         var entity = await _repository.GetByIdAsync(id);
 
@@ -29,19 +29,19 @@ public class BaseService<TEntity, TResponse, TCreateRequest, TUpdateRequest>(IMa
         return await _repository.DeleteAsync(entity);
     }
 
-    public async Task<IEnumerable<TResponse>> GetAsync()
+    public virtual async Task<IEnumerable<TResponse>> GetAsync()
     {
         var entities = await _repository.GetAsync();
         return _mapper.Map<IEnumerable<TResponse>>(entities);
     }
 
-    public async Task<TResponse?> GetByIdAsync(int id)
+    public virtual async Task<TResponse?> GetByIdAsync(int id)
     {
         var entity = await _repository.GetByIdAsync(id);
         return _mapper.Map<TResponse>(entity);
     }
 
-    public async Task<TResponse?> UpdateAsync(int id, TUpdateRequest request)
+    public virtual async Task<TResponse?> UpdateAsync(int id, TUpdateRequest request)
     {
         var entity = await _repository.GetByIdAsync(id);
 
