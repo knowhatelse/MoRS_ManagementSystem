@@ -1,4 +1,4 @@
-using MoRS.ManagementSystem.Domain.Entities.Enums;
+using MoRS.ManagementSystem.Domain.Enums;
 
 namespace MoRS.ManagementSystem.Domain.Entities;
 

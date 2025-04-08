@@ -1,4 +1,4 @@
-namespace MoRS.ManagementSystem.Domain.Entities.Enums;
+namespace MoRS.ManagementSystem.Domain.Enums;
 
 public enum NotificationType
 {
