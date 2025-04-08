@@ -15,6 +15,5 @@ public class AppointmentQuery : BaseQuery
     public bool IsAppointmentTypeIncluded { get; set; } = true;
     public bool IsAppointmentScheduleIncluded { get; set; } = true;
     public bool IsUserIncluded { get; set; } = true;
-    public bool AreAteendeesIncluded { get; set; } = true;
-
+    public bool AreAttendeesIncluded { get; set; } = true;
 }
