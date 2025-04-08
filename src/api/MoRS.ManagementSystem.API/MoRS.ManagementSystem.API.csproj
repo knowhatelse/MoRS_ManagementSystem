@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MoRS.ManagementSystem.Application\MoRS.ManagementSystem.Application.csproj" />
     <ProjectReference Include="..\MoRS.ManagementSystem.Infrastructure\MoRS.ManagementSystem.Infrastructure.csproj" />
   </ItemGroup>
 

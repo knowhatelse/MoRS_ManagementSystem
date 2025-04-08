@@ -1,6 +1,6 @@
 using MoRS.ManagementSystem.Domain.Entities;
+using MoRS.ManagementSystem.Domain.Interfaces;
 using MoRS.ManagementSystem.Infrastructure.Data;
-using MoRS.ManagementSystem.Infrastructure.Interfaces.Repositories;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
