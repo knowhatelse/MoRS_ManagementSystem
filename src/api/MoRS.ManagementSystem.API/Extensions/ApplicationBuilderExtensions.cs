@@ -1,11 +1,7 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using MoRS.ManagementSystem.Infrastructure.Data;
 using Scalar.AspNetCore;
 
 
-namespace MoRS.ManagementSystem.Infrastructure.Extensions;
+namespace MoRS.ManagementSystem.API.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
