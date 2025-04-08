@@ -28,7 +28,7 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
             .HasOne(a => a.BookedByUser)
             .WithMany(u => u.CreatedAppointments)
             .HasForeignKey(a => a.BookedByUserId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<User>()
             .HasMany(u => u.AttendingAppointments)

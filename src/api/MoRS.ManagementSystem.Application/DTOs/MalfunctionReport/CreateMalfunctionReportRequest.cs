@@ -1,6 +1,6 @@
 namespace MoRS.ManagementSystem.Application.DTOs.MalfunctionReport;
 
-public class CreateMalfunctionReportProfileRequest
+public class CreateMalfunctionReportRequest
 {
     public required string Description { get; set; }
     public DateTime Date { get; set; }

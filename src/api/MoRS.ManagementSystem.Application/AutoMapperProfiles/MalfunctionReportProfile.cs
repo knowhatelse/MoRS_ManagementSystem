@@ -9,6 +9,7 @@ public class MalfunctionReportProfile : Profile
     public MalfunctionReportProfile()
     {
         CreateMap<MalfunctionReport, MalfunctionReportResponse>();
-        CreateMap<CreateMalfunctionReportProfileRequest, MalfunctionReport>();
+        CreateMap<CreateMalfunctionReportRequest, MalfunctionReport>();
+        CreateMap<UpdateMalfunctionReportRequest, MalfunctionReport>();
     }
 }
