@@ -1,12 +1,12 @@
 using MoRS.ManagementSystem.Application.DTOs.Announcement;
-using MoRS.ManagementSystem.Application.Interfaces.BaseInterfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 
-namespace MoRS.ManagementSystem.Application.Interfaces;
+namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
 public interface IAnnouncementService :
     IGetService<AnnouncementResponse>,
     IAddService<AnnouncementResponse, CreateAnnouncementRequest>,
-    IUpdateService<AnnouncementResponse, UpdateAnnouncemtRequest>
+    IUpdateService<AnnouncementResponse, UpdateAnnouncementRequest>
 {
 
 }

@@ -1,7 +1,7 @@
 using MoRS.ManagementSystem.Application.DTOs.ProfilePicture;
-using MoRS.ManagementSystem.Application.Interfaces.BaseInterfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 
-namespace MoRS.ManagementSystem.Application.Interfaces;
+namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
 public interface IProfilePictureService :
     IUpdateService<ProfilePictureResponse, UpdateProfilePictureRequest>,

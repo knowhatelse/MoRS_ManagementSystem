@@ -1,10 +1,10 @@
 using MoRS.ManagementSystem.Application.DTOs.MalfunctionReport;
-using MoRS.ManagementSystem.Application.Interfaces.BaseInterfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 
-namespace MoRS.ManagementSystem.Application.Interfaces;
+namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
 public interface IMalfunctionReportService :
-    IGetService<MalfunctionReportResponse>, 
+    IGetService<MalfunctionReportResponse>,
     IAddService<MalfunctionReportResponse, CreateMalfunctionReportRequest>,
     IUpdateService<MalfunctionReportResponse, UpdateMalfunctionReportRequest>,
     IDeleteService

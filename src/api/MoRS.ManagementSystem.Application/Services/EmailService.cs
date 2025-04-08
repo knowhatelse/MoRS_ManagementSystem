@@ -1,9 +1,9 @@
 using AutoMapper;
 using MoRS.ManagementSystem.Application.DTOs;
 using MoRS.ManagementSystem.Application.DTOs.Email;
-using MoRS.ManagementSystem.Application.Interfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Repositories;
+using MoRS.ManagementSystem.Application.Interfaces.Services;
 using MoRS.ManagementSystem.Domain.Entities;
-using MoRS.ManagementSystem.Domain.Interfaces;
 
 namespace MoRS.ManagementSystem.Application.Services;
 

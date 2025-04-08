@@ -1,4 +1,4 @@
-namespace MoRS.ManagementSystem.Application.Interfaces.BaseInterfaces;
+namespace MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 
 public interface IGetService<TResponse>
 {
