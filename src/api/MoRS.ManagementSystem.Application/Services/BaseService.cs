@@ -1,14 +1,15 @@
 using AutoMapper;
-using MoRS.ManagementSystem.Application.Interfaces.BaseInterfaces;
-using MoRS.ManagementSystem.Domain.Interfaces.BaseInterfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Repositories.BaseInterfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 
 namespace MoRS.ManagementSystem.Application.Services;
 
-public class BaseService<TEntity, TResponse, TCreateRequest, TUpdateRequest>(IMapper mapper, IBaseRepository<TEntity> repository) :
-    IGetService<TResponse>, IAddService<TResponse, TCreateRequest>, IUpdateService<TResponse, TUpdateRequest>, IDeleteService
+public class BaseService<TEntity, TResponse, TCreateRequest, TUpdateRequest, TQueryFilter>(IMapper mapper, IBaseRepository<TEntity, TQueryFilter> repository) :
+    IGetService<TResponse, TQueryFilter>, IAddService<TResponse, TCreateRequest>, IUpdateService<TResponse, TUpdateRequest>, IDeleteService
+    where TQueryFilter : class
 {
     private readonly IMapper _mapper = mapper;
-    private readonly IBaseRepository<TEntity> _repository = repository;
+    private readonly IBaseRepository<TEntity, TQueryFilter> _repository = repository;
 
     public virtual async Task<TResponse> AddAsync(TCreateRequest request)
     {
@@ -29,9 +30,9 @@ public class BaseService<TEntity, TResponse, TCreateRequest, TUpdateRequest>(IMa
         return await _repository.DeleteAsync(entity);
     }
 
-    public virtual async Task<IEnumerable<TResponse>> GetAsync()
+    public virtual async Task<IEnumerable<TResponse>> GetAsync(TQueryFilter? queryFilter = null)
     {
-        var entities = await _repository.GetAsync();
+        var entities = await _repository.GetAsync(queryFilter);
         return _mapper.Map<IEnumerable<TResponse>>(entities);
     }
 

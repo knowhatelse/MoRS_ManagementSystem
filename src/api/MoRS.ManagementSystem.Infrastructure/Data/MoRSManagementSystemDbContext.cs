@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MoRS.ManagementSystem.Domain.Entities;
-using MoRS.ManagementSystem.Domain.Entities.Enums;
 
 namespace MoRS.ManagementSystem.Infrastructure.Data;
 

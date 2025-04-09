@@ -1,10 +1,11 @@
+using MoRS.ManagementSystem.Application.Filters;
+using MoRS.ManagementSystem.Application.Interfaces.Repositories;
 using MoRS.ManagementSystem.Domain.Entities;
-using MoRS.ManagementSystem.Domain.Interfaces;
 using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class NotificationRepository(MoRSManagementSystemDbContext context) : BaseRepository<Notification>(context), INotificationRepository
+public class NotificationRepository(MoRSManagementSystemDbContext context) : BaseRepository<Notification, NoQuery>(context), INotificationRepository
 {
 
 }

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using MoRS.ManagementSystem.Application.Interfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Services;
 using MoRS.ManagementSystem.Application.Services;
 
 namespace MoRS.ManagementSystem.Application.Extensions;

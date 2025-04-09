@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using MoRS.ManagementSystem.Domain.Interfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Repositories;
 using MoRS.ManagementSystem.Infrastructure.Repositories;
 
 namespace MoRS.ManagementSystem.Infrastructure.Extensions;

@@ -1,11 +1,14 @@
 
 using Microsoft.EntityFrameworkCore;
-using MoRS.ManagementSystem.Domain.Interfaces.BaseInterfaces;
+using MoRS.ManagementSystem.Application.Interfaces.Repositories.BaseInterfaces;
 using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class BaseRepository<TEntity>(MoRSManagementSystemDbContext context) : IBaseRepository<TEntity> where TEntity : class
+public class BaseRepository<TEntity, TQueryFilter>(MoRSManagementSystemDbContext context) :
+    IBaseRepository<TEntity, TQueryFilter>
+    where TEntity : class
+    where TQueryFilter : class
 {
     private readonly MoRSManagementSystemDbContext _context = context;
 
@@ -23,9 +26,11 @@ public class BaseRepository<TEntity>(MoRSManagementSystemDbContext context) : IB
         return result > 0;
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAsync()
+    public virtual async Task<IEnumerable<TEntity>> GetAsync(TQueryFilter? queryFilter = null)
     {
-        return await _context.Set<TEntity>().ToListAsync();
+        var query = _context.Set<TEntity>().AsQueryable();
+        query = ApplyQueryFilters(query, queryFilter);
+        return await query.ToListAsync();
     }
 
     public virtual async Task<TEntity?> GetByIdAsync(int id)
@@ -38,5 +43,10 @@ public class BaseRepository<TEntity>(MoRSManagementSystemDbContext context) : IB
         _context.Set<TEntity>().Update(entity);
         await _context.SaveChangesAsync();
         return entity;
+    }
+
+    public virtual IQueryable<TEntity> ApplyQueryFilters(IQueryable<TEntity> query, TQueryFilter? queryFilter)
+    {
+        return query;
     }
 }

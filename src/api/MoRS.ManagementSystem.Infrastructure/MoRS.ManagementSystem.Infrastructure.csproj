@@ -18,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MoRS.ManagementSystem.Domain\MoRS.ManagementSystem.Domain.csproj" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\MoRS.ManagementSystem.Application\MoRS.ManagementSystem.Application.csproj" />
   </ItemGroup>
 
 </Project>

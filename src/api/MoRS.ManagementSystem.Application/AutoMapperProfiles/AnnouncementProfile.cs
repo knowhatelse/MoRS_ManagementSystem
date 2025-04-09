@@ -10,6 +10,6 @@ public class AnnouncementProfile : Profile
     {
         CreateMap<Announcement, AnnouncementResponse>();
         CreateMap<CreateAnnouncementRequest, Announcement>();
-        CreateMap<UpdateAnnouncemtRequest, Announcement>();
+        CreateMap<UpdateAnnouncementRequest, Announcement>();
     }
 }

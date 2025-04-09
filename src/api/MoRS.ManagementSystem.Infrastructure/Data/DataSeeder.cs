@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MoRS.ManagementSystem.Domain.Entities;
-using MoRS.ManagementSystem.Domain.Entities.Enums;
+using MoRS.ManagementSystem.Domain.Enums;
 
 namespace MoRS.ManagementSystem.Infrastructure.Data;
 
