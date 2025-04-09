@@ -1,6 +1,6 @@
 namespace MoRS.ManagementSystem.Application.Filters;
 
-public class RoomQuery : BaseQuery
+public class RoomQuery
 {
     public bool? IsActive { get; set; } = true;
 }

@@ -1,9 +1,10 @@
+using MoRS.ManagementSystem.Application.Filters;
 using MoRS.ManagementSystem.Application.Interfaces.Repositories.BaseInterfaces;
 using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IAnnouncementRepository : IBaseRepository<Announcement>
+public interface IAnnouncementRepository : IBaseRepository<Announcement, NoQuery>
 {
 
 }

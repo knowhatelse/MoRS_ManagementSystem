@@ -1,6 +1,6 @@
 namespace MoRS.ManagementSystem.Application.Filters;
 
-public class MalfunctionReportQuery : BaseQuery
+public class MalfunctionReportQuery
 {
     public int? RoomId { get; set; }
     public int? UserId { get; set; }

@@ -1,6 +1,6 @@
 namespace MoRS.ManagementSystem.Application.Filters;
 
-public class AppointmentQuery : BaseQuery
+public class AppointmentQuery
 {
     public DateOnly? Date { get; set; }
     public DateOnly? DateFrom { get; set; }
