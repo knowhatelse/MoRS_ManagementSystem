@@ -10,7 +10,7 @@ public class User
     public required string PhoneNumber { get; set; }
     public required string PasswordHash { get; set; }
     public required string PasswordSalt { get; set; }
-    public bool IsRestricted { get; set; }
+    public bool IsRestricted { get; set; } = false;
     public ProfilePicture? ProfilePicture { get; set; }
 
     public int RoleId { get; set; }

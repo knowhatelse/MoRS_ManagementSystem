@@ -4,8 +4,8 @@ public class Appointment
 {
     public int Id { get; set; }
 
-    public bool IsRepeating { get; set; }
-    public bool IsCancelled { get; set; }
+    public bool IsRepeating { get; set; } = false;
+    public bool IsCancelled { get; set; } = false;
     public AppointmentSchedule? AppointmentSchedule { get; set; }
 
     public int RoomId { get; set; }
