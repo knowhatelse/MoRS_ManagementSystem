@@ -12,7 +12,7 @@ public class BaseRepository<TEntity, TQueryFilter>(MoRSManagementSystemDbContext
 {
     private readonly MoRSManagementSystemDbContext _context = context;
 
-    public virtual async Task<TEntity> AddAsync(TEntity entity)
+    public virtual async Task<TEntity?> AddAsync(TEntity entity)
     {
         await _context.Set<TEntity>().AddAsync(entity);
         await _context.SaveChangesAsync();
@@ -38,7 +38,7 @@ public class BaseRepository<TEntity, TQueryFilter>(MoRSManagementSystemDbContext
         return await _context.Set<TEntity>().FindAsync(id);
     }
 
-    public virtual async Task<TEntity> UpdateAsync(TEntity entity)
+    public virtual async Task<TEntity?> UpdateAsync(TEntity entity)
     {
         _context.Set<TEntity>().Update(entity);
         await _context.SaveChangesAsync();

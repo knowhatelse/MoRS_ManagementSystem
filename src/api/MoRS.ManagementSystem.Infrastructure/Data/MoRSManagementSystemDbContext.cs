@@ -34,6 +34,10 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
             .WithMany(a => a.Attendees)
             .UsingEntity(j => j.ToTable("UserAppointments"));
 
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
         modelBuilder.Entity<Email>()
             .HasMany(e => e.Users)
             .WithMany(u => u.Emails)
