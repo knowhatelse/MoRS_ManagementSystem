@@ -8,7 +8,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
 public class AppointmentRepository(MoRSManagementSystemDbContext context) : BaseRepository<Appointment, AppointmentQuery>(context), IAppointmentRepository
 {
-    public override IQueryable<Appointment> ApplyQueryFilters(IQueryable<Appointment> query, AppointmentQuery? queryFilter)
+    protected override IQueryable<Appointment> ApplyQueryFilters(IQueryable<Appointment> query, AppointmentQuery? queryFilter)
     {
         if (queryFilter?.Date is not null)
         {

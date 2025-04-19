@@ -10,19 +10,7 @@ public class UserRepository(MoRSManagementSystemDbContext context) : BaseReposit
 {
     private readonly MoRSManagementSystemDbContext _context = context;
 
-    public async override Task<User?> AddAsync(User entity)
-    {
-        var emailExists = await _context.Users.AnyAsync(u => u.Email == entity.Email);
-
-        if(emailExists)
-        {
-            return null;
-        }
-
-        return await base.AddAsync(entity);
-    }
-
-    public override IQueryable<User> ApplyQueryFilters(IQueryable<User> query, UserQuery? queryFilter = null)
+    protected override IQueryable<User> ApplyQueryFilters(IQueryable<User> query, UserQuery? queryFilter = null)
     {
 
         if (!string.IsNullOrWhiteSpace(queryFilter?.Name))

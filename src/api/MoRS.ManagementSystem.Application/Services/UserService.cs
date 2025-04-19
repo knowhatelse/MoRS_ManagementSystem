@@ -13,12 +13,15 @@ public class UserService(IMapper mapper, IUserRepository repository) :
     BaseService<User, UserResponse, CreateUserRequest, UpdateUserRequest, UserQuery>(mapper, repository),
     IUserService
 {
-    private readonly IMapper _mapper = mapper;
     private readonly IUserRepository _repository = repository;
 
-    public async override Task<UserResponse> AddAsync(CreateUserRequest request)
+    protected override async Task BeforeInsertAsync(CreateUserRequest request, User entity)
     {
-        var result = await base.AddAsync(request) ?? throw new InvalidOperationException(ErrorMessages.EmailConflict);
-        return result;
+        var emailExists = await _repository.GetAsync(new UserQuery { Email = entity.Email });
+
+        if (emailExists != null)
+        {
+            throw new InvalidOperationException(ErrorMessages.EmailAlreadyExists);
+        }
     }
 }

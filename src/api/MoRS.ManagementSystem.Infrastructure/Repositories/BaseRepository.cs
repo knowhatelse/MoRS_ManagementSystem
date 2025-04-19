@@ -45,7 +45,7 @@ public class BaseRepository<TEntity, TQueryFilter>(MoRSManagementSystemDbContext
         return entity;
     }
 
-    public virtual IQueryable<TEntity> ApplyQueryFilters(IQueryable<TEntity> query, TQueryFilter? queryFilter)
+    protected virtual IQueryable<TEntity> ApplyQueryFilters(IQueryable<TEntity> query, TQueryFilter? queryFilter)
     {
         return query;
     }
