@@ -15,7 +15,7 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository repositor
     private readonly IMapper _mapper = mapper;
     private readonly IAppointmentRepository _repository = repository;
 
-    public override async Task<AppointmentResponse> AddAsync(CreateAppointmentRequest request)
+    protected override async Task BeforeInsertAsync(CreateAppointmentRequest request, Appointment entity)
     {
         var query = new AppointmentQuery
         {
@@ -36,7 +36,5 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository repositor
                 throw new InvalidOperationException(ErrorMessages.TimeSlotConflict);
             }
         }
-
-        return await base.AddAsync(request);
     }
 }
