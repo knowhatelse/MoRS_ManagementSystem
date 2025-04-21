@@ -23,5 +23,12 @@ public class UserService(IMapper mapper, IUserRepository repository) :
         {
             throw new InvalidOperationException(ErrorMessages.EmailAlreadyExists);
         }
+
+        var defaultPassword = $"{entity.Name.Trim().ToLower()}.{entity.Surname.Trim().ToLower()}";
+
+        PasswordHelper.CreatePasswordHash(defaultPassword, out byte[] passwordHash,out byte[] passwordSalt);
+
+        entity.PasswordHash = passwordHash;
+        entity.PasswordSalt = passwordSalt;
     }
 }
