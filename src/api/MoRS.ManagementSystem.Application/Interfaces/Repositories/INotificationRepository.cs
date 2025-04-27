@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface INotificationRepository : IBaseRepository<Notification, NoQuery>
+public interface INotificationRepository : IBaseRepository<Notification, NotificationQuery>
 {
 
 }

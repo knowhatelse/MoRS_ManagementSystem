@@ -15,6 +15,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddScoped<IProfilePictureService, ProfilePictureService>();
         services.AddScoped<IRoomService, RoomService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<INotificationService, NotificationService>();
 
         return services;
     }
