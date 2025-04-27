@@ -7,7 +7,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
 public class RoomRepository(MoRSManagementSystemDbContext context) : BaseRepository<Room, RoomQuery>(context), IRoomRepository
 {
-    public override IQueryable<Room> ApplyQueryFilters(IQueryable<Room> query, RoomQuery? queryFilter = null)
+    protected override IQueryable<Room> ApplyQueryFilters(IQueryable<Room> query, RoomQuery? queryFilter = null)
     {
         if (queryFilter?.IsActive is not null)
         {

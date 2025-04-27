@@ -12,5 +12,6 @@ public class AppointmentResponse
     public required RoomResponse Room { get; set; }
     public required AppointmentScheduleResponse AppointmentSchedule { get; set; }
     public List<UserResponse> Attendees { get; set; } = [];
-    public int UserId { get; set; }
+    public UserResponse? BookedByUser { get; set; }
+    public DateOnly OccuringDate { get; set; }
 }

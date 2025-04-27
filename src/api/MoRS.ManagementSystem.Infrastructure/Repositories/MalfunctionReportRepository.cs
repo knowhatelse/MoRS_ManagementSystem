@@ -10,7 +10,7 @@ public class MalfunctionReportRepository(MoRSManagementSystemDbContext context) 
     BaseRepository<MalfunctionReport, MalfunctionReportQuery>(context),
     IMalfunctionReportRepository
 {
-    public override IQueryable<MalfunctionReport> ApplyQueryFilters(IQueryable<MalfunctionReport> query, MalfunctionReportQuery? queryFilter)
+    protected override IQueryable<MalfunctionReport> ApplyQueryFilters(IQueryable<MalfunctionReport> query, MalfunctionReportQuery? queryFilter)
     {
         if (queryFilter?.RoomId is not null)
         {

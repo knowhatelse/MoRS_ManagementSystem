@@ -6,7 +6,7 @@ public class MembershipFee
 {
     public int Id { get; set; }
 
-    public DateTime PaymentDate { get; set; }
+    public DateTime PaymentDate { get; set; } = DateTime.Now;
     public decimal Amount { get; set; }
     public required string Status { get; set; }
     public required string PaymentMethod { get; set; }

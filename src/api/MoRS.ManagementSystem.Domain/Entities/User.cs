@@ -8,9 +8,9 @@ public class User
     public required string Surname { get; set; }
     public required string Email { get; set; }
     public required string PhoneNumber { get; set; }
-    public required string PasswordHash { get; set; }
-    public required string PasswordSalt { get; set; }
-    public bool IsRestricted { get; set; }
+    public required byte[] PasswordHash { get; set; }
+    public required byte[] PasswordSalt { get; set; }
+    public bool IsRestricted { get; set; } = false;
     public ProfilePicture? ProfilePicture { get; set; }
 
     public int RoleId { get; set; }

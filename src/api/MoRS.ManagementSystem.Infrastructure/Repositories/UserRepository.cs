@@ -8,7 +8,9 @@ namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
 public class UserRepository(MoRSManagementSystemDbContext context) : BaseRepository<User, UserQuery>(context), IUserRepository
 {
-    public override IQueryable<User> ApplyQueryFilters(IQueryable<User> query, UserQuery? queryFilter = null)
+    private readonly MoRSManagementSystemDbContext _context = context;
+
+    protected override IQueryable<User> ApplyQueryFilters(IQueryable<User> query, UserQuery? queryFilter = null)
     {
 
         if (!string.IsNullOrWhiteSpace(queryFilter?.Name))

@@ -6,7 +6,7 @@ public class Payment
 {
     public int Id { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; } = DateTime.Now;
     public decimal Amount { get; set; }
     public PaymentStatus Status { get; set; }
     public PaymentMethod PaymentMethod { get; set; }
