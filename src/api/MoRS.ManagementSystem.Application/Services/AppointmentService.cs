@@ -31,10 +31,37 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository repositor
 
         foreach (var appointment in existingAppointment)
         {
-            if (TimeSlotValidator.IsValidTimeSlot(appointment.AppointmentSchedule?.Time, incomingAppointment.AppointmentSchedule?.Time))
+            if (TimeSlotValidator.IsOccurringOnDate(appointment, request.AppointmentSchedule!.Date))
             {
-                throw new InvalidOperationException(ErrorMessages.TimeSlotConflict);
+                if (TimeSlotValidator.IsValidTimeSlot(appointment.AppointmentSchedule?.Time, incomingAppointment.AppointmentSchedule?.Time))
+                {
+                    throw new InvalidOperationException(ErrorMessages.TimeSlotConflict);
+                }
             }
         }
     }
+
+    private AppointmentResponse MapToDto(Appointment appointment, DateOnly currentDate)
+    {
+        var dto = _mapper.Map<AppointmentResponse>(appointment);
+        dto.AppointmentSchedule.Date = appointment.IsRepeating ? currentDate : appointment.AppointmentSchedule!.Date;
+        return dto;
+    }
+
+    protected override async Task<IEnumerable<Appointment>> AfterGetAsync(IEnumerable<Appointment> entities, AppointmentQuery? queryFilter = null)
+    {
+        var currentDate = queryFilter?.Date ?? DateOnly.FromDateTime(DateTime.Today);
+
+        foreach (var appointment in entities)
+        {
+            if (appointment.IsRepeating && appointment.AppointmentSchedule != null)
+            {
+                appointment.AppointmentSchedule.Date = currentDate;
+            }
+        }
+
+        return entities;
+    }
+
+
 }

@@ -6,6 +6,7 @@ public class Appointment
 
     public bool IsRepeating { get; set; } = false;
     public bool IsCancelled { get; set; } = false;
+    public DayOfWeek? RepeatingDayOfWeek  { get; set; }
     public AppointmentSchedule? AppointmentSchedule { get; set; }
 
     public int RoomId { get; set; }

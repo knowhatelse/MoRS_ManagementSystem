@@ -10,19 +10,25 @@ public class AppointmentRepository(MoRSManagementSystemDbContext context) : Base
 {
     protected override IQueryable<Appointment> ApplyQueryFilters(IQueryable<Appointment> query, AppointmentQuery? queryFilter)
     {
+
+        // if (queryFilter?.DateFrom is not null)
+        // {
+        //     query = query.Include(a => a.AppointmentSchedule).Where(a =>
+        //         a.AppointmentSchedule != null &&
+        //         a.AppointmentSchedule.Date >= queryFilter.DateFrom
+        //     );
+        // }
+
         if (queryFilter?.Date is not null)
         {
+            var date = queryFilter.Date.Value;
             query = query.Include(a => a.AppointmentSchedule).Where(a =>
                 a.AppointmentSchedule != null &&
-                a.AppointmentSchedule.Date == queryFilter.Date
-            );
-        }
-
-        if (queryFilter?.DateFrom is not null)
-        {
-            query = query.Include(a => a.AppointmentSchedule).Where(a =>
-                a.AppointmentSchedule != null &&
-                a.AppointmentSchedule.Date >= queryFilter.DateFrom
+                (
+                    (!a.IsRepeating && a.AppointmentSchedule.Date == date) ||
+                    (a.IsRepeating && a.AppointmentSchedule.Date <= date &&
+                     a.RepeatingDayOfWeek == date.DayOfWeek)
+                )
             );
         }
 

@@ -13,4 +13,20 @@ public static class TimeSlotValidator
 
         return incoming.TimeFrom < existing.TimeTo && existing.TimeFrom < incoming.TimeTo;
     }
+
+    public static bool IsOccurringOnDate(Appointment appointment, DateOnly date)
+    {
+        if (appointment.IsCancelled)
+        {
+            return false;
+        }
+
+        if (!appointment.IsRepeating)
+        {
+            return appointment.AppointmentSchedule?.Date == date;
+        }
+
+        return appointment.AppointmentSchedule?.Date <= date && appointment.RepeatingDayOfWeek == date.DayOfWeek;
+    }
+
 }
