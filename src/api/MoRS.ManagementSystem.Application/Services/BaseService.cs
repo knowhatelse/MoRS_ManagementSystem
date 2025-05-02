@@ -62,6 +62,11 @@ public abstract class BaseService<TEntity, TResponse, TCreateRequest, TUpdateReq
         return Task.CompletedTask;
     }
 
+    protected virtual Task AfterInsertAsync(TCreateRequest request, TEntity entity)
+    {
+        return Task.CompletedTask;
+    }
+
     protected virtual Task<IEnumerable<TEntity>> AfterGetAsync(IEnumerable<TEntity> entities, TQueryFilter? queryFilter = null)
     {
         return Task.FromResult(entities);

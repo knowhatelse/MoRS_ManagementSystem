@@ -6,12 +6,8 @@ public class MembershipFee
 {
     public int Id { get; set; }
 
-    public DateTime PaymentDate { get; set; } = DateTime.Now;
-    public decimal Amount { get; set; }
-    public required string Status { get; set; }
-    public required string PaymentMethod { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public MembershipType MembershipType { get; set; }
-    public int TransactionId { get; set; }
 
     public int PaymentId { get; set; }
     public Payment Payment { get; set; } = null!;
