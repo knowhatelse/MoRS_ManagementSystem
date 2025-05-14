@@ -35,7 +35,7 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository repositor
             {
                 if (TimeSlotValidator.IsValidTimeSlot(appointment.AppointmentSchedule?.Time, incomingAppointment.AppointmentSchedule?.Time))
                 {
-                    throw new InvalidOperationException(ErrorMessages.TimeSlotConflict);
+                    throw new InvalidOperationException(Messages.TimeSlotConflict);
                 }
             }
         }

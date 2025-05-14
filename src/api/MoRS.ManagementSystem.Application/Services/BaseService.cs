@@ -54,10 +54,23 @@ public abstract class BaseService<TEntity, TResponse, TCreateRequest, TUpdateReq
         }
 
         var result = await _repository.UpdateAsync(entity);
+
+        await AfterUpdateAsync(request, result);
+
         return _mapper.Map<TResponse>(result);
     }
 
     protected virtual Task BeforeInsertAsync(TCreateRequest request, TEntity entity)
+    {
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task AfterInsertAsync(TCreateRequest request, TEntity entity)
+    {
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task AfterUpdateAsync(TUpdateRequest request, TEntity? entity) 
     {
         return Task.CompletedTask;
     }
