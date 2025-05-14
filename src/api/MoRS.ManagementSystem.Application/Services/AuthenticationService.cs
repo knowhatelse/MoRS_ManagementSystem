@@ -24,7 +24,7 @@ public class AuthenticationService(IMapper mapper, IUserRepository repository) :
 
         if (user is null || !user.Any())
         {
-            throw new Exception(ErrorMessages.InvalidCredentials);
+            throw new Exception(Messages.InvalidCredentials);
         }
 
         var result = PasswordHelper.VerifyPassword(request.Password, user.First().PasswordHash, user.First().PasswordSalt);
@@ -35,7 +35,7 @@ public class AuthenticationService(IMapper mapper, IUserRepository repository) :
         }
         else
         {
-            throw new Exception(ErrorMessages.InvalidCredentials);
+            throw new Exception(Messages.InvalidCredentials);
         }
     }
 }
