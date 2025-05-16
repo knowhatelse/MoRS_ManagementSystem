@@ -104,6 +104,9 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                     b.Property<bool>("IsRepeating")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("RepeatingDayOfWeek")
+                        .HasColumnType("int");
+
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
@@ -219,34 +222,20 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("MembershipType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("PaymentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TransactionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
 
                     b.ToTable("MembershipFees");
                 });
@@ -299,7 +288,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("PaidAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
@@ -310,8 +299,9 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TransactionId")
-                        .HasColumnType("int");
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -434,7 +424,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsRestricted")
                         .HasColumnType("bit");
@@ -443,13 +433,13 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("PasswordSalt")
+                    b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -463,6 +453,9 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
@@ -521,7 +514,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.User", "BookedByUser")
                         .WithMany("CreatedAppointments")
                         .HasForeignKey("BookedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.Room", "Room")
                         .WithMany("Appointments")
@@ -569,8 +562,8 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
             modelBuilder.Entity("MoRS.ManagementSystem.Domain.Entities.MembershipFee", b =>
                 {
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.Payment", "Payment")
-                        .WithMany("MembershipFees")
-                        .HasForeignKey("PaymentId")
+                        .WithOne("MembershipFee")
+                        .HasForeignKey("MoRS.ManagementSystem.Domain.Entities.MembershipFee", "PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -649,7 +642,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("MoRS.ManagementSystem.Domain.Entities.Payment", b =>
                 {
-                    b.Navigation("MembershipFees");
+                    b.Navigation("MembershipFee");
                 });
 
             modelBuilder.Entity("MoRS.ManagementSystem.Domain.Entities.Role", b =>

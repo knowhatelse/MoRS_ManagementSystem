@@ -60,8 +60,6 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository repositor
             }
         }
 
-        return entities;
+        return await Task.FromResult(entities);
     }
-
-
 }
