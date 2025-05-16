@@ -2,7 +2,7 @@ using MoRS.ManagementSystem.Domain.Enums;
 
 namespace MoRS.ManagementSystem.Application.DTOs.Payment;
 
-public class PaymentRequest
+public class CreatePaymentRequest
 {
     public decimal Amount { get; set; }
     public PaymentStatus Status { get; set; }

@@ -10,10 +10,10 @@ using MoRS.ManagementSystem.Domain.Entities;
 namespace MoRS.ManagementSystem.Application.Services;
 
 public class ProfilePictureService(IMapper mapper, IProfilePictureRepository repository) :
-    BaseService<ProfilePicture, ProfilePictureResponse, AddProfilePictureRequest, EmptyDto, NoQuery>(mapper, repository),
+    BaseService<ProfilePicture, ProfilePictureResponse, CreateProfilePictureRequest, EmptyDto, NoQuery>(mapper, repository),
     IProfilePictureService
 {
-    protected override Task BeforeInsertAsync(AddProfilePictureRequest request, ProfilePicture entity)
+    protected override Task BeforeInsertAsync(CreateProfilePictureRequest request, ProfilePicture entity)
     {
         entity.Data = Convert.FromBase64String(request.Base64Data);
 

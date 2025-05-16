@@ -9,6 +9,6 @@ public class ProfilePictureProfile : Profile
     public ProfilePictureProfile()
     {
         CreateMap<ProfilePicture, ProfilePictureResponse>();
-        CreateMap<AddProfilePictureRequest, ProfilePicture>();
+        CreateMap<CreateProfilePictureRequest, ProfilePicture>();
     }
 }

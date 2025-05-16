@@ -12,13 +12,13 @@ using MoRS.ManagementSystem.Domain.Enums;
 namespace MoRS.ManagementSystem.Application.Services;
 
 public class PaymentService(IMapper mapper, IPaymentRepository paymentRepository, IMembershipFeeRepository membershipFeeRepository, INotificationRepository notificationRepository) :
-    BaseService<Payment, PaymentResponse, PaymentRequest, EmptyDto, NoQuery>(mapper, paymentRepository),
+    BaseService<Payment, PaymentResponse, CreatePaymentRequest, EmptyDto, NoQuery>(mapper, paymentRepository),
     IPaymentService
 {
     private readonly IMembershipFeeRepository _membershipFeeRepository = membershipFeeRepository;
     private readonly INotificationRepository _notificationRepository = notificationRepository;
 
-    protected override async Task<Task> AfterInsertAsync(PaymentRequest request, Payment entity)
+    protected override async Task<Task> AfterInsertAsync(CreatePaymentRequest request, Payment entity)
     {
         if (request.Status != PaymentStatus.Zavrseno)
         {

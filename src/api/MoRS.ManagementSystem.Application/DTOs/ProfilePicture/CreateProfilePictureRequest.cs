@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MoRS.ManagementSystem.Application.DTOs.ProfilePicture;
 
-public class AddProfilePictureRequest
+public class CreateProfilePictureRequest
 {
     [Required]
     [Range(1, int.MaxValue)]
