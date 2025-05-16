@@ -54,10 +54,9 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
             entity.Property(p => p.Status).HasConversion<string>();
         });
 
-        modelBuilder.Entity<MembershipFee>(entity =>
-        {
-            entity.Property(mf => mf.MembershipType).HasConversion<string>();
-            entity.Property(e => e.Amount).HasPrecision(18, 4);
-        });
+        modelBuilder.Entity<MembershipFee>()
+            .Property(mf => mf.MembershipType)
+            .HasConversion<string>();
+
     }
 }
