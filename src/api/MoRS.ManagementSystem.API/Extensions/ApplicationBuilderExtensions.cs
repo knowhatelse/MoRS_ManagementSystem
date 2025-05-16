@@ -1,3 +1,4 @@
+using MoRS.ManagementSystem.Infrastructure.Extensions;
 using Scalar.AspNetCore;
 
 
@@ -21,6 +22,7 @@ public static class ApplicationBuilderExtensions
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
+        app.SeedDatabaseAsync().Wait();
 
         return app;
     }

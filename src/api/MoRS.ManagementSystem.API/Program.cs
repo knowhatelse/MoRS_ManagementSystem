@@ -16,6 +16,5 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
-app.SeedDatabaseAsync().Wait();
 app.ConfigurePipeline();
 app.Run();
