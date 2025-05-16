@@ -8,6 +8,6 @@ public class PaymenetProfile : Profile
 {
     public PaymenetProfile()
     {
-        CreateMap<PaymentRequest, Payment>();
+        CreateMap<CreatePaymentRequest, Payment>();
     }
 }

@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
 public interface IProfilePictureService :
-    IAddService<ProfilePictureResponse, AddProfilePictureRequest>,
+    IAddService<ProfilePictureResponse, CreateProfilePictureRequest>,
     IDeleteService
 {
 
