@@ -9,7 +9,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 namespace MoRS.ManagementSystem.Application.Services;
 
 public class MembershipFeeService(IMapper mapper, IMembershipFeeRepository repository) :
-    BaseService<MembershipFee, MembershipFeeResponse, EmptyDto, EmptyDto, NoQuery>(mapper, repository),
+    BaseService<MembershipFee, MembershipFeeResponse, EmptyDto, EmptyDto, EmptyQuery>(mapper, repository),
     IMembershipFeeService
 {
 

@@ -10,7 +10,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class MembershipFeeController(IMembershipFeeService service)
-    : BaseController<MembershipFee, MembershipFeeResponse, EmptyDto, EmptyDto, NoQuery, IMembershipFeeService>(service)
+    : BaseController<MembershipFee, MembershipFeeResponse, EmptyDto, EmptyDto, EmptyQuery>(service)
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]

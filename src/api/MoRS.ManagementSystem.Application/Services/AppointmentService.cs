@@ -8,12 +8,14 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Services;
 
-public class AppointmentService(IMapper mapper, IAppointmentRepository repository) :
-    BaseService<Appointment, AppointmentResponse, CreateAppointmentRequest, UpdateAppointmentRequest, AppointmentQuery>(mapper, repository),
+public class AppointmentService(IMapper mapper, IAppointmentRepository appointmentRepository, IUserRepository userRepository) :
+    BaseService<Appointment, AppointmentResponse, CreateAppointmentRequest, UpdateAppointmentRequest, AppointmentQuery>(mapper, appointmentRepository),
     IAppointmentService
 {
     private readonly IMapper _mapper = mapper;
-    private readonly IAppointmentRepository _repository = repository;
+    private readonly IAppointmentRepository _appointmentRepository = appointmentRepository;
+    private readonly IUserRepository _userRepository = userRepository;
+
 
     protected override async Task BeforeInsertAsync(CreateAppointmentRequest request, Appointment entity)
     {
@@ -26,26 +28,17 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository repositor
             RoomId = request.RoomId,
         };
 
-        var existingAppointment = await _repository.GetAsync(query);
+        var existingAppointment = await _appointmentRepository.GetAsync(query);
         var incomingAppointment = _mapper.Map<Appointment>(request);
 
         foreach (var appointment in existingAppointment)
         {
-            if (TimeSlotValidator.IsOccurringOnDate(appointment, request.AppointmentSchedule!.Date))
+
+            if (TimeSlotValidator.IsValidTimeSlot(appointment.AppointmentSchedule?.Time, incomingAppointment.AppointmentSchedule?.Time))
             {
-                if (TimeSlotValidator.IsValidTimeSlot(appointment.AppointmentSchedule?.Time, incomingAppointment.AppointmentSchedule?.Time))
-                {
-                    throw new InvalidOperationException(Messages.TimeSlotConflict);
-                }
+                throw new InvalidOperationException(Messages.TimeSlotConflict);
             }
         }
-    }
-
-    private AppointmentResponse MapToDto(Appointment appointment, DateOnly currentDate)
-    {
-        var dto = _mapper.Map<AppointmentResponse>(appointment);
-        dto.AppointmentSchedule.Date = appointment.IsRepeating ? currentDate : appointment.AppointmentSchedule!.Date;
-        return dto;
     }
 
     protected override async Task<IEnumerable<Appointment>> AfterGetAsync(IEnumerable<Appointment> entities, AppointmentQuery? queryFilter = null)
@@ -60,8 +53,6 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository repositor
             }
         }
 
-        return entities;
+        return await Task.FromResult(entities);
     }
-
-
 }

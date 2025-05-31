@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class EmailRepository(MoRSManagementSystemDbContext context) : BaseRepository<Email, NoQuery>(context), IEmailRepository
+public class EmailRepository(MoRSManagementSystemDbContext context) : BaseRepository<Email, EmptyQuery>(context), IEmailRepository
 {
 
 }

@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 namespace MoRS.ManagementSystem.Application.Services;
 
 public abstract class BaseService<TEntity, TResponse, TCreateRequest, TUpdateRequest, TQueryFilter>(IMapper mapper, IBaseRepository<TEntity, TQueryFilter> repository) :
-    IGetService<TResponse, TQueryFilter>, IAddService<TResponse, TCreateRequest>, IUpdateService<TResponse, TUpdateRequest>, IDeleteService
+    IBaseService<TResponse, TCreateRequest, TUpdateRequest, TQueryFilter>
     where TQueryFilter : class
 {
     private readonly IMapper _mapper = mapper;
@@ -16,6 +16,7 @@ public abstract class BaseService<TEntity, TResponse, TCreateRequest, TUpdateReq
         var entity = _mapper.Map<TEntity>(request);
         await BeforeInsertAsync(request, entity);
         var response = await _repository.AddAsync(entity);
+        await AfterInsertAsync(request, entity);
         return _mapper.Map<TResponse>(response);
     }
 
@@ -53,9 +54,11 @@ public abstract class BaseService<TEntity, TResponse, TCreateRequest, TUpdateReq
             return _mapper.Map<TResponse>(entity);
         }
 
-        var result = await _repository.UpdateAsync(entity);
+        await BeforeUpdateAsync(request, entity);
 
-        await AfterUpdateAsync(request, result);
+        _mapper.Map(request, entity);
+
+        var result = await _repository.UpdateAsync(entity);
 
         return _mapper.Map<TResponse>(result);
     }
@@ -70,7 +73,7 @@ public abstract class BaseService<TEntity, TResponse, TCreateRequest, TUpdateReq
         return Task.CompletedTask;
     }
 
-    protected virtual Task AfterUpdateAsync(TUpdateRequest request, TEntity? entity) 
+    protected virtual Task BeforeUpdateAsync(TUpdateRequest request, TEntity? entity)
     {
         return Task.CompletedTask;
     }

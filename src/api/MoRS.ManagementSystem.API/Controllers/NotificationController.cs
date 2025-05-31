@@ -10,7 +10,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class NotificationController(INotificationService service)
-    : BaseController<Notification, NotificationResponse, EmptyDto, EmptyDto, NotificationQuery, INotificationService>(service)
+    : BaseController<Notification, NotificationResponse, EmptyDto, EmptyDto, NotificationQuery>(service)
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]

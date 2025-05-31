@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class RoleRepository(MoRSManagementSystemDbContext context) : BaseRepository<Role, NoQuery>(context), IRoleRepository
+public class RoleRepository(MoRSManagementSystemDbContext context) : BaseRepository<Role, EmptyQuery>(context), IRoleRepository
 {
 
 }

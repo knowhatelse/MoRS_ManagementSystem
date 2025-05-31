@@ -1,5 +1,4 @@
-using Scalar.AspNetCore;
-
+using MoRS.ManagementSystem.Infrastructure.Extensions;
 
 namespace MoRS.ManagementSystem.API.Extensions;
 
@@ -10,17 +9,16 @@ public static class ApplicationBuilderExtensions
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
-            app.MapScalarApiReference(options =>
+            app.UseSwaggerUI(options =>
             {
-                options
-                    .WithTitle("MoRS Management System API")
-                    .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+                options.SwaggerEndpoint("/openapi/v1.json", "MoRS Management System API");
             });
         }
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
+        app.SeedDatabaseAsync().Wait();
 
         return app;
     }

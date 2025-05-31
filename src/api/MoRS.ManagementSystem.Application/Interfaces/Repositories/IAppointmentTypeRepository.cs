@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IAppointmentTypeRepository : IBaseRepository<AppointmentType, NoQuery>
+public interface IAppointmentTypeRepository : IBaseRepository<AppointmentType, EmptyQuery>
 {
 
 }

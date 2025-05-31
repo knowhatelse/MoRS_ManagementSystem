@@ -16,6 +16,9 @@ public static class ApplicationServiceCollectionExtensions
         services.AddScoped<IRoomService, RoomService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IMembershipFeeService, MembershipFeeService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         return services;
     }

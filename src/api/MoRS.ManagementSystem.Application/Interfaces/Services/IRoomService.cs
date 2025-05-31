@@ -4,11 +4,8 @@ using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
-public interface IRoomService :
-    IGetService<RoomResponse, RoomQuery>,
-    IAddService<RoomResponse, CreateRoomRequest>,
-    IUpdateService<RoomResponse, UpdateRoomRequest>,
-    IDeleteService
+public interface IRoomService : 
+    IBaseService<RoomResponse, CreateRoomRequest, UpdateRoomRequest, RoomQuery>
 {
 
 }

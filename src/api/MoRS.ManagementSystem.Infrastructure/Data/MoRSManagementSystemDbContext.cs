@@ -27,7 +27,7 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
             .HasOne(a => a.BookedByUser)
             .WithMany(u => u.CreatedAppointments)
             .HasForeignKey(a => a.BookedByUserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<User>()
             .HasMany(u => u.AttendingAppointments)
@@ -54,10 +54,9 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
             entity.Property(p => p.Status).HasConversion<string>();
         });
 
-        modelBuilder.Entity<MembershipFee>(entity =>
-        {
-            entity.Property(mf => mf.MembershipType).HasConversion<string>();
-            entity.Property(e => e.Amount).HasPrecision(18, 4);
-        });
+        modelBuilder.Entity<MembershipFee>()
+            .Property(mf => mf.MembershipType)
+            .HasConversion<string>();
+
     }
 }

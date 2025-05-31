@@ -10,11 +10,11 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class PaymentController(IPaymentService service)
-    : BaseController<Payment, PaymentResponse, CreatePaymentRequest, EmptyDto, NoQuery, IPaymentService>(service)
+    : BaseController<Payment, PaymentResponse, CreatePaymentRequest, EmptyDto, EmptyQuery>(service)
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]
-    public override Task<ActionResult<IEnumerable<PaymentResponse>>> Get(NoQuery? queryFilter = null) => base.Get(queryFilter);
+    public override Task<ActionResult<IEnumerable<PaymentResponse>>> Get(EmptyQuery? queryFilter = null) => base.Get(queryFilter);
 
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]

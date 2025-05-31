@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class ProfilePictureRepository(MoRSManagementSystemDbContext context) : BaseRepository<ProfilePicture, NoQuery>(context), IProfilePictureRepository
+public class ProfilePictureRepository(MoRSManagementSystemDbContext context) : BaseRepository<ProfilePicture, EmptyQuery>(context), IProfilePictureRepository
 {
 
 }

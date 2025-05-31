@@ -10,11 +10,11 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class ProfilePictureController(IProfilePictureService service)
-    : BaseController<ProfilePicture, ProfilePictureResponse, CreateProfilePictureRequest, EmptyDto, NoQuery, IProfilePictureService>(service)
+    : BaseController<ProfilePicture, ProfilePictureResponse, CreateProfilePictureRequest, EmptyDto, EmptyQuery>(service)
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]
-    public override Task<ActionResult<IEnumerable<ProfilePictureResponse>>> Get(NoQuery? queryFilter = null) => base.Get(queryFilter);
+    public override Task<ActionResult<IEnumerable<ProfilePictureResponse>>> Get(EmptyQuery? queryFilter = null) => base.Get(queryFilter);
 
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]

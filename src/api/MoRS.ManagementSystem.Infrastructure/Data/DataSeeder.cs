@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MoRS.ManagementSystem.Application.Utils;
 using MoRS.ManagementSystem.Domain.Entities;
 using MoRS.ManagementSystem.Domain.Enums;
 
@@ -10,24 +11,34 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
     private readonly MoRSManagementSystemDbContext _context = context;
     private readonly ILogger<DataSeeder> _logger = logger;
 
+    private byte[]? _passwordHash;
+    private byte[]? _passwordSalt;
+
     public async Task SeedData()
     {
+        var defaultPassword = "Test123$";
+
+        PasswordHelper.CreatePasswordHash(defaultPassword, out byte[] passwordHash, out byte[] passwordSalt);
+
+        _passwordHash = passwordHash;
+        _passwordSalt = passwordSalt;
+
         _logger.LogInformation("Seeding data...");
 
         var seededRoles = await SeedRolesAsync();
-        var seededUsers = await SeedUsersAsync(seededRoles);
-        var seededAnnouncements = await SeedAnnouncementsAsync(seededUsers);
-        var seededRooms = await SeedRooms();
+        //var seededUsers = await SeedUsersAsync(seededRoles);
+        //var seededAnnouncements = await SeedAnnouncementsAsync(seededUsers);
+        //var seededRooms = await SeedRooms();
         var seededAppointmentTypes = await SeedAppointmentType();
-        var seededAppointments = await SeedAppointments(seededRooms, seededAppointmentTypes, seededUsers);
-        var seededAppointmentSchedules = await SeedAppointmentSchedulesAsync(seededAppointments);
-        var seededEmails = await SeedEmails(seededUsers);
-        var seededMalfunctionReports = await SeedMalfunctionReports(seededRooms, seededUsers);
-        var seededPayments = await SeedPayments(seededUsers);
-        var seededMembershipFees = await SeedMembershipFees(seededPayments);
-        var seededNotifications = await SeedNotifications(seededUsers);
-        var seededProfilePictures = await SeedProfilePictures(seededUsers);
-        var seededTimes = await SeedTimes(seededAppointmentSchedules);
+        //var seededAppointments = await SeedAppointments(seededRooms, seededAppointmentTypes, seededUsers);
+        //var seededAppointmentSchedules = await SeedAppointmentSchedulesAsync(seededAppointments);
+        //var seededEmails = await SeedEmails(seededUsers);
+        //var seededMalfunctionReports = await SeedMalfunctionReports(seededRooms, seededUsers);
+        //var seededPayments = await SeedPayments(seededUsers);
+        //var seededMembershipFees = await SeedMembershipFees(seededPayments);
+        //var seededNotifications = await SeedNotifications(seededUsers);
+        //var seededProfilePictures = await SeedProfilePictures(seededUsers);
+        //var seededTimes = await SeedTimes(seededAppointmentSchedules);
 
         _logger.LogInformation("Data seeded!");
     }
@@ -75,8 +86,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Kurtovic",
                 Email = "naida.kurtovic@gmail.com",
                 PhoneNumber = "061123456",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Admin").Id
             },
@@ -86,8 +97,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Merzic",
                 Email = "semin.merzic@gmail.com",
                 PhoneNumber = "061546987",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Osoblje").Id
             },
@@ -97,8 +108,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Kovacevic",
                 Email = "ivan.kovacevic@gmail.com",
                 PhoneNumber = "061321654",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Osoblje").Id
             },
@@ -108,8 +119,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Cevra",
                 Email = "emin.cevra@gmail.com",
                 PhoneNumber = "061546321",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Osoblje").Id
             },
@@ -119,8 +130,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Caculovic",
                 Email = "hrvoje.caculovic@gmail.com",
                 PhoneNumber = "063852147",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Osoblje").Id
             },
@@ -130,8 +141,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Zovko",
                 Email = "ivan.zovko@gmail.com",
                 PhoneNumber = "063456789",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Osoblje").Id
             },
@@ -141,8 +152,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Mujic",
                 Email = "djeno.mujic@gmail.com",
                 PhoneNumber = "061987654",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Osoblje").Id
             },
@@ -152,8 +163,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Soldo",
                 Email = "ilija.soldo@gmail.com",
                 PhoneNumber = "063654987",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Osoblje").Id
             },
@@ -163,8 +174,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Kajtazovic",
                 Email = "kenan.kajtazovic@gmail.com",
                 PhoneNumber = "061478523",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Polaznik").Id
             },
@@ -174,8 +185,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Zovko",
                 Email = "petar.zovko@gmail.com",
                 PhoneNumber = "063874512",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Polaznik").Id
             },
@@ -185,8 +196,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Prusina",
                 Email = "gojko.prusina@gmail.com",
                 PhoneNumber = "063987456",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Polaznik").Id
             },
@@ -196,8 +207,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Sesar",
                 Email = "dora.sesar@gmail.com",
                 PhoneNumber = "063987456",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Polaznik").Id
             },
@@ -207,8 +218,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Banovic",
                 Email = "nika.banovic@gmail.com",
                 PhoneNumber = "063408456",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Polaznik").Id
             },
@@ -218,8 +229,8 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Surname = "Cerkez",
                 Email = "leo.cerkez@gmail.com",
                 PhoneNumber = "063937456",
-                PasswordHash = "123",
-                PasswordSalt = "123",
+                PasswordHash = _passwordHash!,
+                PasswordSalt = _passwordSalt!,
                 IsRestricted = false,
                 RoleId = roles.First(r => r.Name == "Polaznik").Id
             },
@@ -811,56 +822,56 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
         [
             new Payment
             {
-                Date = new DateTime(2025, 03, 24, 10, 15, 00),
+                PaidAt = new DateTime(2025, 03, 24, 10, 15, 00),
                 Amount = 50.00m,
                 Status = PaymentStatus.Zavrseno,
                 PaymentMethod = PaymentMethod.PayPal,
-                TransactionId = 1,
+                TransactionId = "1",
                 UserId = users.First(u => u.Name == "Kenan" && u.Surname == "Kajtazovic").Id
             },
             new Payment
             {
-                Date = new DateTime(2025, 03, 25, 11, 30, 00),
+                PaidAt = new DateTime(2025, 03, 25, 11, 30, 00),
                 Amount = 50.00m,
                 Status = PaymentStatus.NaCekanju,
                 PaymentMethod = PaymentMethod.KreditnaKartica,
-                TransactionId = 2,
+                TransactionId = "2",
                 UserId = users.First(u => u.Name == "Petar" && u.Surname == "Zovko").Id,
             },
             new Payment
             {
-                Date = new DateTime(2025, 03, 26, 12, 45, 00),
+                PaidAt = new DateTime(2025, 03, 26, 12, 45, 00),
                 Amount = 50.00m,
                 Status = PaymentStatus.Neuspjesno,
                 PaymentMethod = PaymentMethod.BankovniTransfer,
-                TransactionId = 3,
+                TransactionId = "3",
                 UserId = users.First(u => u.Name == "Gojko" && u.Surname == "Prusina").Id,
             },
             new Payment
             {
-                Date = new DateTime(2025, 03, 27, 14, 00, 00),
+                PaidAt = new DateTime(2025, 03, 27, 14, 00, 00),
                 Amount = 50.00m,
                 Status = PaymentStatus.Zavrseno,
                 PaymentMethod = PaymentMethod.PayPal,
-                TransactionId = 4,
+                TransactionId = "4",
                 UserId = users.First(u => u.Name == "Dora" && u.Surname == "Sesar").Id,
             },
             new Payment
             {
-                Date = new DateTime(2025, 03, 28, 15, 15, 00),
+                PaidAt = new DateTime(2025, 03, 28, 15, 15, 00),
                 Amount = 50.00m,
                 Status = PaymentStatus.Neuspjesno,
                 PaymentMethod = PaymentMethod.KreditnaKartica,
-                TransactionId = 5,
+                TransactionId = "5",
                 UserId = users.First(u => u.Name == "Nika" && u.Surname == "Banovic").Id,
             },
             new Payment
             {
-                Date = new DateTime(2025, 03, 29, 16, 30, 00),
+                PaidAt = new DateTime(2025, 03, 29, 16, 30, 00),
                 Amount = 50.00m,
                 Status = PaymentStatus.NaCekanju,
                 PaymentMethod = PaymentMethod.BankovniTransfer,
-                TransactionId = 6,
+                TransactionId = "6",
                 UserId = users.First(u => u.Name == "Leo" && u.Surname == "Cerkez").Id,
             },
         ];
@@ -887,62 +898,38 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
         [
             new MembershipFee
             {
-                PaymentDate = payments.Where(p=> p.UserId == 9).First().Date,
-                Amount = payments.Where(p=> p.UserId == 9).First().Amount,
-                Status = payments.Where(p=> p.UserId == 9).First().Status.ToString(),
-                PaymentMethod = payments.Where(p=> p.UserId == 9).First().PaymentMethod.ToString(),
+                CreatedAt = payments.Where(p=> p.UserId == 9).First().PaidAt,
                 MembershipType = MembershipType.Mjesecna,
-                TransactionId = payments.Where(p=> p.UserId == 9).First().TransactionId,
                 PaymentId = 1
             },
             new MembershipFee
             {
-                PaymentDate = payments.Where(p=> p.UserId == 10).First().Date,
-                Amount = payments.Where(p=> p.UserId == 10).First().Amount,
-                Status = payments.Where(p=> p.UserId == 10).First().Status.ToString(),
-                PaymentMethod = payments.Where(p=> p.UserId == 10).First().PaymentMethod.ToString(),
+                CreatedAt = payments.Where(p=> p.UserId == 10).First().PaidAt,
                 MembershipType = MembershipType.Mjesecna,
-                TransactionId = payments.Where(p=> p.UserId == 10).First().TransactionId,
                 PaymentId = 2
             },
             new MembershipFee
             {
-                PaymentDate = payments.Where(p=> p.UserId == 11).First().Date,
-                Amount = payments.Where(p=> p.UserId == 11).First().Amount,
-                Status = payments.Where(p=> p.UserId == 11).First().Status.ToString(),
-                PaymentMethod = payments.Where(p=> p.UserId == 11).First().PaymentMethod.ToString(),
+                CreatedAt = payments.Where(p=> p.UserId == 11).First().PaidAt,
                 MembershipType = MembershipType.Mjesecna,
-                TransactionId = payments.Where(p=> p.UserId == 11).First().TransactionId,
                 PaymentId = 3
             },
             new MembershipFee
             {
-                PaymentDate = payments.Where(p=> p.UserId == 12).First().Date,
-                Amount = payments.Where(p=> p.UserId == 12).First().Amount,
-                Status = payments.Where(p=> p.UserId == 12).First().Status.ToString(),
-                PaymentMethod = payments.Where(p=> p.UserId == 12).First().PaymentMethod.ToString(),
+                CreatedAt = payments.Where(p=> p.UserId == 12).First().PaidAt,
                 MembershipType = MembershipType.Mjesecna,
-                TransactionId = payments.Where(p=> p.UserId == 12).First().TransactionId,
                 PaymentId = 4
             },
             new MembershipFee
             {
-                PaymentDate = payments.Where(p=> p.UserId == 13).First().Date,
-                Amount = payments.Where(p=> p.UserId == 13).First().Amount,
-                Status = payments.Where(p=> p.UserId == 13).First().Status.ToString(),
-                PaymentMethod = payments.Where(p=> p.UserId == 13).First().PaymentMethod.ToString(),
+                CreatedAt = payments.Where(p=> p.UserId == 13).First().PaidAt,
                 MembershipType = MembershipType.Mjesecna,
-                TransactionId = payments.Where(p=> p.UserId == 13).First().TransactionId,
                 PaymentId = 5
             },
             new MembershipFee
             {
-                PaymentDate = payments.Where(p=> p.UserId == 14).First().Date,
-                Amount = payments.Where(p=> p.UserId == 14).First().Amount,
-                Status = payments.Where(p=> p.UserId == 14).First().Status.ToString(),
-                PaymentMethod = payments.Where(p=> p.UserId == 14).First().PaymentMethod.ToString(),
+                CreatedAt = payments.Where(p=> p.UserId == 14).First().PaidAt,
                 MembershipType = MembershipType.Mjesecna,
-                TransactionId = payments.Where(p=> p.UserId == 14).First().TransactionId,
                 PaymentId = 6
             },
         ];

@@ -9,6 +9,6 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class RoomController(IRoomService service)
-    : BaseController<Room, RoomResponse, CreateRoomRequest, UpdateRoomRequest, RoomQuery, IRoomService>(service)
+    : BaseController<Room, RoomResponse, CreateRoomRequest, UpdateRoomRequest, RoomQuery>(service)
 {
 }

@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IAnnouncementRepository : IBaseRepository<Announcement, NoQuery>
+public interface IAnnouncementRepository : IBaseRepository<Announcement, AnnouncementQuery>
 {
 
 }

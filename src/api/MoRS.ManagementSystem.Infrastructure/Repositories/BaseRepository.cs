@@ -19,8 +19,13 @@ public class BaseRepository<TEntity, TQueryFilter>(MoRSManagementSystemDbContext
         return entity;
     }
 
-    public virtual async Task<bool> DeleteAsync(TEntity entity)
+    public virtual async Task<bool> DeleteAsync(TEntity? entity)
     {
+        if (entity is null)
+        {
+            return false;
+        }
+
         _context.Set<TEntity>().Remove(entity);
         var result = await _context.SaveChangesAsync();
         return result > 0;

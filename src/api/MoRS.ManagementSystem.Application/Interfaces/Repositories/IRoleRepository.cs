@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IRoleRepository : IBaseRepository<Role, NoQuery>
+public interface IRoleRepository : IBaseRepository<Role, EmptyQuery>
 {
 
 }
