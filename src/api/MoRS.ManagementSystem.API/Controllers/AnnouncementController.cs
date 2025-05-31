@@ -9,7 +9,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class AnnouncementController(IAnnouncementService service)
-    : BaseController<Announcement, AnnouncementResponse, CreateAnnouncementRequest, UpdateAnnouncementRequest, NoQuery, IAnnouncementService>(service)
+    : BaseController<Announcement, AnnouncementResponse, CreateAnnouncementRequest, UpdateAnnouncementRequest, AnnouncementQuery>(service)
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]

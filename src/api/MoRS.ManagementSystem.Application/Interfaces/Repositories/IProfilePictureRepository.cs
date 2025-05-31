@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IProfilePictureRepository : IBaseRepository<ProfilePicture, NoQuery>
+public interface IProfilePictureRepository : IBaseRepository<ProfilePicture, EmptyQuery>
 {
 
 }

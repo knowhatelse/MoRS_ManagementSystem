@@ -5,10 +5,7 @@ using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
 public interface IMalfunctionReportService :
-    IGetService<MalfunctionReportResponse, MalfunctionReportQuery>,
-    IAddService<MalfunctionReportResponse, CreateMalfunctionReportRequest>,
-    IUpdateService<MalfunctionReportResponse, UpdateMalfunctionReportRequest>,
-    IDeleteService
+    IBaseService<MalfunctionReportResponse, CreateMalfunctionReportRequest, UpdateMalfunctionReportRequest, MalfunctionReportQuery>
 {
 
 }

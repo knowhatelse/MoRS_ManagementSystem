@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class AppointmentScheduleRepository(MoRSManagementSystemDbContext context) : BaseRepository<AppointmentSchedule, NoQuery>(context), IAppointmentScheduleRepository
+public class AppointmentScheduleRepository(MoRSManagementSystemDbContext context) : BaseRepository<AppointmentSchedule, EmptyQuery>(context), IAppointmentScheduleRepository
 {
 
 }

@@ -4,10 +4,11 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.AutoMapperProfiles;
 
-public class PaymenetProfile : Profile
+public class PaymentProfile : Profile
 {
-    public PaymenetProfile()
+    public PaymentProfile()
     {
+        CreateMap<Payment, PaymentResponse>();
         CreateMap<CreatePaymentRequest, Payment>();
     }
 }

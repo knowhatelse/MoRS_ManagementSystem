@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IPaymentRepository : IBaseRepository<Payment, NoQuery>
+public interface IPaymentRepository : IBaseRepository<Payment, EmptyQuery>
 {
 
 }

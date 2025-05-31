@@ -31,6 +31,11 @@ public class MalfunctionReportRepository(MoRSManagementSystemDbContext context) 
             );
         }
 
+        if (queryFilter?.IsArchived is not null)
+        {
+            query = query.Where(mr => mr.IsArchived == queryFilter.IsArchived);
+        }
+
         if (queryFilter?.IsRoomIncluded == true)
         {
             query = query.Include(mr => mr.Room);

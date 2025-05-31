@@ -8,7 +8,7 @@ using MoRS.ManagementSystem.Application.Utils;
 
 namespace MoRS.ManagementSystem.Application.Services;
 
-public class AuthenticationService(IMapper mapper, IUserRepository repository) : IAuthenticationService<UserResponse, LoginRequest>
+public class AuthenticationService(IMapper mapper, IUserRepository repository) : IAuthenticationService
 {
     private readonly IMapper _mapper = mapper;
     private readonly IUserRepository _repository = repository;

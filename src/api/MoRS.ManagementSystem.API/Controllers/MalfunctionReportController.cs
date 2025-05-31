@@ -9,6 +9,6 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class MalfunctionReportController(IMalfunctionReportService service)
-    : BaseController<MalfunctionReport, MalfunctionReportResponse, CreateMalfunctionReportRequest, UpdateMalfunctionReportRequest, MalfunctionReportQuery, IMalfunctionReportService>(service)
+    : BaseController<MalfunctionReport, MalfunctionReportResponse, CreateMalfunctionReportRequest, UpdateMalfunctionReportRequest, MalfunctionReportQuery>(service)
 {
 }

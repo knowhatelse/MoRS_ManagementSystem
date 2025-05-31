@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IEmailRepository : IBaseRepository<Email, NoQuery>
+public interface IEmailRepository : IBaseRepository<Email, EmptyQuery>
 {
 
 }

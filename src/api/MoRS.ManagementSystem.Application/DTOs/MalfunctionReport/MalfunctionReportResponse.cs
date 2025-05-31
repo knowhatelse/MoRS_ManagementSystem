@@ -10,4 +10,5 @@ public class MalfunctionReportResponse
     public DateTime Date { get; set; }
     public RoomResponse? Room { get; set; }
     public UserResponse? ReportedByUser { get; set; }
+    public bool IsArchived { get; set; }
 }

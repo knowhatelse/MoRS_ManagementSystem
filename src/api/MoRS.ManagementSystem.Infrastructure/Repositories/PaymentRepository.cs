@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class PaymentRepository(MoRSManagementSystemDbContext context) : BaseRepository<Payment, NoQuery>(context), IPaymentRepository
+public class PaymentRepository(MoRSManagementSystemDbContext context) : BaseRepository<Payment, EmptyQuery>(context), IPaymentRepository
 {
 
 }

@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class TimeSlotRepository(MoRSManagementSystemDbContext context) : BaseRepository<TimeSlot, NoQuery>(context), ITimeSlotRepository
+public class TimeSlotRepository(MoRSManagementSystemDbContext context) : BaseRepository<TimeSlot, EmptyQuery>(context), ITimeSlotRepository
 {
 
 }

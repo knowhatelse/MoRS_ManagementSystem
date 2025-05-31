@@ -12,7 +12,7 @@ using MoRS.ManagementSystem.Domain.Enums;
 namespace MoRS.ManagementSystem.Application.Services;
 
 public class PaymentService(IMapper mapper, IPaymentRepository paymentRepository, IMembershipFeeRepository membershipFeeRepository, INotificationRepository notificationRepository) :
-    BaseService<Payment, PaymentResponse, CreatePaymentRequest, EmptyDto, NoQuery>(mapper, paymentRepository),
+    BaseService<Payment, PaymentResponse, CreatePaymentRequest, EmptyDto, EmptyQuery>(mapper, paymentRepository),
     IPaymentService
 {
     private readonly IMembershipFeeRepository _membershipFeeRepository = membershipFeeRepository;
@@ -35,16 +35,6 @@ public class PaymentService(IMapper mapper, IPaymentRepository paymentRepository
             return base.AfterInsertAsync(request, entity);
         }
 
-
-        var newMembershipiFee = new MembershipFee
-        {
-            CreatedAt = DateTime.Now,
-            MembershipType = MembershipType.Mjesecna,
-            PaymentId = entity.Id,
-        };
-
-        await _membershipFeeRepository.AddAsync(newMembershipiFee);
-
         var successNotification = new Notification
         {
             Title = Messages.PaymentTitle,
@@ -55,6 +45,15 @@ public class PaymentService(IMapper mapper, IPaymentRepository paymentRepository
         };
 
         await _notificationRepository.AddAsync(successNotification);
+
+        var newMembershipiFee = new MembershipFee
+        {
+            CreatedAt = DateTime.Now,
+            MembershipType = MembershipType.Mjesecna,
+            PaymentId = entity.Id,
+        };
+
+        await _membershipFeeRepository.AddAsync(newMembershipiFee);
 
         return base.AfterInsertAsync(request, entity);
     }

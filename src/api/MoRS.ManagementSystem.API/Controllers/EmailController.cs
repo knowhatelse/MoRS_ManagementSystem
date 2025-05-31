@@ -10,11 +10,11 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class EmailController(IEmailService service)
-    : BaseController<Email, EmailResponse, CreateEmailRequest, EmptyDto, NoQuery, IEmailService>(service)
+    : BaseController<Email, EmailResponse, CreateEmailRequest, EmptyDto, EmptyQuery>(service)
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]
-    public override Task<ActionResult<IEnumerable<EmailResponse>>> Get(NoQuery? queryFilter = null) => base.Get(queryFilter);
+    public override Task<ActionResult<IEnumerable<EmailResponse>>> Get(EmptyQuery? queryFilter = null) => base.Get(queryFilter);
 
     [ApiExplorerSettings(IgnoreApi = true)]
     [NonAction]

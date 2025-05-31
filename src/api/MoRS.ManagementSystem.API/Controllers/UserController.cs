@@ -9,6 +9,6 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class UserController(IUserService service)
-    : BaseController<User, UserResponse, CreateUserRequest, UpdateUserRequest, UserQuery, IUserService>(service)
+    : BaseController<User, UserResponse, CreateUserRequest, UpdateUserRequest, UserQuery>(service)
 {
 }

@@ -1,6 +1,9 @@
+using MoRS.ManagementSystem.Application.DTOs.Authentication;
+using MoRS.ManagementSystem.Application.DTOs.User;
+
 namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
-public interface IAuthenticationService<TResponse, TRequest>
+public interface IAuthenticationService
 {
-    Task<TResponse> LoginAsync(TRequest request);
+    Task<UserResponse> LoginAsync(LoginRequest request);
 }

@@ -8,6 +8,7 @@ public class EmailProfile : Profile
 {
     public EmailProfile()
     {
+        CreateMap<Email, EmailResponse>();
         CreateMap<CreateEmailRequest, Email>();
     }
 }

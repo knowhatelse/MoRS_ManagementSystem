@@ -10,5 +10,6 @@ public class RoomProfile : Profile
     {
         CreateMap<Room, RoomResponse>();
         CreateMap<CreateRoomRequest, Room>();
+        CreateMap<UpdateRoomRequest, Room>();
     }
 }

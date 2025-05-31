@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface IMembershipFeeRepository : IBaseRepository<MembershipFee, NoQuery>
+public interface IMembershipFeeRepository : IBaseRepository<MembershipFee, EmptyQuery>
 {
 
 }

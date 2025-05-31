@@ -5,10 +5,7 @@ using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
 public interface IAppointmentService :
-    IGetService<AppointmentResponse, AppointmentQuery>,
-    IAddService<AppointmentResponse, CreateAppointmentRequest>,
-    IUpdateService<AppointmentResponse, UpdateAppointmentRequest>,
-    IDeleteService
+    IBaseService<AppointmentResponse, CreateAppointmentRequest, UpdateAppointmentRequest, AppointmentQuery>
 {
 
 }

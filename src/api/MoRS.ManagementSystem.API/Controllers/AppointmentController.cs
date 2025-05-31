@@ -9,6 +9,6 @@ namespace MoRS.ManagementSystem.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class AppointmentController(IAppointmentService service)
-    : BaseController<Appointment, AppointmentResponse, CreateAppointmentRequest, UpdateAppointmentRequest, AppointmentQuery, IAppointmentService>(service)
+    : BaseController<Appointment, AppointmentResponse, CreateAppointmentRequest, UpdateAppointmentRequest, AppointmentQuery>(service)
 {
 }

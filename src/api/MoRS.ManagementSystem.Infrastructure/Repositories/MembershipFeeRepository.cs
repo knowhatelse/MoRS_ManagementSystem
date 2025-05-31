@@ -5,7 +5,7 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 
 namespace MoRS.ManagementSystem.Infrastructure.Repositories;
 
-public class MembershipFeeRepository(MoRSManagementSystemDbContext context) : BaseRepository<MembershipFee, NoQuery>(context), IMembershipFeeRepository
+public class MembershipFeeRepository(MoRSManagementSystemDbContext context) : BaseRepository<MembershipFee, EmptyQuery>(context), IMembershipFeeRepository
 {
 
 }

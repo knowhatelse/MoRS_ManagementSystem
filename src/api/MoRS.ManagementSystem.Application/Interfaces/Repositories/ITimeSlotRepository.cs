@@ -4,7 +4,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Interfaces.Repositories;
 
-public interface ITimeSlotRepository : IBaseRepository<TimeSlot, NoQuery>
+public interface ITimeSlotRepository : IBaseRepository<TimeSlot, EmptyQuery>
 {
 
 }

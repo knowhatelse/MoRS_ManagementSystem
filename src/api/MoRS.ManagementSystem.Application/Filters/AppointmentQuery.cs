@@ -8,8 +8,8 @@ public class AppointmentQuery
     public int? RoomId { get; set; }
     public int? BookedByUserId { get; set; }
     public int? AttendeeId { get; set; }
-    public bool IsCancelled { get; set; } = false;
-    public bool IsRepeating { get; set; } = true;
+    public bool? IsCancelled { get; set; }
+    public bool? IsRepeating { get; set; }
 
     public bool IsRoomIncluded { get; set; } = true;
     public bool IsAppointmentTypeIncluded { get; set; } = true;

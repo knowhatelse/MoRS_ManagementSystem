@@ -10,18 +10,20 @@ using MoRS.ManagementSystem.Domain.Entities;
 namespace MoRS.ManagementSystem.Application.Services;
 
 public class ProfilePictureService(IMapper mapper, IProfilePictureRepository repository) :
-    BaseService<ProfilePicture, ProfilePictureResponse, CreateProfilePictureRequest, EmptyDto, NoQuery>(mapper, repository),
+    BaseService<ProfilePicture, ProfilePictureResponse, CreateProfilePictureRequest, EmptyDto, EmptyQuery>(mapper, repository),
     IProfilePictureService
 {
-    protected override Task BeforeInsertAsync(CreateProfilePictureRequest request, ProfilePicture entity)
+    protected override async Task BeforeInsertAsync(CreateProfilePictureRequest request, ProfilePicture entity)
     {
-        entity.Data = Convert.FromBase64String(request.Base64Data);
+        if (string.IsNullOrWhiteSpace(request.Base64Data))
+        {
+            throw new ArgumentException("Base64 data cannot be null or empty.");
+        }
 
-        string detectedFileType = FileHelper.DetectFileType(entity.Data);
-        entity.FileType = detectedFileType;
+        entity.FileName = $"{request.UserId}_profile_picture.png";
+        entity.FileType = "image/png";
+        entity.UserId = request.UserId;
 
-        entity.FileName = $"user_{request.UserId}_{DateTime.Now.Ticks}.{FileHelper.GetExtensionFromType(detectedFileType)}";
-
-        return Task.CompletedTask;
+        await base.BeforeInsertAsync(request, entity);
     }
 }

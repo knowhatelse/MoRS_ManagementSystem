@@ -7,9 +7,9 @@ namespace MoRS.ManagementSystem.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthenticationController(IAuthenticationService<UserResponse, LoginRequest> service) : ControllerBase
+public class AuthenticationController(IAuthenticationService service) : ControllerBase
 {
-    private readonly IAuthenticationService<UserResponse, LoginRequest> _service = service;
+    private readonly IAuthenticationService _service = service;
 
     [HttpPost]
     public async Task<ActionResult<UserResponse>> Login([FromBody] LoginRequest request)

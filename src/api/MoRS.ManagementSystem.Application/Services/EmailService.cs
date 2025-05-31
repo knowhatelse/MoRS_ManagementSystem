@@ -8,9 +8,17 @@ using MoRS.ManagementSystem.Domain.Entities;
 
 namespace MoRS.ManagementSystem.Application.Services;
 
-public class EmailService(IMapper mapper, IEmailRepository repository) :
-    BaseService<Email, EmailResponse, CreateEmailRequest, EmptyDto, NoQuery>(mapper, repository),
+public class EmailService(IMapper mapper, IEmailRepository emailRepository, IUserRepository userRepository) :
+    BaseService<Email, EmailResponse, CreateEmailRequest, EmptyDto, EmptyQuery>(mapper, emailRepository),
     IEmailService
 {
+    private readonly IUserRepository _userRepository = userRepository;
 
+    protected override async Task BeforeInsertAsync(CreateEmailRequest request, Email entity)
+    {
+        var users = await _userRepository.GetAsync(new UserQuery { Ids = request.UserIds });
+        entity.Users = [.. users];
+        
+        await base.BeforeInsertAsync(request, entity);
+    }
 }
