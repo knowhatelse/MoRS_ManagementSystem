@@ -14,7 +14,18 @@ public class AuthenticationController(IAuthenticationService service) : Controll
     [HttpPost]
     public async Task<ActionResult<UserResponse>> Login([FromBody] LoginRequest request)
     {
-        var result = await _service.LoginAsync(request);
-        return result is not null ? Ok(result) : Unauthorized();
+        try
+        {
+            var result = await _service.LoginAsync(request);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized(new { message = "Neispravna email adresa ili lozinka" });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { message = "Došlo je do greške prilikom prijave" });
+        }
     }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
+import 'screens/main_screen.dart';
+import 'models/models.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +18,14 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const LoginScreen(),
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/main': (context) {
+          final user =
+              ModalRoute.of(context)!.settings.arguments as UserResponse;
+          return MainScreen(user: user);
+        },
+      },
     );
   }
 }
