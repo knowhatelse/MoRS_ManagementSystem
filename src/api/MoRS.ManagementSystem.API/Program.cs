@@ -10,6 +10,7 @@ builder.Services.AddMoRSManagementSystemDbContext(connectionString!);
 builder.Services.AddDataSeeder();
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+builder.Services.AddCorsPolicy();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
