@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../models/models.dart';
+import '../services/services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,15 +12,88 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthenticationService _authService = AuthenticationService();
+  bool _isLoading = false;
 
   // Custom color #525fe1
   static const Color customBlue = Color(0xFF525FE1);
-
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    // Basic validation
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      _showErrorSnackBar('Please fill in all fields');
+      return;
+    }
+
+    if (!_isValidEmail(email)) {
+      _showErrorSnackBar('Please enter a valid email address');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final loginRequest = LoginRequest(email: email, password: password);
+
+      final userResponse = await _authService.login(loginRequest);
+
+      // Login successful
+      if (mounted) {
+        _showSuccessSnackBar('Welcome back, ${userResponse.fullName}!');
+        // TODO: Navigate to home screen or dashboard
+        // Navigator.pushReplacementNamed(context, '/home');
+        debugPrint('Login successful: ${userResponse.toString()}');
+      }
+    } on ApiException catch (e) {
+      if (mounted) {
+        _showErrorSnackBar(e.message);
+      }
+    } catch (e) {
+      if (mounted) {
+        _showErrorSnackBar('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -39,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Logo
-                  Container(
+                  SizedBox(
                     width: 150,
                     height: 150,
                     child: Image.asset(
@@ -125,28 +200,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  // Login button
+                  const SizedBox(height: 40), // Login button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle login logic here
-                        String email = _emailController.text;
-                        String password = _passwordController.text;
-
-                        // For now, just print the values (you can implement actual login logic)
-                        print('Email: $email, Password: $password');
-
-                        // Show a snackbar as feedback
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Login button pressed!'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      },
+                      onPressed: _isLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: customBlue,
                         foregroundColor: Colors.white,
@@ -155,13 +214,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         elevation: 2,
                       ),
-                      child: const Text(
-                        'Prijavi se',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'Prijavi se',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 20),
