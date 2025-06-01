@@ -396,6 +396,59 @@ FodyWeavers.xsd
 *.sln.iml
 
 #########################################
+# Additional Patterns for This Project
+#########################################
+
+# Environment files that might contain secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# IDE and editor files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/c_cpp_properties.json
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+# Package manager lock files (keep these for reproducible builds)
+# package-lock.json (keep for consistency)
+# yarn.lock (keep for consistency)
+# pubspec.lock (keep for Flutter consistency)
+
+#########################################
 # Flutter/Dart/Mobile Development Files
 #########################################
 
@@ -424,7 +477,15 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+**/build/
+src/mobile/build/
+
+# Flutter generated files
+.metadata
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+*.config.dart
 
 # Symbolication related
 app.*.symbols
@@ -436,3 +497,44 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android specific
+**/android/local.properties
+**/android/.gradle/
+**/android/.kotlin/
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/key.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/**/GeneratedPluginRegistrant.kt
+
+# iOS specific
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GoogleService-Info.plist
+
+# macOS specific
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+
+# Windows specific
+**/windows/flutter/generated_plugins.cmake
+**/windows/flutter/generated_plugin_registrant.cc
+**/windows/flutter/generated_plugin_registrant.h
+
+# Web specific
+**/web/manifest.json
+
+# Firebase
+**/lib/firebase_options.dart
+
+# Coverage
+coverage/
+
+# Exceptions to above rules
+!**/ios/**/default.mode1v3
+!**/ios/**/default.mode2v3
+!**/ios/**/default.movov3
+!**/ios/**/default.pbxuser
+!**/ios/**/default.perspectivev3

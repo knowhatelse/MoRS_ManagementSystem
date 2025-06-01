@@ -11,9 +11,7 @@ namespace MoRS.ManagementSystem.Application.Services;
 public class AuthenticationService(IMapper mapper, IUserRepository repository) : IAuthenticationService
 {
     private readonly IMapper _mapper = mapper;
-    private readonly IUserRepository _repository = repository;
-
-    public async Task<UserResponse> LoginAsync(LoginRequest request)
+    private readonly IUserRepository _repository = repository; public async Task<UserResponse> LoginAsync(LoginRequest request)
     {
         var userQuery = new UserQuery
         {
@@ -24,7 +22,7 @@ public class AuthenticationService(IMapper mapper, IUserRepository repository) :
 
         if (user is null || !user.Any())
         {
-            throw new Exception(Messages.InvalidCredentials);
+            throw new UnauthorizedAccessException(Messages.InvalidCredentials);
         }
 
         var result = PasswordHelper.VerifyPassword(request.Password, user.First().PasswordHash, user.First().PasswordSalt);
@@ -35,7 +33,7 @@ public class AuthenticationService(IMapper mapper, IUserRepository repository) :
         }
         else
         {
-            throw new Exception(Messages.InvalidCredentials);
+            throw new UnauthorizedAccessException(Messages.InvalidCredentials);
         }
     }
 }

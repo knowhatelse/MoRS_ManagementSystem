@@ -14,8 +14,8 @@ public static class ApplicationBuilderExtensions
                 options.SwaggerEndpoint("/openapi/v1.json", "MoRS Management System API");
             });
         }
-
         app.UseHttpsRedirection();
+        app.UseCors("MoRSCorsPolicy");
         app.UseAuthorization();
         app.MapControllers();
         app.SeedDatabaseAsync().Wait();
