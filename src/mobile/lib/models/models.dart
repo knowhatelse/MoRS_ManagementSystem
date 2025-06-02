@@ -10,3 +10,8 @@ export 'profile_picture/profile_picture_response.dart';
 
 // Role models
 export 'role/role_response.dart';
+
+// Announcement models
+export 'announcement/announcement_response.dart';
+export 'announcement/create_announcement_request.dart';
+export 'announcement/update_announcement_request.dart';
