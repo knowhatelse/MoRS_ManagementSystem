@@ -1,10 +1,10 @@
 class ApiConfig {
   // Base URL for the API
-  static const String _baseUrl = 'http://192.168.116.132:5000/api';
+  static const String _baseUrl = 'http://192.168.0.7:5000/api';
   static String get baseUrl => _baseUrl;
-
   // API endpoints
   static const String authentication = '/Authentication';
+  static const String announcements = '/Announcement';
 
   // Common headers
   static Map<String, String> get defaultHeaders => {

@@ -13,7 +13,14 @@ class AuthenticationService extends BaseApiService {
 
       // Since the API returns UserResponse directly (not wrapped in LoginResponse),
       // we create the UserResponse from the API response
-      return UserResponse.fromJson(response);
+      if (response is Map<String, dynamic>) {
+        return UserResponse.fromJson(response);
+      } else {
+        throw ApiException(
+          statusCode: 0,
+          message: 'Invalid response format from login API',
+        );
+      }
     } catch (e) {
       // Re-throw the error to be handled by the UI
       rethrow;

@@ -5,7 +5,7 @@ import 'api_config.dart';
 
 abstract class BaseApiService {
   // GET request
-  Future<Map<String, dynamic>> get(
+  Future<dynamic> get(
     String endpoint, {
     Map<String, String>? headers,
     Map<String, String>? queryParameters,
@@ -29,7 +29,7 @@ abstract class BaseApiService {
   }
 
   // POST request
-  Future<Map<String, dynamic>> post(
+  Future<dynamic> post(
     String endpoint, {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
@@ -50,7 +50,7 @@ abstract class BaseApiService {
   }
 
   // PUT request
-  Future<Map<String, dynamic>> put(
+  Future<dynamic> put(
     String endpoint, {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
@@ -71,7 +71,7 @@ abstract class BaseApiService {
   }
 
   // DELETE request
-  Future<Map<String, dynamic>> delete(
+  Future<dynamic> delete(
     String endpoint, {
     Map<String, String>? headers,
   }) async {
@@ -90,12 +90,12 @@ abstract class BaseApiService {
   }
 
   // Handle HTTP response
-  Map<String, dynamic> _handleResponse(http.Response response) {
+  dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (response.body.isEmpty) {
         return {};
       }
-      return jsonDecode(response.body) as Map<String, dynamic>;
+      return jsonDecode(response.body);
     } else {
       throw ApiException(
         statusCode: response.statusCode,

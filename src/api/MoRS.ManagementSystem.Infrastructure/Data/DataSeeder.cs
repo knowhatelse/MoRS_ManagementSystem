@@ -26,19 +26,19 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
         _logger.LogInformation("Seeding data...");
 
         var seededRoles = await SeedRolesAsync();
-        //var seededUsers = await SeedUsersAsync(seededRoles);
-        //var seededAnnouncements = await SeedAnnouncementsAsync(seededUsers);
-        //var seededRooms = await SeedRooms();
+        var seededUsers = await SeedUsersAsync(seededRoles);
+        var seededAnnouncements = await SeedAnnouncementsAsync(seededUsers);
+        var seededRooms = await SeedRooms();
         var seededAppointmentTypes = await SeedAppointmentType();
-        //var seededAppointments = await SeedAppointments(seededRooms, seededAppointmentTypes, seededUsers);
-        //var seededAppointmentSchedules = await SeedAppointmentSchedulesAsync(seededAppointments);
-        //var seededEmails = await SeedEmails(seededUsers);
-        //var seededMalfunctionReports = await SeedMalfunctionReports(seededRooms, seededUsers);
-        //var seededPayments = await SeedPayments(seededUsers);
-        //var seededMembershipFees = await SeedMembershipFees(seededPayments);
-        //var seededNotifications = await SeedNotifications(seededUsers);
-        //var seededProfilePictures = await SeedProfilePictures(seededUsers);
-        //var seededTimes = await SeedTimes(seededAppointmentSchedules);
+        var seededAppointments = await SeedAppointments(seededRooms, seededAppointmentTypes, seededUsers);
+        var seededAppointmentSchedules = await SeedAppointmentSchedulesAsync(seededAppointments);
+        var seededEmails = await SeedEmails(seededUsers);
+        var seededMalfunctionReports = await SeedMalfunctionReports(seededRooms, seededUsers);
+        var seededPayments = await SeedPayments(seededUsers);
+        var seededMembershipFees = await SeedMembershipFees(seededPayments);
+        var seededNotifications = await SeedNotifications(seededUsers);
+        var seededProfilePictures = await SeedProfilePictures(seededUsers);
+        var seededTimes = await SeedTimes(seededAppointmentSchedules);
 
         _logger.LogInformation("Data seeded!");
     }
