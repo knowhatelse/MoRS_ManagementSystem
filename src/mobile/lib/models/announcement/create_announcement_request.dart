@@ -21,7 +21,6 @@ class CreateAnnouncementRequest {
     );
   }
 
-  // Validation methods following C# validation attributes
   bool isValidTitle() {
     return title.length >= 5 && title.length <= 100;
   }

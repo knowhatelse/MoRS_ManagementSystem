@@ -32,4 +32,20 @@ class AppUtils {
       backgroundColor: AppConstants.primaryBlue,
     );
   }
+
+  static void showNetworkErrorSnackbar(BuildContext context, String message) {
+    showSnackBar(context, message, backgroundColor: AppConstants.errorColor);
+  }
+
+  static void showServerNotRespondingSnackbar(BuildContext context) {
+    showNetworkErrorSnackbar(context, AppStrings.serverNotResponding);
+  }
+
+  static void showConnectionTimeoutSnackbar(BuildContext context) {
+    showNetworkErrorSnackbar(context, AppStrings.connectionTimeout);
+  }
+
+  static void showNoInternetSnackbar(BuildContext context) {
+    showNetworkErrorSnackbar(context, AppStrings.noInternetConnection);
+  }
 }

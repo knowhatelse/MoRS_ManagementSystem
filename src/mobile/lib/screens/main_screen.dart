@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/models.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_navigation.dart';
@@ -7,6 +8,7 @@ import '../pages/schedule_page.dart';
 import '../pages/my_schedule_page.dart';
 import '../pages/report_problem_page.dart';
 import '../pages/profile_page.dart';
+import '../providers/announcement_provider.dart';
 import '../constants/app_constants.dart';
 import '../utils/app_utils.dart';
 
@@ -46,6 +48,12 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedIndex = index;
     });
+
+    if (index == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<AnnouncementProvider>().loadAnnouncements();
+      });
+    }
   }
 
   Widget _buildBody() {

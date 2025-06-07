@@ -3,4 +3,4 @@ export 'custom_bottom_navigation.dart';
 export 'custom_button.dart';
 export 'custom_text_field.dart';
 export 'empty_page_widget.dart';
-export 'announcement_form_dialog.dart';
+export 'announcement_detail_dialog.dart';

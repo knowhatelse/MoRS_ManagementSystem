@@ -20,6 +20,8 @@ public class AnnouncementRepository(MoRSManagementSystemDbContext context) : Bas
             query = query.Include(a => a.User);
         }
 
+        query = query.OrderByDescending(a => a.CreatedAt);
+
         return base.ApplyQueryFilters(query, queryFilter);
     }
 }

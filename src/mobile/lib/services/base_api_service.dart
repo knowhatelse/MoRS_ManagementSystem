@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'api_config.dart';
 
 abstract class BaseApiService {
-  // GET request
   Future<dynamic> get(
     String endpoint, {
     Map<String, String>? headers,
@@ -17,10 +17,9 @@ abstract class BaseApiService {
         url = url.replace(queryParameters: queryParameters);
       }
 
-      final response = await http.get(
-        url,
-        headers: headers ?? ApiConfig.defaultHeaders,
-      );
+      final response = await http
+          .get(url, headers: headers ?? ApiConfig.defaultHeaders)
+          .timeout(ApiConfig.requestTimeout);
 
       return _handleResponse(response);
     } catch (e) {
@@ -28,7 +27,6 @@ abstract class BaseApiService {
     }
   }
 
-  // POST request
   Future<dynamic> post(
     String endpoint, {
     Map<String, dynamic>? body,
@@ -37,11 +35,13 @@ abstract class BaseApiService {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
 
-      final response = await http.post(
-        url,
-        headers: headers ?? ApiConfig.defaultHeaders,
-        body: body != null ? jsonEncode(body) : null,
-      );
+      final response = await http
+          .post(
+            url,
+            headers: headers ?? ApiConfig.defaultHeaders,
+            body: body != null ? jsonEncode(body) : null,
+          )
+          .timeout(ApiConfig.requestTimeout);
 
       return _handleResponse(response);
     } catch (e) {
@@ -49,7 +49,6 @@ abstract class BaseApiService {
     }
   }
 
-  // PUT request
   Future<dynamic> put(
     String endpoint, {
     Map<String, dynamic>? body,
@@ -58,11 +57,13 @@ abstract class BaseApiService {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
 
-      final response = await http.put(
-        url,
-        headers: headers ?? ApiConfig.defaultHeaders,
-        body: body != null ? jsonEncode(body) : null,
-      );
+      final response = await http
+          .put(
+            url,
+            headers: headers ?? ApiConfig.defaultHeaders,
+            body: body != null ? jsonEncode(body) : null,
+          )
+          .timeout(ApiConfig.requestTimeout);
 
       return _handleResponse(response);
     } catch (e) {
@@ -70,7 +71,6 @@ abstract class BaseApiService {
     }
   }
 
-  // DELETE request
   Future<dynamic> delete(
     String endpoint, {
     Map<String, String>? headers,
@@ -78,10 +78,9 @@ abstract class BaseApiService {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
 
-      final response = await http.delete(
-        url,
-        headers: headers ?? ApiConfig.defaultHeaders,
-      );
+      final response = await http
+          .delete(url, headers: headers ?? ApiConfig.defaultHeaders)
+          .timeout(ApiConfig.requestTimeout);
 
       return _handleResponse(response);
     } catch (e) {
@@ -89,7 +88,6 @@ abstract class BaseApiService {
     }
   }
 
-  // Handle HTTP response
   dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (response.body.isEmpty) {
@@ -104,7 +102,6 @@ abstract class BaseApiService {
     }
   }
 
-  // Extract error message from response
   String _getErrorMessage(http.Response response) {
     try {
       if (response.body.isNotEmpty) {
@@ -115,15 +112,17 @@ abstract class BaseApiService {
               'HTTP ${response.statusCode}';
         }
       }
-    } catch (e) {
-      // If JSON parsing fails, return status code
-    }
+    } catch (e) {}
     return 'HTTP ${response.statusCode}';
   }
 
-  // Handle different types of errors
   Exception _handleError(dynamic error) {
-    if (error is SocketException) {
+    if (error is TimeoutException) {
+      return ApiException(
+        statusCode: 0,
+        message: 'Connection timeout - server is not responding',
+      );
+    } else if (error is SocketException) {
       return ApiException(
         statusCode: 0,
         message: 'No internet connection or server unreachable',
@@ -146,7 +145,6 @@ abstract class BaseApiService {
   }
 }
 
-// Custom API exception class
 class ApiException implements Exception {
   final int statusCode;
   final String message;

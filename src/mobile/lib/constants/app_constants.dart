@@ -41,8 +41,6 @@ class AppStrings {
     'Prijava kvara',
     'Profil',
   ];
-
-  // Individual page titles for const usage
   static const String announcements = 'Obavijesti';
   static const String schedule = 'Planer';
   static const String mySchedule = 'Moji termini';
@@ -62,5 +60,22 @@ class AppStrings {
   static const String enterValidEmail = 'Unesite ispravnu email adresu';
   static const String enterPassword = 'Unesite lozinku';
   static const String unexpectedError =
-      'An unexpected error occurred. Please try again.';
+      'Došlo je do neočekivane greške. Molimo pokušajte ponovo.';
+
+  static const String serverNotResponding =
+      'Server ne odgovara. Molimo pokušajte ponovo.';
+  static const String connectionTimeout =
+      'Veza se prekida zbog dugog čekanja. Provjerite internetsku vezu.';
+  static const String noInternetConnection =
+      'Nema internetske veze ili server nije dostupan.';
+  static const String loadingAnnouncementsFailed =
+      'Učitavanje obavijesti nije uspjelo.';
+  static const String tryAgain = 'Pokušaj ponovo';
+  static const String checkConnection = 'Provjerite internetsku vezu';
+  static const String serverMaintenance =
+      'Server je trenutno u održavanju. Molimo pokušajte kasnije.';
+
+  static const String announcementDetails = 'Detalji o obavijesti';
+  static const String author = 'Autor:';
+  static const String publishedDate = 'Datum objave:';
 }
