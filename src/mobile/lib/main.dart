@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/main_screen.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AnnouncementProvider()),
+        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
       ],
       child: MaterialApp(
         title: 'MoRS Management System',
@@ -23,6 +25,16 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', 'US'), 
+          Locale('bs', 'BA'), 
+        ],
+        locale: const Locale('bs', 'BA'),
         home: const LoginScreen(),
         routes: {
           '/login': (context) => const LoginScreen(),

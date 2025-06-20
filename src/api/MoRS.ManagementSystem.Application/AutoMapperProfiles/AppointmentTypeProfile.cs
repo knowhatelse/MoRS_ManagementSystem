@@ -9,5 +9,6 @@ public class AppointmentTypeProfile : Profile
     public AppointmentTypeProfile()
     {
         CreateMap<AppointmentType, AppointmentTypeResponse>();
+        CreateMap<CreateAppointmentTypeRequest, AppointmentType>();
     }
 }

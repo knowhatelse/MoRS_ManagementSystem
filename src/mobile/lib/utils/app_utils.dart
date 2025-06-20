@@ -25,6 +25,10 @@ class AppUtils {
     showSnackBar(context, message, backgroundColor: AppConstants.errorColor);
   }
 
+  static void showSuccessSnackbar(BuildContext context, String message) {
+    showSnackBar(context, message, backgroundColor: Colors.green);
+  }
+
   static void showComingSoonSnackBar(BuildContext context, String feature) {
     showSnackBar(
       context,

@@ -70,6 +70,8 @@ class AppStrings {
       'Nema internetske veze ili server nije dostupan.';
   static const String loadingAnnouncementsFailed =
       'Učitavanje obavijesti nije uspjelo.';
+  static const String loadingAppointmentsFailed =
+      'Učitavanje termina nije uspjelo.';
   static const String tryAgain = 'Pokušaj ponovo';
   static const String checkConnection = 'Provjerite internetsku vezu';
   static const String serverMaintenance =
@@ -78,4 +80,38 @@ class AppStrings {
   static const String announcementDetails = 'Detalji o obavijesti';
   static const String author = 'Autor:';
   static const String publishedDate = 'Datum objave:';
+
+  static const String noAppointmentsToday = 'Nema termina za danas.';
+  static const String noAppointmentsForDate = 'Nema termina za odabrani datum.';
+  static const String appointmentTime = 'Vrijeme:';
+  static const String appointmentRoom = 'Sala:';
+  static const String appointmentType = 'Tip:';
+  static const String appointmentAttendees = 'Polaznici:';
+  static const String bookedBy = 'Rezervirao:';
+  static const String cancelled = 'Otkazano';
+  static const String today = 'Danas';
+  static const String tomorrow = 'Sutra';
+  static const String users = 'Korisnici';
+
+  static const String newAppointment = 'Novi termin';
+  static const String timeFrom = 'Od:';
+  static const String timeTo = 'Do:';
+  static const String appointmentDate = 'Datum:';
+  static const String room = 'Prostorija:';
+  static const String appointmentTypeLabel = 'Tip termina:';
+  static const String addUser = 'Dodajte korisnika:';
+  static const String repeatingAppointment = 'Ponavljajući termin:';
+  static const String createAppointment = 'Kreiraj termin';
+  static const String cancel = 'Otkaži';
+  static const String selectRoom = 'Odaberi prostoriju';
+  static const String selectAppointmentType = 'Odaberi tip termina';
+  static const String selectUser = 'Odaberi korisnika';
+  static const String searchUsers = 'Pretraži korisnike...';
+  static const String noUsersFound = 'Nema pronađenih korisnika';
+  static const String required = 'Obavezno polje';
+  static const String invalidTimeRange =
+      'Vrijeme "Od" mora biti prije vremena "Do"';
+  static const String appointmentCreated = 'Termin je uspješno kreiran';
+  static const String appointmentCreationFailed =
+      'Kreiranje termina nije uspjelo';
 }

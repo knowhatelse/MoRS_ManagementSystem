@@ -14,45 +14,231 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository appointme
 {
     private readonly IMapper _mapper = mapper;
     private readonly IAppointmentRepository _appointmentRepository = appointmentRepository;
-    private readonly IUserRepository _userRepository = userRepository;
-
-
-    protected override async Task BeforeInsertAsync(CreateAppointmentRequest request, Appointment entity)
+    private readonly IUserRepository _userRepository = userRepository; protected override async Task BeforeInsertAsync(CreateAppointmentRequest request, Appointment entity)
     {
+        if (request.AppointmentSchedule?.Date != null)
+        {
+            entity.DayOfOccurrance = request.AppointmentSchedule.Date.DayOfWeek.ToString();
+
+            if (request.IsRepeating)
+            {
+                entity.RepeatingDayOfWeek = request.AppointmentSchedule.Date.DayOfWeek;
+            }
+        }
+
+        if (request.AppointmentSchedule?.Time != null)
+        {
+            var timeSlot = _mapper.Map<TimeSlot>(request.AppointmentSchedule.Time);
+
+            if (!TimeSlotValidator.IsValidTimeRange(timeSlot))
+            {
+                throw new InvalidOperationException(Messages.AppointmentInvalidTimeRange);
+            }
+
+            if (!TimeSlotValidator.IsWithinAllowedHours(timeSlot))
+            {
+                throw new InvalidOperationException(Messages.AppointmentOutsideAllowedHours);
+            }
+
+            if (!TimeSlotValidator.IsValidDuration(timeSlot))
+            {
+                var duration = timeSlot.TimeTo - timeSlot.TimeFrom;
+                if (duration < TimeSpan.Zero)
+                {
+                    duration = duration.Add(new TimeSpan(24, 0, 0));
+                }
+
+                if (duration < new TimeSpan(0, 30, 0))
+                {
+                    throw new InvalidOperationException(Messages.AppointmentDurationTooShort);
+                }
+                else
+                {
+                    throw new InvalidOperationException(Messages.AppointmentDurationTooLong);
+                }
+            }
+        }
+
+        if (entity.IsRepeating && request.AppointmentSchedule?.Date != null)
+        {
+            entity.RepeatingDayOfWeek = request.AppointmentSchedule.Date.DayOfWeek;
+        }
+
+        if (request.AttendeesIds != null && request.AttendeesIds.Count > 0)
+        {
+            var attendees = await _userRepository.GetAsync(new UserQuery { Ids = request.AttendeesIds });
+            entity.Attendees = [.. attendees];
+        }
+
+        await ValidateNoConflictingAppointments(request, entity);
+    }
+
+    private async Task ValidateNoConflictingAppointments(CreateAppointmentRequest request, Appointment newAppointment)
+    {
+        if (request.AppointmentSchedule?.Date == null || request.AppointmentSchedule.Time == null)
+            return;
+
+        var appointmentDate = request.AppointmentSchedule.Date;
+        var dayOfWeek = appointmentDate.DayOfWeek; var incomingTimeSlot = _mapper.Map<TimeSlot>(request.AppointmentSchedule.Time);
+
         var query = new AppointmentQuery
         {
-            Date = request.AppointmentSchedule?.Date,
             IsAppointmentScheduleIncluded = true,
             IsRoomIncluded = true,
             IsCancelled = false,
             RoomId = request.RoomId,
-        };
+        }; var allAppointments = await _appointmentRepository.GetAsync(query);
 
-        var existingAppointment = await _appointmentRepository.GetAsync(query);
-        var incomingAppointment = _mapper.Map<Appointment>(request);
+        var conflictingAppointments = allAppointments.Where(appointment =>
+            TimeSlotValidator.IsOccurringOnDate(appointment, appointmentDate));
 
-        foreach (var appointment in existingAppointment)
+        foreach (var appointment in conflictingAppointments)
         {
-
-            if (TimeSlotValidator.IsValidTimeSlot(appointment.AppointmentSchedule?.Time, incomingAppointment.AppointmentSchedule?.Time))
+            if (appointment.AppointmentSchedule?.Time != null &&
+                TimeSlotValidator.IsValidTimeSlot(appointment.AppointmentSchedule.Time, incomingTimeSlot))
             {
-                throw new InvalidOperationException(Messages.TimeSlotConflict);
+                if (appointment.IsRepeating)
+                {
+                    throw new InvalidOperationException(
+                        $"{Messages.TimeSlotConflict} (Ponavljajući termin svaki {appointment.RepeatingDayOfWeek ?? dayOfWeek})");
+                }
+                else
+                {
+                    throw new InvalidOperationException(Messages.TimeSlotConflict);
+                }
             }
         }
     }
-
     protected override async Task<IEnumerable<Appointment>> AfterGetAsync(IEnumerable<Appointment> entities, AppointmentQuery? queryFilter = null)
     {
-        var currentDate = queryFilter?.Date ?? DateOnly.FromDateTime(DateTime.Today);
+        var appointments = entities.ToList();
 
-        foreach (var appointment in entities)
+        if (queryFilter?.Date.HasValue == true)
         {
-            if (appointment.IsRepeating && appointment.AppointmentSchedule != null)
+            var targetDate = queryFilter.Date.Value;
+            var targetDayOfWeek = targetDate.DayOfWeek; var targetDayName = targetDayOfWeek.ToString();
+
+            var relevantAppointments = new List<Appointment>(); foreach (var appointment in appointments)
             {
-                appointment.AppointmentSchedule.Date = currentDate;
+                if (appointment.IsCancelled && queryFilter.IsCancelled != true)
+                    continue;
+                if (TimeSlotValidator.IsOccurringOnDate(appointment, targetDate))
+                {
+                    if (appointment.IsRepeating && appointment.AppointmentSchedule != null)
+                    {
+                        var appointmentCopy = new Appointment
+                        {
+                            Id = appointment.Id,
+                            IsRepeating = appointment.IsRepeating,
+                            IsCancelled = appointment.IsCancelled,
+                            RepeatingDayOfWeek = appointment.RepeatingDayOfWeek,
+                            DayOfOccurrance = appointment.DayOfOccurrance,
+                            AppointmentSchedule = new AppointmentSchedule
+                            {
+                                Id = appointment.AppointmentSchedule.Id,
+                                Date = targetDate,
+                                Time = appointment.AppointmentSchedule.Time
+                            },
+                            RoomId = appointment.RoomId,
+                            Room = appointment.Room,
+                            AppointmentTypeId = appointment.AppointmentTypeId,
+                            AppointmentType = appointment.AppointmentType,
+                            BookedByUserId = appointment.BookedByUserId,
+                            BookedByUser = appointment.BookedByUser,
+                            Attendees = appointment.Attendees
+                        };
+                        relevantAppointments.Add(appointmentCopy);
+                    }
+                    else
+                    {
+                        relevantAppointments.Add(appointment);
+                    }
+                }
             }
+
+            return await Task.FromResult(relevantAppointments);
+        }
+        else if (queryFilter?.DateFrom.HasValue == true || queryFilter?.DateTo.HasValue == true)
+        {
+            var dateFrom = queryFilter.DateFrom ?? DateOnly.MinValue;
+            var dateTo = queryFilter.DateTo ?? DateOnly.MaxValue;
+
+            var relevantAppointments = new List<Appointment>();
+
+            foreach (var appointment in appointments)
+            {
+                if (appointment.IsCancelled && queryFilter.IsCancelled != true)
+                    continue;
+
+                if (appointment.IsRepeating && appointment.RepeatingDayOfWeek.HasValue)
+                {
+                    var occurrences = GetRepeatingAppointmentOccurrences(appointment, dateFrom, dateTo);
+                    relevantAppointments.AddRange(occurrences);
+                }
+                else if (appointment.AppointmentSchedule?.Date >= dateFrom &&
+                         appointment.AppointmentSchedule?.Date <= dateTo)
+                {
+                    relevantAppointments.Add(appointment);
+                }
+            }
+
+            return await Task.FromResult(relevantAppointments);
+        }
+        else
+        {
+            if (queryFilter?.IsCancelled != true)
+            {
+                appointments = appointments.Where(a => !a.IsCancelled).ToList();
+            }
+
+            return await Task.FromResult(appointments);
+        }
+    }
+
+    private static List<Appointment> GetRepeatingAppointmentOccurrences(Appointment repeatingAppointment, DateOnly dateFrom, DateOnly dateTo)
+    {
+        var occurrences = new List<Appointment>();
+
+        if (repeatingAppointment.AppointmentSchedule?.Date == null ||
+            !repeatingAppointment.RepeatingDayOfWeek.HasValue)
+            return occurrences;
+
+        var startDate = repeatingAppointment.AppointmentSchedule.Date;
+        var targetDayOfWeek = repeatingAppointment.RepeatingDayOfWeek.Value;
+
+        var currentDate = dateFrom;
+
+        while (currentDate <= dateTo)
+        {
+            if (currentDate >= startDate && currentDate.DayOfWeek == targetDayOfWeek)
+            {               
+                var occurrence = new Appointment
+                {
+                    Id = repeatingAppointment.Id,
+                    IsRepeating = repeatingAppointment.IsRepeating,
+                    IsCancelled = repeatingAppointment.IsCancelled,
+                    RepeatingDayOfWeek = repeatingAppointment.RepeatingDayOfWeek,
+                    DayOfOccurrance = repeatingAppointment.DayOfOccurrance,
+                    AppointmentSchedule = new AppointmentSchedule
+                    {
+                        Id = repeatingAppointment.AppointmentSchedule.Id,
+                        Date = currentDate,
+                        Time = repeatingAppointment.AppointmentSchedule.Time
+                    },
+                    RoomId = repeatingAppointment.RoomId,
+                    Room = repeatingAppointment.Room,
+                    AppointmentTypeId = repeatingAppointment.AppointmentTypeId,
+                    AppointmentType = repeatingAppointment.AppointmentType,
+                    BookedByUserId = repeatingAppointment.BookedByUserId,
+                    BookedByUser = repeatingAppointment.BookedByUser,
+                    Attendees = repeatingAppointment.Attendees
+                };
+                occurrences.Add(occurrence);
+            }
+
+            currentDate = currentDate.AddDays(1);
         }
 
-        return await Task.FromResult(entities);
+        return occurrences;
     }
 }

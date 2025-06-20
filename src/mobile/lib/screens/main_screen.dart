@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
       case 0:
         return const AnnouncementsPage();
       case 1:
-        return const SchedulePage();
+        return SchedulePage(currentUser: widget.user);
       case 2:
         return const MySchedulePage();
       case 3:

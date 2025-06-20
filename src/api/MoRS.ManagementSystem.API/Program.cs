@@ -20,3 +20,5 @@ var app = builder.Build();
 
 app.ConfigurePipeline();
 app.Run();
+
+public partial class Program { }

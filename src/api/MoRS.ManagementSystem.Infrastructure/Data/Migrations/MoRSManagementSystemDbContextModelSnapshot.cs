@@ -98,6 +98,9 @@ namespace MoRS.ManagementSystem.Infrastructure.Data.Migrations
                     b.Property<int?>("BookedByUserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DayOfOccurrance")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsCancelled")
                         .HasColumnType("bit");
 

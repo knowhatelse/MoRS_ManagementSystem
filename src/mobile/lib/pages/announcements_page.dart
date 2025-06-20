@@ -88,10 +88,12 @@ class _AnnouncementsPageState extends State<AnnouncementsPage>
             onRefresh: () async {
               await provider.refreshAnnouncements();
               if (provider.hasError && mounted) {
-                AppUtils.showNetworkErrorSnackbar(
-                  context,
-                  provider.errorMessage ?? AppStrings.unexpectedError,
-                );
+                if (context.mounted) {
+                  AppUtils.showNetworkErrorSnackbar(
+                    context,
+                    provider.errorMessage ?? AppStrings.unexpectedError,
+                  );
+                }
               }
             },
             child: ListView.builder(

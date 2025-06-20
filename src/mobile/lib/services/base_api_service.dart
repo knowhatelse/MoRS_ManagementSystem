@@ -12,7 +12,6 @@ abstract class BaseApiService {
   }) async {
     try {
       Uri url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-
       if (queryParameters != null && queryParameters.isNotEmpty) {
         url = url.replace(queryParameters: queryParameters);
       }
@@ -107,12 +106,18 @@ abstract class BaseApiService {
       if (response.body.isNotEmpty) {
         final errorData = jsonDecode(response.body);
         if (errorData is Map<String, dynamic>) {
+          if (errorData.containsKey('detail')) {
+            return errorData['detail'] ?? 'HTTP ${response.statusCode}';
+          }
           return errorData['message'] ??
               errorData['error'] ??
+              errorData['Message'] ??
               'HTTP ${response.statusCode}';
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      // 
+    }
     return 'HTTP ${response.statusCode}';
   }
 

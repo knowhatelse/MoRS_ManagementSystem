@@ -8,6 +8,9 @@ namespace MoRS.ManagementSystem.Application.DTOs.Appointment;
 public class AppointmentResponse
 {
     public int Id { get; set; }
+    public bool IsRepeating { get; set; }
+    public bool IsCancelled { get; set; }
+    public string? DayOfOccurrance { get; set; }
     public required AppointmentTypeResponse AppointmentType { get; set; }
     public required RoomResponse Room { get; set; }
     public required AppointmentScheduleResponse AppointmentSchedule { get; set; }

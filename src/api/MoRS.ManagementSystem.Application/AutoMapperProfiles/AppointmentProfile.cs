@@ -9,7 +9,8 @@ public class AppointmentProfile : Profile
     public AppointmentProfile()
     {
         CreateMap<Appointment, AppointmentResponse>();
-        CreateMap<CreateAppointmentRequest, Appointment>();
+        CreateMap<CreateAppointmentRequest, Appointment>()
+            .ForMember(dest => dest.DayOfOccurrance, opt => opt.Ignore());
         CreateMap<UpdateAppointmentRequest, Appointment>();
     }
 }

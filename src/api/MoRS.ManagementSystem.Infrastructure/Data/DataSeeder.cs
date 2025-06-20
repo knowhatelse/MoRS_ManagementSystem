@@ -13,6 +13,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
 
     private byte[]? _passwordHash;
     private byte[]? _passwordSalt;
+    private static readonly int[] sourceArray = [9, 10, 11, 12, 13, 14];
 
     public async Task SeedData()
     {
@@ -389,12 +390,25 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
 
         _logger.LogInformation("Seeding appointments...");
 
+
+        var scheduleDates = new DateOnly[]
+        {
+            new(2025, 03, 24),
+            new(2025, 03, 25),
+            new(2025, 03, 26),
+            new(2025, 03, 27),
+            new(2025, 03, 28),
+            new(2025, 03, 29),
+            new(2025, 03, 20)
+        };
+
         IEnumerable<Appointment> appointments =
-        [
-            new Appointment
+        [   new Appointment
             {
                 IsRepeating = true,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[0].DayOfWeek.ToString(),
+                RepeatingDayOfWeek = scheduleDates[0].DayOfWeek,
                 RoomId = rooms.First(r => r.Name == "Guitar Room 2").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Gitara").Id,
                 BookedByUserId = users.First(u => u.Name == "Ivan" && u.Surname == "Kovacevic").Id,
@@ -404,6 +418,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[1].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Guitar Room 1").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Nadoknada").Id,
                 BookedByUserId = users.First(u => u.Name == "Ivan" && u.Surname == "Kovacevic").Id,
@@ -413,6 +428,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = true,
+                DayOfOccurrance = scheduleDates[2].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Guitar Room 2").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Muzicka teorija").Id,
                 BookedByUserId = users.First(u => u.Name == "Ivan" && u.Surname == "Kovacevic").Id,
@@ -422,15 +438,17 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[3].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Studio 24").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vjezba").Id,
                 BookedByUserId = users.First(u => u.Name == "Kenan" && u.Surname == "Kajtazovic").Id
             },
-
             new Appointment
             {
                 IsRepeating = true,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[4].DayOfWeek.ToString(),
+                RepeatingDayOfWeek = scheduleDates[4].DayOfWeek,
                 RoomId = rooms.First(r => r.Name == "Studio 24").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Gitara").Id,
                 BookedByUserId = users.First(u => u.Name == "Emin" && u.Surname == "Cevra").Id,
@@ -440,6 +458,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[5].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Studio 24").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Nadoknada").Id,
                 BookedByUserId = users.First(u => u.Name == "Emin" && u.Surname == "Cevra").Id,
@@ -449,6 +468,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = true,
+                DayOfOccurrance = scheduleDates[6].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Guitar Room 2").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Muzicka teorija").Id,
                 BookedByUserId = users.First(u => u.Name == "Emin" && u.Surname == "Cevra").Id,
@@ -458,15 +478,17 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[0].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Guitar Room 1").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vjezba").Id,
                 BookedByUserId = users.First(u => u.Name == "Petar" && u.Surname == "Zovko").Id
             },
-
             new Appointment
             {
                 IsRepeating = true,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[1].DayOfWeek.ToString(),
+                RepeatingDayOfWeek = scheduleDates[1].DayOfWeek,
                 RoomId = rooms.First(r => r.Name == "Vocals").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vokal").Id,
                 BookedByUserId = users.First(u => u.Name == "Ilija" && u.Surname == "Soldo").Id,
@@ -476,6 +498,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[2].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Vocals").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Nadoknada").Id,
                 BookedByUserId = users.First(u => u.Name == "Ilija" && u.Surname == "Soldo").Id,
@@ -485,6 +508,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = true,
+                DayOfOccurrance = scheduleDates[3].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Vocals").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vokal").Id,
                 BookedByUserId = users.First(u => u.Name == "Ilija" && u.Surname == "Soldo").Id,
@@ -494,15 +518,17 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[4].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "DK Studio").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vjezba").Id,
                 BookedByUserId = users.First(u => u.Name == "Gojko" && u.Surname == "Prusina").Id,
             },
-
             new Appointment
             {
                 IsRepeating = true,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[5].DayOfWeek.ToString(),
+                RepeatingDayOfWeek = scheduleDates[5].DayOfWeek,
                 RoomId = rooms.First(r => r.Name == "Guitar Room 1").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Bass").Id,
                 BookedByUserId = users.First(u => u.Name == "Hrvoje" && u.Surname == "Caculovic").Id,
@@ -512,6 +538,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[6].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Guitar Room 1").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Nadoknada").Id,
                 BookedByUserId = users.First(u => u.Name == "Hrvoje" && u.Surname == "Caculovic").Id,
@@ -520,129 +547,43 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             new Appointment
             {
                 IsRepeating = false,
-                IsCancelled = true,
-                RoomId = rooms.First(r => r.Name == "Guitar Room 2").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Muzicka teorija").Id,
-                BookedByUserId = users.First(u => u.Name == "Hrvoje" && u.Surname == "Caculovic").Id,
-                Attendees = [.. users.Where(u => u.Name == "Dora" && u.Surname == "Sesar")]
-            },
-            new Appointment
-            {
-                IsRepeating = false,
                 IsCancelled = false,
-                RoomId = rooms.First(r => r.Name == "Guitar Room 2").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vjezba").Id,
-                BookedByUserId = users.First(u => u.Name == "Dora" && u.Surname == "Sesar").Id,
-            },
-
-            new Appointment
-            {
-                IsRepeating = true,
-                IsCancelled = false,
-                RoomId = rooms.First(r => r.Name == "Keys & Brass").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Klavijature").Id,
-                BookedByUserId = users.First(u => u.Name == "Ivan" && u.Surname == "Zovko").Id,
-                Attendees = [.. users.Where(u => u.Name == "Nika" && u.Surname == "Banovic")]
-            },
-            new Appointment
-            {
-                IsRepeating = false,
-                IsCancelled = false,
-                RoomId = rooms.First(r => r.Name == "DK Studio").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Nadoknada").Id,
-                BookedByUserId = users.First(u => u.Name == "Ivan" && u.Surname == "Zovko").Id,
-                Attendees = [.. users.Where(u => u.Name == "Nika" && u.Surname == "Banovic")]
-            },
-            new Appointment
-            {
-                IsRepeating = false,
-                IsCancelled = true,
-                RoomId = rooms.First(r => r.Name == "Keys & Brass").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Muzicka teorija").Id,
-                BookedByUserId = users.First(u => u.Name == "Ivan" && u.Surname == "Zovko").Id,
-                Attendees = [.. users.Where(u => u.Name == "Nika" && u.Surname == "Banovic")]
-            },
-            new Appointment
-            {
-                IsRepeating = false,
-                IsCancelled = false,
-                RoomId = rooms.First(r => r.Name == "DK Studio").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vjezba").Id,
-                BookedByUserId = users.First(u => u.Name == "Nika" && u.Surname == "Banovic").Id,
-            },
-
-            new Appointment
-            {
-                IsRepeating = true,
-                IsCancelled = false,
-                RoomId = rooms.First(r => r.Name == "DK Studio").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Bubnjevi").Id,
-                BookedByUserId = users.First(u => u.Name == "Djeno" && u.Surname == "Mujic").Id,
-                Attendees = [.. users.Where(u => u.Name == "Leo" && u.Surname == "Cerkez")]
-            },
-            new Appointment
-            {
-                IsRepeating = false,
-                IsCancelled = false,
-                RoomId = rooms.First(r => r.Name == "DK Studio").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Nadoknada").Id,
-                BookedByUserId = users.First(u => u.Name == "Djeno" && u.Surname == "Mujic").Id,
-                Attendees = [.. users.Where(u => u.Name == "Leo" && u.Surname == "Cerkez")]
-            },
-            new Appointment
-            {
-                IsRepeating = false,
-                IsCancelled = true,
-                RoomId = rooms.First(r => r.Name == "Studio B").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Tehnika").Id,
-                BookedByUserId = users.First(u => u.Name == "Djeno" && u.Surname == "Mujic").Id,
-                Attendees = [.. users.Where(u => u.Name == "Leo" && u.Surname == "Cerkez")]
-            },
-            new Appointment
-            {
-                IsRepeating = false,
-                IsCancelled = false,
-                RoomId = rooms.First(r => r.Name == "Studio 24").Id,
-                AppointmentTypeId = appointmentTypes.First(at => at.Name == "Vjezba").Id,
-                BookedByUserId = users.First(u => u.Name == "Leo" && u.Surname == "Cerkez").Id,
-            },
-
-            new Appointment
-            {
-                IsRepeating = false,
-                IsCancelled = false,
+                DayOfOccurrance = scheduleDates[0].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "DK Studio").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Session 1").Id,
                 BookedByUserId = users.First(u => u.Name == "Semin" && u.Surname == "Merzic").Id,
-                Attendees = [.. users.Where(u => new[] {9, 10, 11, 12, 13, 14 }.Contains(u.Id))]
+                Attendees = [.. users.Where(u => sourceArray.Contains(u.Id))]
             },
             new Appointment
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[1].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Studio B").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Session 1").Id,
                 BookedByUserId = users.First(u => u.Name == "Semin" && u.Surname == "Merzic").Id,
-                Attendees = [.. users.Where(u => new[] {9, 10, 11, 12, 13, 14 }.Contains(u.Id))]
+                Attendees = [.. users.Where(u => sourceArray.Contains(u.Id))]
             },
 
             new Appointment
             {
                 IsRepeating = false,
                 IsCancelled = true,
+                DayOfOccurrance = scheduleDates[0].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "DK Studio").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Proba").Id,
                 BookedByUserId = users.First(u => u.Name == "Petar" && u.Surname == "Zovko").Id,
-                Attendees = [.. users.Where(u => new[] {9, 11, 12, 13, 14 }.Contains(u.Id))]
+                Attendees = [.. users.Where(u => sourceArray.Contains(u.Id))]
             },
             new Appointment
             {
                 IsRepeating = false,
                 IsCancelled = false,
+                DayOfOccurrance = scheduleDates[1].DayOfWeek.ToString(),
                 RoomId = rooms.First(r => r.Name == "Studio B").Id,
                 AppointmentTypeId = appointmentTypes.First(at => at.Name == "Proba").Id,
                 BookedByUserId = users.First(u => u.Name == "Kenan" && u.Surname == "Kajtazovic").Id,
-                Attendees = [.. users.Where(u => new[] {10, 11, 12, 13, 14 }.Contains(u.Id))]
+                Attendees = [.. users.Where(u => sourceArray.Contains(u.Id))]
             },
         ];
 
@@ -713,19 +654,19 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
             {
                 Subject = "Session band 4",
                 Body = "Pozdrav Session band 4! Ulazimo u četvrti session krug koji broji 11 formacija. Vi ste Session band 4, tema je 70s i narednih mjesec dana ćete raditi u ovoj formaciji na zadatku kojeg ste dobili, te kreirati vlastitu autorsku pjesmu. Na tom putu i na probama pomoći će vam vaš band coach Semin Merzić. Dostavljamo zadatak i kontakte članova vašeg benda za vašu lakšu komunikaciju. Preporučujemo da se uvežete i na Facebook-u i napravite svoju grupu sa band coachem sa kojim ćete dogovarati bukiranje proba, obavještavanje o eventualnim izmjenama termina i sl.Vaš zadatak za ovaj krug je: Deep Purple - Misstreated. Sretno!",
-                Users = [.. users.Where(u => new[] {9, 10, 11, 12, 13, 14 }.Contains(u.Id))]
+                Users = [.. users.Where(u => sourceArray.Contains(u.Id))]
             },
             new Email
             {
                 Subject = "Session band 1",
                 Body = "Pozdrav Session band 1! Ulazimo u četvrti session krug koji broji 10 formacija. Vi ste Session band 1, tema je 80s i narednih mjesec dana ćete raditi u ovoj formaciji na zadatku kojeg ste dobili, te kreirati vlastitu autorsku pjesmu. Na tom putu i na probama pomoći će vam vaš band coach Semin Merzić. Dostavljamo zadatak i kontakte članova vašeg benda za vašu lakšu komunikaciju. Preporučujemo da se uvežete i na Facebook-u i napravite svoju grupu sa band coachem sa kojim ćete dogovarati bukiranje proba, obavještavanje o eventualnim izmjenama termina i sl.Vaš zadatak za ovaj krug je: Bon Joiv - You Give Love A Bad Name. Sretno!",
-                Users = [.. users.Where(u => new[] {9, 10, 11, 12, 13, 14 }.Contains(u.Id))]
+                Users = [.. users.Where(u => sourceArray.Contains(u.Id))]
             },
             new Email
             {
                 Subject = "Session band 1",
                 Body = "Pozdrav Session band 1! Ulazimo u četvrti session krug koji broji 11 formacija. Vi ste Session band 1, tema je 90s i narednih mjesec dana ćete raditi u ovoj formaciji na zadatku kojeg ste dobili, te kreirati vlastitu autorsku pjesmu. Na tom putu i na probama pomoći će vam vaš band coach Semin Merzić. Dostavljamo zadatak i kontakte članova vašeg benda za vašu lakšu komunikaciju. Preporučujemo da se uvežete i na Facebook-u i napravite svoju grupu sa band coachem sa kojim ćete dogovarati bukiranje proba, obavještavanje o eventualnim izmjenama termina i sl.Vaš zadatak za ovaj krug je: Majke - Ja Sam Buducnost. Sretno!",
-                Users = [.. users.Where(u => new[] {9, 10, 11, 12, 13, 14 }.Contains(u.Id))]
+                Users = [.. users.Where(u => sourceArray.Contains(u.Id))]
             }
         ];
 
@@ -1017,7 +958,6 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
 
         return notifications;
     }
-
     private async Task<IEnumerable<ProfilePicture>> SeedProfilePictures(IEnumerable<User> users)
     {
         if (_context.ProfilePictures.Any())
@@ -1030,15 +970,33 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
 
         var profilePictures = new List<ProfilePicture>();
 
+        var minimalPngData = new byte[]
+        {
+            0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
+            0x00, 0x00, 0x00, 0x0D,
+            0x49, 0x48, 0x44, 0x52,
+            0x00, 0x00, 0x00, 0x01,
+            0x00, 0x00, 0x00, 0x01,
+            0x08, 0x06, 0x00, 0x00, 0x00,
+            0x1F, 0x15, 0xC4, 0x89,
+            0x00, 0x00, 0x00, 0x0A,
+            0x49, 0x44, 0x41, 0x54,
+            0x78, 0x9C, 0x63, 0x00, 0x01, 0x00, 0x00, 0x05, 0x00, 0x01,
+            0x0D, 0x0A, 0x2D, 0xB4,
+            0x00, 0x00, 0x00, 0x00,
+            0x49, 0x45, 0x4E, 0x44,
+            0xAE, 0x42, 0x60, 0x82
+        };
+
         foreach (var u in users)
         {
             profilePictures.Add
             (
                 new ProfilePicture
                 {
-                    Data = [0x00, 0x01, 0x02, 0x03],
-                    FileName = $"{u.Name}_{u.Surname}.jpg",
-                    FileType = "image/jpeg",
+                    Data = minimalPngData,
+                    FileName = $"{u.Name}_{u.Surname}.png",
+                    FileType = "image/png",
                     UserId = u.Id
                 }
             );
@@ -1051,7 +1009,6 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
 
         return profilePictures;
     }
-
     private async Task<IEnumerable<TimeSlot>> SeedTimes(IEnumerable<AppointmentSchedule> appointmentSchedules)
     {
         if (_context.Times.Any())
@@ -1062,177 +1019,31 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
 
         _logger.LogInformation("Seeding times...");
 
-        IEnumerable<TimeSlot> times =
-        [
-            new TimeSlot
+
+        var timeSlots = new[]
+        {
+            new { From = new TimeSpan(08, 00, 00), To = new TimeSpan(10, 00, 00) },
+            new { From = new TimeSpan(10, 00, 00), To = new TimeSpan(12, 00, 00) },
+            new { From = new TimeSpan(12, 00, 00), To = new TimeSpan(14, 00, 00) },
+            new { From = new TimeSpan(14, 00, 00), To = new TimeSpan(16, 00, 00) },
+            new { From = new TimeSpan(16, 00, 00), To = new TimeSpan(18, 00, 00) },
+            new { From = new TimeSpan(18, 00, 00), To = new TimeSpan(20, 00, 00) },
+            new { From = new TimeSpan(20, 00, 00), To = new TimeSpan(22, 00, 00) }
+        };
+
+        var times = new List<TimeSlot>();
+        var appointmentSchedulesList = appointmentSchedules.ToList();
+
+        for (int i = 0; i < appointmentSchedulesList.Count; i++)
+        {
+            var timeSlot = timeSlots[i % timeSlots.Length];
+            times.Add(new TimeSlot
             {
-                TimeFrom = new TimeSpan(08, 00, 00),
-                TimeTo = new TimeSpan(10, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(0).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(10, 00, 00),
-                TimeTo = new TimeSpan(12, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(1).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(12, 00, 00),
-                TimeTo = new TimeSpan(14, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(2).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(14, 00, 00),
-                TimeTo = new TimeSpan(16, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(3).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(16, 00, 00),
-                TimeTo = new TimeSpan(18, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(4).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(18, 00, 00),
-                TimeTo = new TimeSpan(20, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(5).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(20, 00, 00),
-                TimeTo = new TimeSpan(22, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(6).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(08, 00, 00),
-                TimeTo = new TimeSpan(10, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(7).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(10, 00, 00),
-                TimeTo = new TimeSpan(12, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(8).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(12, 00, 00),
-                TimeTo = new TimeSpan(14, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(9).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(14, 00, 00),
-                TimeTo = new TimeSpan(16, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(10).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(16, 00, 00),
-                TimeTo = new TimeSpan(18, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(11).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(18, 00, 00),
-                TimeTo = new TimeSpan(20, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(12).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(20, 00, 00),
-                TimeTo = new TimeSpan(22, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(13).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(08, 00, 00),
-                TimeTo = new TimeSpan(10, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(14).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(10, 00, 00),
-                TimeTo = new TimeSpan(12, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(15).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(12, 00, 00),
-                TimeTo = new TimeSpan(14, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(16).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(14, 00, 00),
-                TimeTo = new TimeSpan(16, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(17).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(16, 00, 00),
-                TimeTo = new TimeSpan(18, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(18).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(18, 00, 00),
-                TimeTo = new TimeSpan(20, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(19).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(20, 00, 00),
-                TimeTo = new TimeSpan(22, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(20).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(08, 00, 00),
-                TimeTo = new TimeSpan(10, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(21).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(10, 00, 00),
-                TimeTo = new TimeSpan(12, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(22).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(12, 00, 00),
-                TimeTo = new TimeSpan(14, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(23).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(14, 00, 00),
-                TimeTo = new TimeSpan(16, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(24).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(16, 00, 00),
-                TimeTo = new TimeSpan(18, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(25).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(18, 00, 00),
-                TimeTo = new TimeSpan(20, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(26).Id
-            },
-            new TimeSlot
-            {
-                TimeFrom = new TimeSpan(20, 00, 00),
-                TimeTo = new TimeSpan(22, 00, 00),
-                AppointmentScheduleId = appointmentSchedules.ElementAt(27).Id
-            },
-        ];
+                TimeFrom = timeSlot.From,
+                TimeTo = timeSlot.To,
+                AppointmentScheduleId = appointmentSchedulesList[i].Id
+            });
+        }
 
         await _context.Times.AddRangeAsync(times);
         await _context.SaveChangesAsync();

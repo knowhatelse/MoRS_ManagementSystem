@@ -1,12 +1,17 @@
 class ApiConfig {
   static const String _baseUrl = 'http://192.168.0.7:5000/api';
+  //static const String _baseUrl = 'http://192.168.116.214:5000/api';
   static String get baseUrl => _baseUrl;
 
   static const Duration connectionTimeout = Duration(seconds: 10);
   static const Duration requestTimeout = Duration(seconds: 5);
-
   static const String authentication = '/Authentication';
   static const String announcements = '/Announcement';
+  static const String appointments = '/Appointment';
+  static const String rooms = '/Room';
+  static const String appointmentTypes = '/AppointmentType';
+  static const String timeSlots = '/TimeSlot';
+  static const String users = '/User';
 
   static Map<String, String> get defaultHeaders => {
     'Content-Type': 'application/json',
