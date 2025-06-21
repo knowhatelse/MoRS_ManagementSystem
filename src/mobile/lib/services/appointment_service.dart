@@ -39,14 +39,17 @@ class AppointmentService extends BaseApiService {
         ApiConfig.appointments,
         queryParameters: queryParameters.isNotEmpty ? queryParameters : null,
       );
-
       if (response is List) {
-        final appointments = response
-            .map(
-              (json) =>
-                  AppointmentResponse.fromJson(json as Map<String, dynamic>),
-            )
-            .toList();
+        final appointments = <AppointmentResponse>[];
+        for (int i = 0; i < response.length; i++) {
+          try {
+            final appointmentJson = response[i] as Map<String, dynamic>;
+            final appointment = AppointmentResponse.fromJson(appointmentJson);
+            appointments.add(appointment);
+          } catch (e) {
+            continue;
+          }
+        }
         return appointments;
       } else {
         throw ApiException(
@@ -81,6 +84,28 @@ class AppointmentService extends BaseApiService {
           'Response parsing failed but appointment was likely created: $parseError',
         );
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateAppointment(
+    int appointmentId,
+    UpdateAppointmentRequest request,
+  ) async {
+    try {
+      await put(
+        '${ApiConfig.appointments}/$appointmentId',
+        body: request.toJson(),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteAppointment(int appointmentId) async {
+    try {
+      await delete('${ApiConfig.appointments}/$appointmentId');
     } catch (e) {
       rethrow;
     }

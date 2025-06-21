@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AnnouncementProvider()),
         ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (_) => MyAppointmentsProvider()),
       ],
       child: MaterialApp(
         title: 'MoRS Management System',
@@ -30,10 +31,7 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
-          Locale('en', 'US'), 
-          Locale('bs', 'BA'), 
-        ],
+        supportedLocales: const [Locale('en', 'US'), Locale('bs', 'BA')],
         locale: const Locale('bs', 'BA'),
         home: const LoginScreen(),
         routes: {

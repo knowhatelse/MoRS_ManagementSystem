@@ -26,25 +26,53 @@ class AppointmentResponse {
     required this.isRepeating,
   });
   factory AppointmentResponse.fromJson(Map<String, dynamic> json) {
-    return AppointmentResponse(
-      id: json['id'],
-      appointmentType: AppointmentTypeResponse.fromJson(
-        json['appointmentType'],
-      ),
-      room: RoomResponse.fromJson(json['room']),
-      appointmentSchedule: AppointmentScheduleResponse.fromJson(
-        json['appointmentSchedule'],
-      ),
-      attendees: (json['attendees'] as List)
-          .map((attendee) => UserResponse.fromJson(attendee))
-          .toList(),
-      bookedByUser: json['bookedByUser'] != null
-          ? UserResponse.fromJson(json['bookedByUser'])
-          : null,
-      occuringDate: DateTime.parse(json['occuringDate']),
-      isCancelled: json['isCancelled'] ?? false,
-      isRepeating: json['isRepeating'] ?? false,
-    );
+    try {
+      if (json['id'] == null) {
+        throw Exception('Missing required field: id');
+      }
+      if (json['appointmentType'] == null) {
+        throw Exception('Missing required field: appointmentType');
+      }
+      if (json['room'] == null) {
+        throw Exception('Missing required field: room');
+      }
+      if (json['appointmentSchedule'] == null) {
+        throw Exception('Missing required field: appointmentSchedule');
+      }
+      if (json['attendees'] == null) {
+        throw Exception('Missing required field: attendees');
+      }
+      if (json['occuringDate'] == null) {
+        throw Exception('Missing required field: occuringDate');
+      }
+
+      return AppointmentResponse(
+        id: json['id'],
+        appointmentType: AppointmentTypeResponse.fromJson(
+          json['appointmentType'] as Map<String, dynamic>,
+        ),
+        room: RoomResponse.fromJson(json['room'] as Map<String, dynamic>),
+        appointmentSchedule: AppointmentScheduleResponse.fromJson(
+          json['appointmentSchedule'] as Map<String, dynamic>,
+        ),
+        attendees: (json['attendees'] as List)
+            .map(
+              (attendee) =>
+                  UserResponse.fromJson(attendee as Map<String, dynamic>),
+            )
+            .toList(),
+        bookedByUser: json['bookedByUser'] != null
+            ? UserResponse.fromJson(
+                json['bookedByUser'] as Map<String, dynamic>,
+              )
+            : null,
+        occuringDate: DateTime.parse(json['occuringDate']),
+        isCancelled: json['isCancelled'] ?? false,
+        isRepeating: json['isRepeating'] ?? false,
+      );
+    } catch (e) {
+      throw Exception('Error parsing AppointmentResponse: $e. JSON: $json');
+    }
   }
   Map<String, dynamic> toJson() {
     return {

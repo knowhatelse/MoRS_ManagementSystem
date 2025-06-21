@@ -5,7 +5,7 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_navigation.dart';
 import '../pages/announcements_page.dart';
 import '../pages/schedule_page.dart';
-import '../pages/my_schedule_page.dart';
+import '../pages/my_appointments_page.dart';
 import '../pages/report_problem_page.dart';
 import '../pages/profile_page.dart';
 import '../providers/announcement_provider.dart';
@@ -63,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
       case 1:
         return SchedulePage(currentUser: widget.user);
       case 2:
-        return const MySchedulePage();
+        return MyAppointmentsPage(currentUser: widget.user);
       case 3:
         return const ReportProblemPage();
       case 4:

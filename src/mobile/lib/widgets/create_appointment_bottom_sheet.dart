@@ -1010,13 +1010,9 @@ class _CreateAppointmentBottomSheetState
     return Center(
       child: IntrinsicWidth(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minWidth: 200,
-          ),
+          constraints: const BoxConstraints(minWidth: 200),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton(
               onPressed: _isLoading
                   ? null
@@ -1133,10 +1129,10 @@ class _CreateAppointmentBottomSheetState
       if (picked != null) {
         if (isFrom) {
           _timeFrom = picked;
-          _clearTimeFromError(); 
+          _clearTimeFromError();
         } else {
           _timeTo = picked;
-          _clearTimeToError(); 
+          _clearTimeToError();
         }
       } else {
         if (isFrom && _timeFrom == null) {
@@ -1308,15 +1304,14 @@ class _CreateAppointmentBottomSheetState
 
   String? _validateBusinessRules() {
     if (_timeFrom == null || _timeTo == null) return null;
- 
-    const int allowedStartHour = 8; 
-    const int allowedEndHour =
-        23;
+
+    const int allowedStartHour = 8;
+    const int allowedEndHour = 23;
 
     if (_timeFrom!.hour < allowedStartHour) {
       return 'Termini se mogu zakazati samo od 08:00 sati';
     }
- 
+
     if (_timeTo!.hour > allowedEndHour &&
         !(_timeTo!.hour == 0 && _timeTo!.minute == 0)) {
       return 'Termini se mogu zakazati samo do 00:00 sati';
@@ -1393,36 +1388,80 @@ class _CreateAppointmentBottomSheetState
 
       if (mounted) {
         setState(() => _isLoading = false);
-        _showSuccessDialog();
+        _showSuccessSnackbar();
         _clearFormData();
+        Navigator.of(context).pop(); 
       }
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showApiErrorDialog(e);
+
+        if (_isValidationError(e)) {
+          _showApiErrorDialog(e);
+        } else {
+          _showErrorSnackbar('Greška pri kreiranju termina: ${e.message}');
+        }
       }
     } on SocketException {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showNetworkErrorDialog();
+        _showErrorSnackbar(
+          'Problem s mrežom. Molimo provjerite internetsku vezu i pokušajte ponovo.',
+        );
       }
     } on TimeoutException {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showTimeoutErrorDialog();
+        _showErrorSnackbar('Zahtjev je prestari. Server možda nije dostupan.');
       }
     } on FormatException {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showSuccessDialog();
+        _showSuccessSnackbar();
         _clearFormData();
+        Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showGenericErrorDialog(e);
+        _showErrorSnackbar(
+          'Dogodila se neočekivana greška pri kreiranju termina.',
+        );
       }
     }
+  }
+
+  bool _isValidationError(ApiException error) {
+    return error.message.contains(
+          'Termini se mogu zakazati samo između 08:00 i 00:00 sati',
+        ) ||
+        error.message.contains('Termin mora trajati najmanje 30 minuta') ||
+        error.message.contains('Termin ne može trajati duže od 3 sata') ||
+        error.message.contains('Nepravilan vremenski raspon termina') ||
+        error.message.contains(
+          'Termin u ovoj prostoriji već postoji u odabranom vremenskom terminu',
+        ) ||
+        error.statusCode == 409;
+  }
+
+  void _showSuccessSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Termin je uspješno kreiran'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 4),
+      ),
+    );
   }
 
   void _showApiErrorDialog(ApiException error) {
@@ -1480,105 +1519,6 @@ class _CreateAppointmentBottomSheetState
     _showErrorDialogWithMessage(errorTitle, errorMessage);
   }
 
-  void _showNetworkErrorDialog() {
-    _showErrorDialogWithMessage(
-      'Problem s konekcijom',
-      'Trenutno nije moguće kreirati termin. Server nije dostupan ili nema internetske konekcije.\n\nMolimo provjerite konekciju i pokušajte ponovo.',
-    );
-  }
-
-  void _showTimeoutErrorDialog() {
-    _showErrorDialogWithMessage(
-      'Zahtjev je prestari',
-      'Zahtjev je predugo trajao. Server možda nije dostupan.\n\nMolimo pokušajte ponovo.',
-    );
-  }
-
-  void _showGenericErrorDialog(dynamic error) {
-    _showErrorDialogWithMessage(
-      'Neočekivana greška',
-      'Dogodila se neočekivana greška pri kreiranju termina.\n\nMolimo pokušajte ponovo ili kontaktirajte podršku.',
-    );
-  }
-
-  void _showErrorDialogWithMessage(String title, String message) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  message,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors
-                        .black87, 
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.priority_high,
-                    color: Colors.white,
-                    size: 36,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _primaryColor,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 24,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppConstants.borderRadius,
-                        ),
-                      ),
-                      elevation: 2,
-                    ),
-                    child: const Text(
-                      'U redu',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   void _clearFormData() {
     setState(() {
       _selectedDate = null;
@@ -1614,67 +1554,43 @@ class _CreateAppointmentBottomSheetState
     }
   }
 
-  void _showSuccessDialog() {
+  void _showErrorDialogWithMessage(String title, String message) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+        return AlertDialog(
+          title: Text(title.isNotEmpty ? title : 'Greška'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: _primaryColor,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.priority_high,
+                  color: Colors.white,
+                  size: 36,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(message),
+            ],
           ),
-          child: Container(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  AppStrings.appointmentCreated,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors
-                        .black87,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                Icon(Icons.check_circle, color: Colors.green, size: 64),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _primaryColor,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 24,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppConstants.borderRadius,
-                        ),
-                      ),
-                      elevation: 2,
-                    ),
-                    child: const Text(
-                      'U redu',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _primaryColor,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('U redu'),
             ),
-          ),
+          ],
         );
       },
     );
@@ -1741,8 +1657,7 @@ class _CreateAppointmentBottomSheetState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 300), () {
         if (_scrollController.hasClients) {
-          const double approximateSearchPosition =
-              (56.0 * 4) + (16.0 * 4); 
+          const double approximateSearchPosition = (56.0 * 4) + (16.0 * 4);
 
           _scrollController.animateTo(
             approximateSearchPosition,
