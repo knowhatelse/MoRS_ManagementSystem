@@ -27,3 +27,6 @@ export 'appointment/appointment_response.dart';
 export 'appointment/create_appointment_request.dart';
 export 'appointment/update_appointment_request.dart';
 export 'appointment/appointment_query.dart';
+
+export 'malfunction_report/create_malfunction_report_request.dart';
+export 'malfunction_report/malfunction_report_response.dart';

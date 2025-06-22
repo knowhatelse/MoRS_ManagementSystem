@@ -92,7 +92,15 @@ abstract class BaseApiService {
       if (response.body.isEmpty) {
         return {};
       }
-      return jsonDecode(response.body);
+      try {
+        final decoded = jsonDecode(response.body);
+        return decoded;
+      } catch (e) {
+        throw ApiException(
+          statusCode: response.statusCode,
+          message: 'Invalid JSON response: ${e.toString()}',
+        );
+      }
     } else {
       throw ApiException(
         statusCode: response.statusCode,
@@ -105,6 +113,7 @@ abstract class BaseApiService {
     try {
       if (response.body.isNotEmpty) {
         final errorData = jsonDecode(response.body);
+
         if (errorData is Map<String, dynamic>) {
           if (errorData.containsKey('detail')) {
             return errorData['detail'] ?? 'HTTP ${response.statusCode}';
@@ -116,7 +125,7 @@ abstract class BaseApiService {
         }
       }
     } catch (e) {
-      // 
+      //
     }
     return 'HTTP ${response.statusCode}';
   }

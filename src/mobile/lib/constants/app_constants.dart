@@ -114,4 +114,19 @@ class AppStrings {
   static const String appointmentCreated = 'Termin je uspješno kreiran';
   static const String appointmentCreationFailed =
       'Kreiranje termina nije uspjelo';
+
+  static const String description = 'Opis';
+  static const String describeTheProblem = 'Opišite problem...';
+  static const String selectRoomForReport = 'Odaberite prostoriju';
+  static const String submitReport = 'Prijavi kvar';
+  static const String reportSubmitted = 'Kvar je uspješno prijavljen';
+  static const String reportSubmissionFailed = 'Prijava kvara nije uspjela';
+  static const String pleaseSelectRoom = 'Molimo odaberite prostoriju';
+  static const String pleaseEnterDescription = 'Molimo unesite opis problema';
+  static const String descriptionTooShort =
+      'Opis mora imati najmanje 10 znakova';
+  static const String descriptionTooLong =
+      'Opis može imati najviše 1000 znakova';
+  static const String charactersRemaining = 'znakova preostalo';
+  static const String charactersExceeded = 'znakova preko limita';
 }

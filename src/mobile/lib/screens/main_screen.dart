@@ -23,11 +23,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.backgroundColor,
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           CustomAppBar(
@@ -65,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
       case 2:
         return MyAppointmentsPage(currentUser: widget.user);
       case 3:
-        return const ReportProblemPage();
+        return ReportProblemPage(currentUser: widget.user);
       case 4:
         return const ProfilePage();
       default:
