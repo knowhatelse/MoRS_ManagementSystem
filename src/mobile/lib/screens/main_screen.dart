@@ -3,14 +3,15 @@ import 'package:provider/provider.dart';
 import '../models/models.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_navigation.dart';
+import '../widgets/notification_sidebar.dart';
 import '../pages/announcements_page.dart';
 import '../pages/schedule_page.dart';
 import '../pages/my_appointments_page.dart';
 import '../pages/report_problem_page.dart';
 import '../pages/profile_page.dart';
 import '../providers/announcement_provider.dart';
+import '../providers/notification_provider.dart';
 import '../constants/app_constants.dart';
-import '../utils/app_utils.dart';
 
 class MainScreen extends StatefulWidget {
   final UserResponse user;
@@ -23,6 +24,23 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NotificationProvider>().startPolling(
+        userId: widget.user.id,
+        interval: const Duration(seconds: 30),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    context.read<NotificationProvider>().stopPolling();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +92,18 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _showNotifications() {
-    AppUtils.showComingSoonSnackBar(context, AppStrings.notifications);
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '',
+      barrierColor: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return NotificationSidebar(
+          currentUser: widget.user,
+          animation: animation,
+        );
+      },
+    );
   }
 }

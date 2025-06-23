@@ -30,3 +30,8 @@ export 'appointment/appointment_query.dart';
 
 export 'malfunction_report/create_malfunction_report_request.dart';
 export 'malfunction_report/malfunction_report_response.dart';
+
+export 'notification/notification_type.dart';
+export 'notification/notification_response.dart';
+export 'notification/update_notification_request.dart';
+export 'notification/notification_query.dart';

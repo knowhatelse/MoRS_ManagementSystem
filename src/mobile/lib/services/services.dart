@@ -17,3 +17,5 @@ export 'time_slot_service.dart';
 export 'user_service.dart';
 
 export 'malfunction_report_service.dart';
+
+export 'notification_service.dart';

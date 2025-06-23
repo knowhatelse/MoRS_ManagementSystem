@@ -14,6 +14,7 @@ class ApiConfig {
   static const String timeSlots = '/TimeSlot';
   static const String users = '/User';
   static const String malfunctionReports = '/MalfunctionReport';
+  static const String notifications = '/Notification';
 
   static Map<String, String> get defaultHeaders => {
     'Content-Type': 'application/json',

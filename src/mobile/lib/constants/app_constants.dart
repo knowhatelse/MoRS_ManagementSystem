@@ -129,4 +129,17 @@ class AppStrings {
       'Opis može imati najviše 1000 znakova';
   static const String charactersRemaining = 'znakova preostalo';
   static const String charactersExceeded = 'znakova preko limita';
+
+  static const String markAsRead = 'Označi kao pročitano';
+  static const String deleteNotification = 'Obriši notifikaciju';
+  static const String noNotifications = 'Nema notifikacija';
+  static const String notificationDeleted = 'Notifikacija je obrisana';
+  static const String notificationMarkedAsRead =
+      'Notifikacija je označena kao pročitana';
+  static const String errorLoadingNotifications =
+      'Greška pri učitavanju notifikacija';
+  static const String errorDeletingNotification =
+      'Greška pri brisanju notifikacije';
+  static const String errorMarkingNotification =
+      'Greška pri označavanju notifikacije';
 }

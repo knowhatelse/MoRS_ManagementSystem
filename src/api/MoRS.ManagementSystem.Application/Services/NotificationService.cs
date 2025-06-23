@@ -9,7 +9,7 @@ using MoRS.ManagementSystem.Domain.Entities;
 namespace MoRS.ManagementSystem.Application.Services;
 
 public class NotificationService(IMapper mapper, INotificationRepository repository) :
-    BaseService<Notification, NotificationResponse, EmptyDto, EmptyDto, NotificationQuery>(mapper, repository),
+    BaseService<Notification, NotificationResponse, EmptyDto, UpdateNotificationRequest, NotificationQuery>(mapper, repository),
     INotificationService
 {
 

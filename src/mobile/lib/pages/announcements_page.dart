@@ -4,6 +4,7 @@ import '../widgets/empty_page_widget.dart';
 import '../widgets/announcement_detail_dialog.dart';
 import '../constants/app_constants.dart';
 import '../providers/announcement_provider.dart';
+import '../providers/notification_provider.dart';
 import '../utils/app_utils.dart';
 
 class AnnouncementsPage extends StatefulWidget {
@@ -35,6 +36,16 @@ class _AnnouncementsPageState extends State<AnnouncementsPage>
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       context.read<AnnouncementProvider>().loadAnnouncements();
+      _refreshNotifications();
+    }
+  }
+
+  void _refreshNotifications() {
+    try {
+      final notificationProvider = context.read<NotificationProvider>();
+      notificationProvider.loadNotifications();
+    } catch (e) {
+      //
     }
   }
 
