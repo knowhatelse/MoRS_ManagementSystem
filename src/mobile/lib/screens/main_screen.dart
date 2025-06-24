@@ -85,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
       case 3:
         return ReportProblemPage(currentUser: widget.user);
       case 4:
-        return const ProfilePage();
+        return ProfilePage(currentUser: widget.user);
       default:
         return const AnnouncementsPage();
     }

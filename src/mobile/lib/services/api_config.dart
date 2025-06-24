@@ -1,7 +1,5 @@
 class ApiConfig {
-  static const String _baseUrl = 'http://192.168.0.7:5000/api';
-  //static const String _baseUrl = 'http://192.168.154.191:5000/api';
-  //static const String _baseUrl = 'http://192.168.116.214:5000/api';
+  static const String _baseUrl = 'http://192.168.116.53:5000/api';
   static String get baseUrl => _baseUrl;
 
   static const Duration connectionTimeout = Duration(seconds: 10);
@@ -13,6 +11,7 @@ class ApiConfig {
   static const String appointmentTypes = '/AppointmentType';
   static const String timeSlots = '/TimeSlot';
   static const String users = '/User';
+  static const String profilePicture = '/ProfilePicture';
   static const String malfunctionReports = '/MalfunctionReport';
   static const String notifications = '/Notification';
 

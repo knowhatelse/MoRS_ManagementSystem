@@ -98,4 +98,26 @@ class UserService extends BaseApiService {
     final allUsers = await getUsers();
     return allUsers.where((user) => !user.isRestricted).toList();
   }
+
+  Future<UserResponse> updateUser(int userId, UpdateUserRequest request) async {
+    try {
+      final response = await put(
+        '${ApiConfig.users}/$userId',
+        body: request.toJson(),
+      );
+
+      return UserResponse.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> updatePassword(int userId, UpdatePasswordRequest request) async {
+    try {
+      await put('${ApiConfig.users}/$userId/password', body: request.toJson());
+      return true;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

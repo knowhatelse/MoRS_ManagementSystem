@@ -16,15 +16,9 @@ public class UpdateUserRequest
     [EmailAddress]
     [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
     public required string Email { get; set; }
-
     [Required]
-    [RegularExpression(@"^(\+387|00387)?\s?6[0-9]\s?\d{3}\s?\d{3,4}$")]
+    [RegularExpression(@"^(\+387|00387)?\s?0?6[0-9]\s?\d{3}\s?\d{3,4}$")]
     public required string PhoneNumber { get; set; }
-
-    [Required]
-    [StringLength(100, MinimumLength = 6)]
-    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$")]
-    public required string Password { get; set; }
 
     [Required]
     public bool IsRestricted { get; set; }

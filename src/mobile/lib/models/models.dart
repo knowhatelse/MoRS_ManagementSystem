@@ -2,8 +2,11 @@ export 'authentication/login_request.dart';
 export 'authentication/login_response.dart';
 
 export 'user/user_response.dart';
+export 'user/update_user_request.dart';
+export 'user/update_password_request.dart';
 
 export 'profile_picture/profile_picture_response.dart';
+export 'profile_picture/create_profile_picture_request.dart';
 
 export 'role/role_response.dart';
 

@@ -39,11 +39,12 @@ dependencies:
 
   # HTTP client for API requests
   http: ^1.1.0
-
   # State management
   provider: ^6.1.2
   # Internationalization
   intl: ^0.20.2
+  # Image picker for profile picture
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

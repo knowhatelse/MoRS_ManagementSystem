@@ -42,8 +42,11 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Ova aplikacija treba pristup kameri za ažuriranje profilne slike.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Ova aplikacija treba pristup foto galeriji za ažuriranje profilne slike.</string>
 </dict>
 </plist>
