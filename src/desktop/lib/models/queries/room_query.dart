@@ -45,13 +45,23 @@ class RoomQuery {
     return params;
   }
 
-  RoomQuery.activeOnly() : this(isActive: true);
+  factory RoomQuery.activeOnly() {
+    return RoomQuery(isActive: true);
+  }
 
-  RoomQuery.inactiveOnly() : this(isActive: false);
+  factory RoomQuery.inactiveOnly() {
+    return RoomQuery(isActive: false);
+  }
 
-  RoomQuery.byType(String roomType) : this(type: roomType);
+  factory RoomQuery.byType(String roomType) {
+    return RoomQuery(type: roomType);
+  }
 
-  RoomQuery.byName(String roomName) : this(name: roomName);
+  factory RoomQuery.byName(String roomName) {
+    return RoomQuery(name: roomName);
+  }
 
-  RoomQuery.all() : this();
+  factory RoomQuery.all() {
+    return RoomQuery();
+  }
 }

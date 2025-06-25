@@ -47,18 +47,72 @@ class MalfunctionReportQuery {
     return json;
   }
 
-  MalfunctionReportQuery.forRoom(int roomId)
-    : this(roomId: roomId, isRoomIncluded: true, isUserIncluded: true);
+  Map<String, String> toQueryParameters() {
+    final params = <String, String>{};
 
-  MalfunctionReportQuery.forUser(int userId)
-    : this(userId: userId, isRoomIncluded: true, isUserIncluded: true);
+    if (roomId != null) {
+      params['roomId'] = roomId.toString();
+    }
+    if (userId != null) {
+      params['userId'] = userId.toString();
+    }
+    if (date != null) {
+      params['date'] = date!.toIso8601String().split('T')[0];
+    }
+    if (isArchived != null) {
+      params['isArchived'] = isArchived.toString();
+    }
+    params['isRoomIncluded'] = isRoomIncluded.toString();
+    params['isUserIncluded'] = isUserIncluded.toString();
 
-  MalfunctionReportQuery.forDate(DateTime date)
-    : this(date: date, isRoomIncluded: true, isUserIncluded: true);
+    return params;
+  }
 
-  MalfunctionReportQuery.activeOnly()
-    : this(isArchived: false, isRoomIncluded: true, isUserIncluded: true);
+  factory MalfunctionReportQuery.forRoom(int roomId) {
+    return MalfunctionReportQuery(
+      roomId: roomId,
+      isRoomIncluded: true,
+      isUserIncluded: true,
+    );
+  }
 
-  MalfunctionReportQuery.archivedOnly()
-    : this(isArchived: true, isRoomIncluded: true, isUserIncluded: true);
+  factory MalfunctionReportQuery.forUser(int userId) {
+    return MalfunctionReportQuery(
+      userId: userId,
+      isRoomIncluded: true,
+      isUserIncluded: true,
+    );
+  }
+
+  factory MalfunctionReportQuery.forDate(DateTime date) {
+    return MalfunctionReportQuery(
+      date: date,
+      isRoomIncluded: true,
+      isUserIncluded: true,
+    );
+  }
+
+  factory MalfunctionReportQuery.activeOnly() {
+    return MalfunctionReportQuery(
+      isArchived: false,
+      isRoomIncluded: true,
+      isUserIncluded: true,
+    );
+  }
+
+  factory MalfunctionReportQuery.archivedOnly() {
+    return MalfunctionReportQuery(
+      isArchived: true,
+      isRoomIncluded: true,
+      isUserIncluded: true,
+    );
+  }
+
+  factory MalfunctionReportQuery.byRoom(int roomId) {
+    return MalfunctionReportQuery(
+      roomId: roomId,
+      isRoomIncluded: true,
+      isUserIncluded: true,
+    );
+  }
 }

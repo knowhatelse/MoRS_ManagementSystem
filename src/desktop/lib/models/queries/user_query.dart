@@ -53,23 +53,57 @@ class UserQuery {
     return json;
   }
 
-  UserQuery.byIds(List<int> userIds)
-    : this(ids: userIds, isProfilePictureIncluded: true, isRoleIncluded: true);
+  Map<String, String> toQueryParameters() {
+    final params = <String, String>{};
 
-  UserQuery.byEmail(String userEmail)
-    : this(
-        email: userEmail,
-        isProfilePictureIncluded: true,
-        isRoleIncluded: true,
-      );
+    if (name != null && name!.isNotEmpty) {
+      params['name'] = name!;
+    }
+    if (surname != null && surname!.isNotEmpty) {
+      params['surname'] = surname!;
+    }
+    if (email != null && email!.isNotEmpty) {
+      params['email'] = email!;
+    }
+    if (phoneNumber != null && phoneNumber!.isNotEmpty) {
+      params['phoneNumber'] = phoneNumber!;
+    }
+    if (ids != null && ids!.isNotEmpty) {
+      params['ids'] = ids!.map((id) => id.toString()).join(',');
+    }
 
-  UserQuery.byName(String firstName, [String? lastName])
-    : this(
-        name: firstName,
-        surname: lastName,
-        isProfilePictureIncluded: true,
-        isRoleIncluded: true,
-      );
+    params['isProfilePictureIncluded'] = isProfilePictureIncluded.toString();
+    params['isRoleIncluded'] = isRoleIncluded.toString();
 
-  UserQuery.all() : this(isProfilePictureIncluded: true, isRoleIncluded: true);
+    return params;
+  }
+
+  factory UserQuery.byIds(List<int> userIds) {
+    return UserQuery(
+      ids: userIds,
+      isProfilePictureIncluded: true,
+      isRoleIncluded: true,
+    );
+  }
+
+  factory UserQuery.byEmail(String userEmail) {
+    return UserQuery(
+      email: userEmail,
+      isProfilePictureIncluded: true,
+      isRoleIncluded: true,
+    );
+  }
+
+  factory UserQuery.byName(String firstName, [String? lastName]) {
+    return UserQuery(
+      name: firstName,
+      surname: lastName,
+      isProfilePictureIncluded: true,
+      isRoleIncluded: true,
+    );
+  }
+
+  factory UserQuery.all() {
+    return UserQuery(isProfilePictureIncluded: true, isRoleIncluded: true);
+  }
 }
