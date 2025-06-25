@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../constants/app_constants.dart';
 import '../widgets/desktop_header.dart';
+import '../pages/planer_page.dart';
 import 'login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -55,32 +56,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildBody() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            _getIconForPage(_selectedIndex),
-            size: 80,
-            color: AppConstants.primaryBlue.withValues(alpha: 0.3),
+    switch (_selectedIndex) {
+      case 1:
+        return PlanerPage(user: widget.user);
+      default:
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                _getIconForPage(_selectedIndex),
+                size: 80,
+                color: AppConstants.primaryBlue.withValues(alpha: 0.3),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                _pageTitles[_selectedIndex],
+                style: const TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  color: AppConstants.primaryBlue,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Stranica u razvoju',
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          Text(
-            _pageTitles[_selectedIndex],
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w600,
-              color: AppConstants.primaryBlue,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Stranica u razvoju',
-            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-          ),
-        ],
-      ),
-    );
+        );
+    }
   }
 
   IconData _getIconForPage(int index) {
