@@ -38,3 +38,6 @@ export 'notification/notification_type.dart';
 export 'notification/notification_response.dart';
 export 'notification/update_notification_request.dart';
 export 'notification/notification_query.dart';
+
+export 'payment/create_payment_request.dart';
+export 'payment/payment_response.dart';

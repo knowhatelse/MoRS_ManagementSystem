@@ -5,6 +5,7 @@ import '../models/models.dart';
 import '../services/services.dart';
 import '../constants/app_constants.dart';
 import '../utils/app_utils.dart';
+import '../screens/paypal_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserResponse currentUser;
@@ -513,9 +514,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: double.infinity,
                   child: OutlinedButton(
                     onPressed: () {
-                      AppUtils.showComingSoonSnackBar(
-                        context,
-                        'Plaćanje članarine',
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PayPalScreen(
+                            totalAmount: 25.0,
+                            currentUser: widget.currentUser,
+                          ),
+                        ),
                       );
                     },
                     style: OutlinedButton.styleFrom(

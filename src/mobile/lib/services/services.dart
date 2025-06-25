@@ -21,3 +21,7 @@ export 'profile_picture_service.dart';
 export 'malfunction_report_service.dart';
 
 export 'notification_service.dart';
+
+export 'payment_service.dart';
+
+export 'paypal_service.dart';
