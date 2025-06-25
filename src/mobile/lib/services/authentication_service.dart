@@ -1,4 +1,5 @@
 import '../models/models.dart';
+import '../constants/app_constants.dart';
 import 'api_config.dart';
 import 'base_api_service.dart';
 
@@ -11,12 +12,22 @@ class AuthenticationService extends BaseApiService {
       );
 
       if (response is Map<String, dynamic>) {
-        return UserResponse.fromJson(response);
+        final userResponse = UserResponse.fromJson(response);
+
+        if (userResponse.role?.id == 1) {
+          throw ApiException(statusCode: 403, message: AppStrings.accessDenied);
+        }
+
+        if (userResponse.role == null) {
+          throw ApiException(
+            statusCode: 403,
+            message: AppStrings.noRoleAssigned,
+          );
+        }
+
+        return userResponse;
       } else {
-        throw ApiException(
-          statusCode: 0,
-          message: 'Invalid response format from login API',
-        );
+        throw ApiException(statusCode: 0, message: AppStrings.invalidResponse);
       }
     } catch (e) {
       rethrow;

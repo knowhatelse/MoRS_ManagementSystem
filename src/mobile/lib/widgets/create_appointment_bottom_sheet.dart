@@ -1390,7 +1390,7 @@ class _CreateAppointmentBottomSheetState
         setState(() => _isLoading = false);
         _showSuccessSnackbar();
         _clearFormData();
-        Navigator.of(context).pop(); 
+        Navigator.of(context).pop();
       }
     } on ApiException catch (e) {
       if (mounted) {
@@ -1399,7 +1399,7 @@ class _CreateAppointmentBottomSheetState
         if (_isValidationError(e)) {
           _showApiErrorDialog(e);
         } else {
-          _showErrorSnackbar('Greška pri kreiranju termina: ${e.message}');
+          _showErrorSnackbar(AppStrings.appointmentCreationFailed);
         }
       }
     } on SocketException {

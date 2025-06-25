@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../constants/paypal_config.dart';
+import '../constants/app_constants.dart';
 
 class PayPalService {
   Future<String> getAccessToken() async {
@@ -18,7 +19,7 @@ class PayPalService {
       final data = jsonDecode(response.body);
       return data['access_token'];
     } else {
-      throw Exception('Failed to obtain PayPal access token');
+      throw Exception(AppStrings.paypalConnectionError);
     }
   }
 
@@ -54,7 +55,7 @@ class PayPalService {
       )['href'];
       return approvalUrl;
     } else {
-      throw Exception('Failed to create PayPal order');
+      throw Exception(AppStrings.paypalOrderError);
     }
   }
 

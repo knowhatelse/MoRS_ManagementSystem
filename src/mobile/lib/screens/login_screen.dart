@@ -116,8 +116,16 @@ class _LoginScreenState extends State<LoginScreen> {
             _emailError = AppStrings.invalidEmailOrPassword;
             _passwordError = AppStrings.invalidEmailOrPassword;
           });
+        } else if (e.statusCode == 403) {
+          if (e.message == AppStrings.accessDenied) {
+            AppUtils.showErrorSnackBar(context, AppStrings.accessDenied);
+          } else if (e.message == AppStrings.noRoleAssigned) {
+            AppUtils.showErrorSnackBar(context, AppStrings.noRoleAssigned);
+          } else {
+            AppUtils.showErrorSnackBar(context, AppStrings.accessDenied);
+          }
         } else {
-          AppUtils.showErrorSnackBar(context, e.message);
+          AppUtils.showErrorSnackBar(context, AppStrings.serverNotResponding);
         }
       }
     } catch (e) {

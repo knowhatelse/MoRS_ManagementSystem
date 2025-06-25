@@ -135,7 +135,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
       } else if (e.statusCode >= 500) {
         _setError(AppStrings.serverMaintenance);
       } else {
-        _setError('${AppStrings.loadingAppointmentsFailed}: ${e.message}');
+        _setError(AppStrings.loadingAppointmentsFailed);
       }
     } catch (e) {
       if (e.toString().contains('Map<String, dynamic>')) {
@@ -315,7 +315,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
 
     sortedAppointments.sort((a, b) {
       if (a.isCancelled != b.isCancelled) {
-        return a.isCancelled ? 1 : -1; 
+        return a.isCancelled ? 1 : -1;
       }
 
       final dateComparison = b.appointmentSchedule.date.compareTo(
@@ -331,7 +331,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
       final aMinutes = aStartTime.inMinutes;
       final bMinutes = bStartTime.inMinutes;
 
-      return bMinutes.compareTo(aMinutes); 
+      return bMinutes.compareTo(aMinutes);
     });
 
     return sortedAppointments;

@@ -56,6 +56,16 @@ class AppStrings {
   static const String password = 'Lozinka';
   static const String invalidEmailOrPassword =
       'Neispravna email adresa ili lozinka';
+  static const String accessDenied =
+      'Pristup je onemogućen za vaš tip korisničkog računa';
+  static const String noRoleAssigned =
+      'Korisnički račun nema dodijeljenu ulogu';
+  static const String invalidResponse =
+      'Neispravna API odgovor. Molimo pokušajte ponovo.';
+  static const String paypalConnectionError =
+      'Greška prilikom povezivanja sa PayPal servisom.';
+  static const String paypalOrderError =
+      'Greška prilikom kreiranja PayPal narudžbe.';
   static const String enterEmail = 'Unesite email adresu';
   static const String enterValidEmail = 'Unesite ispravnu email adresu';
   static const String enterPassword = 'Unesite lozinku';

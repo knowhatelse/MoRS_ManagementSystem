@@ -88,7 +88,7 @@ class AppointmentProvider extends ChangeNotifier {
       } else if (e.statusCode >= 500) {
         _setError(AppStrings.serverMaintenance);
       } else {
-        _setError('${AppStrings.loadingAppointmentsFailed}: ${e.message}');
+        _setError(AppStrings.loadingAppointmentsFailed);
       }
     } catch (e) {
       _setError('${AppStrings.loadingAppointmentsFailed}: $e');

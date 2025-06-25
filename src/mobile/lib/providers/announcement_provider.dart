@@ -34,7 +34,7 @@ class AnnouncementProvider extends ChangeNotifier {
       } else if (e.statusCode >= 500) {
         _setError(AppStrings.serverMaintenance);
       } else {
-        _setError('${AppStrings.loadingAnnouncementsFailed}: ${e.message}');
+        _setError(AppStrings.loadingAnnouncementsFailed);
       }
     } catch (e) {
       _setError('${AppStrings.loadingAnnouncementsFailed}: $e');
