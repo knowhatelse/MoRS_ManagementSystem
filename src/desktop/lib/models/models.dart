@@ -9,6 +9,7 @@ export 'time_slot/create_time_slot_request.dart';
 export 'room/room_response.dart';
 export 'room/create_room_request.dart';
 export 'room/create_room_response.dart';
+export 'room/update_room_request.dart';
 export 'room/update_room_response.dart';
 export 'malfunction_report/malfunction_report_response.dart';
 export 'malfunction_report/create_malfunction_report_request.dart';

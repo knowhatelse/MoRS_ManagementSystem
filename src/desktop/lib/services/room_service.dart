@@ -109,6 +109,60 @@ class RoomService extends BaseApiService {
     return getRooms(RoomQuery.inactiveOnly());
   }
 
+  Future<RoomResponse?> toggleRoomStatus(RoomResponse room) async {
+    try {
+      final updateRequest = UpdateRoomRequest(
+        name: room.name,
+        type: room.type,
+        color: room.color,
+        isActive: !room.isActive, 
+      );
+
+      final response = await put(
+        '${ApiConfig.rooms}/${room.id}',
+        body: updateRequest.toJson(),
+      );
+      return RoomResponse.fromJson(response);
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) {
+        return null;
+      }
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<RoomResponse?> updateRoomDetails(
+    int id,
+    String type,
+    String color,
+    bool isActive,
+    String name,
+  ) async {
+    try {
+      final updateRequest = UpdateRoomRequest(
+        name: name,
+        type: type,
+        color: color,
+        isActive: isActive,
+      );
+
+      final response = await put(
+        '${ApiConfig.rooms}/$id',
+        body: updateRequest.toJson(),
+      );
+      return RoomResponse.fromJson(response);
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) {
+        return null;
+      }
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   bool _isValidCreateRequest(CreateRoomRequest request) {
     if (request.name.length < 2 || request.name.length > 50) {
       return false;
