@@ -33,3 +33,4 @@ export 'enums/payment_method.dart';
 export 'enums/notification_type.dart';
 export 'enums/membership_type.dart';
 export 'authentication/login_request.dart';
+export 'authentication/login_response.dart';

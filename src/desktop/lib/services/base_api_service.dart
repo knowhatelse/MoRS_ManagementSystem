@@ -33,13 +33,11 @@ abstract class BaseApiService {
   }) async {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
+      final requestHeaders = headers ?? ApiConfig.defaultHeaders;
+      final requestBody = body != null ? jsonEncode(body) : null;
 
       final response = await http
-          .post(
-            url,
-            headers: headers ?? ApiConfig.defaultHeaders,
-            body: body != null ? jsonEncode(body) : null,
-          )
+          .post(url, headers: requestHeaders, body: requestBody)
           .timeout(ApiConfig.requestTimeout);
 
       return _handleResponse(response);
@@ -102,9 +100,10 @@ abstract class BaseApiService {
         );
       }
     } else {
+      final errorMessage = _getErrorMessage(response);
       throw ApiException(
         statusCode: response.statusCode,
-        message: _getErrorMessage(response),
+        message: errorMessage,
       );
     }
   }

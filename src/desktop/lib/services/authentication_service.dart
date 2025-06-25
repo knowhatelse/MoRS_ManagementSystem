@@ -14,7 +14,7 @@ class AuthenticationService extends BaseApiService {
       if (response is Map<String, dynamic>) {
         final userResponse = UserResponse.fromJson(response);
 
-        if (userResponse.role?.id == 1) {
+        if (userResponse.role?.id != 1) {
           throw ApiException(statusCode: 403, message: AppStrings.accessDenied);
         }
 

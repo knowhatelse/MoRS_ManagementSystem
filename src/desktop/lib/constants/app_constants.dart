@@ -18,6 +18,20 @@ class AppConstants {
     horizontal: 16.0,
     vertical: 8.0,
   );
+
+  static BoxShadow get topBarShadow => BoxShadow(
+    color: Colors.black.withValues(alpha: 0.1),
+    offset: const Offset(0, 2),
+    blurRadius: 8,
+    spreadRadius: 0,
+  );
+
+  static BoxShadow get bottomBarShadow => BoxShadow(
+    color: Colors.black.withValues(alpha: 0.1),
+    offset: const Offset(0, -2),
+    blurRadius: 8,
+    spreadRadius: 0,
+  );
 }
 
 class AppStrings {
