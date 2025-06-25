@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/services.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/custom_button.dart';
+import '../constants/app_constants.dart';
+import '../utils/app_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,12 +19,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthenticationService _authService = AuthenticationService();
   bool _isLoading = false;
 
-  // Validation state variables
   String? _emailError;
   String? _passwordError;
 
-  // Custom color #525fe1
-  static const Color customBlue = Color(0xFF525FE1);
   @override
   void initState() {
     super.initState();
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_emailError != null) {
       setState(() {
         _emailError = null;
-        if (_passwordError == 'Neispravna email adresa ili lozinka') {
+        if (_passwordError == AppStrings.invalidEmailOrPassword) {
           _passwordError = null;
         }
       });
@@ -43,8 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_passwordError != null) {
       setState(() {
         _passwordError = null;
-        // If both fields have the same authentication error, clear both
-        if (_emailError == 'Neispravna email adresa ili lozinka') {
+        if (_emailError == AppStrings.invalidEmailOrPassword) {
           _emailError = null;
         }
       });
@@ -61,13 +61,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
-    // Clear previous errors
     setState(() {
       _emailError = null;
       _passwordError = null;
     });
 
-    // Basic validation
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -75,19 +73,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (email.isEmpty) {
       setState(() {
-        _emailError = 'Unesite email adresu';
+        _emailError = AppStrings.enterEmail;
       });
       hasErrors = true;
-    } else if (!_isValidEmail(email)) {
+    } else if (!AppUtils.isValidEmail(email)) {
       setState(() {
-        _emailError = 'Unesite ispravnu email adresu';
+        _emailError = AppStrings.enterValidEmail;
       });
       hasErrors = true;
     }
 
     if (password.isEmpty) {
       setState(() {
-        _passwordError = 'Unesite lozinku';
+        _passwordError = AppStrings.enterPassword;
       });
       hasErrors = true;
     }
@@ -99,15 +97,12 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
+
     try {
       final loginRequest = LoginRequest(email: email, password: password);
+      final userResponse = await _authService.login(loginRequest);
 
-      final userResponse = await _authService.login(
-        loginRequest,
-      ); // Login successful
       if (mounted) {
-        _showSuccessSnackBar('Welcome back, ${userResponse.fullName}!');
-        // Navigate to main screen
         Navigator.pushReplacementNamed(
           context,
           '/main',
@@ -116,20 +111,26 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } on ApiException catch (e) {
       if (mounted) {
-        // Check if it's an authentication error (401 Unauthorized)
         if (e.statusCode == 401) {
-          // Highlight both email and password fields red with Serbian error message
           setState(() {
-            _emailError = 'Neispravna email adresa ili lozinka';
-            _passwordError = 'Neispravna email adresa ili lozinka';
+            _emailError = AppStrings.invalidEmailOrPassword;
+            _passwordError = AppStrings.invalidEmailOrPassword;
           });
+        } else if (e.statusCode == 403) {
+          if (e.message == AppStrings.accessDenied) {
+            AppUtils.showErrorSnackBar(context, AppStrings.accessDenied);
+          } else if (e.message == AppStrings.noRoleAssigned) {
+            AppUtils.showErrorSnackBar(context, AppStrings.noRoleAssigned);
+          } else {
+            AppUtils.showErrorSnackBar(context, AppStrings.accessDenied);
+          }
         } else {
-          _showErrorSnackBar(e.message);
+          AppUtils.showErrorSnackBar(context, AppStrings.serverNotResponding);
         }
       }
     } catch (e) {
       if (mounted) {
-        _showErrorSnackBar('An unexpected error occurred. Please try again.');
+        AppUtils.showErrorSnackBar(context, AppStrings.unexpectedError);
       }
     } finally {
       if (mounted) {
@@ -140,37 +141,12 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  bool _isValidEmail(String email) {
-    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppConstants.backgroundColor,
       body: GestureDetector(
         onTap: () {
-          // Unfocus any currently focused input field when tapping outside
           FocusScope.of(context).unfocus();
         },
         child: SafeArea(
@@ -181,213 +157,44 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Logo
                   SizedBox(
                     width: 150,
                     height: 150,
                     child: Image.asset(
-                      'lib/assets/images/mors-logo.png',
+                      'assets/images/mors-logo.png',
                       fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(height: 40),
-                  // "Prijava" text
                   const Text(
-                    'Prijava',
+                    AppStrings.login,
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
-                      color: customBlue,
+                      color: AppConstants.primaryBlue,
                     ),
                   ),
-                  const SizedBox(height: 40), // Email input field
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: _emailError != null
-                                    ? Colors.red
-                                    : Colors.grey.shade400,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: _emailError != null
-                                    ? Colors.red
-                                    : Colors.grey.shade400,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: _emailError != null
-                                    ? Colors.red
-                                    : customBlue,
-                                width: 2,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                                width: 2,
-                              ),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                                width: 2,
-                              ),
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey.shade50,
-                            prefixIcon: Icon(
-                              Icons.email_outlined,
-                              color: _emailError != null
-                                  ? Colors.red
-                                  : Colors.grey.shade600,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (_emailError != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0, left: 12.0),
-                          child: Text(
-                            _emailError!,
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                    ],
+                  const SizedBox(height: 40),
+                  CustomTextField(
+                    controller: _emailController,
+                    hintText: AppStrings.email,
+                    prefixIcon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
+                    errorText: _emailError,
                   ),
                   const SizedBox(height: 20),
-                  // Password input field
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: 'Lozinka',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: _passwordError != null
-                                    ? Colors.red
-                                    : Colors.grey.shade400,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: _passwordError != null
-                                    ? Colors.red
-                                    : Colors.grey.shade400,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                color: _passwordError != null
-                                    ? Colors.red
-                                    : customBlue,
-                                width: 2,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                                width: 2,
-                              ),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                                width: 2,
-                              ),
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey.shade50,
-                            prefixIcon: Icon(
-                              Icons.lock_outlined,
-                              color: _passwordError != null
-                                  ? Colors.red
-                                  : Colors.grey.shade600,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (_passwordError != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0, left: 12.0),
-                          child: Text(
-                            _passwordError!,
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                    ],
+                  CustomTextField(
+                    controller: _passwordController,
+                    hintText: AppStrings.password,
+                    prefixIcon: Icons.lock_outlined,
+                    obscureText: true,
+                    errorText: _passwordError,
                   ),
-                  const SizedBox(height: 40), // Login button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _handleLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: customBlue,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 2,
-                      ),
-                      child: _isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Text(
-                              'Prijavi se',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                    ),
+                  const SizedBox(height: 40),
+                  CustomButton(
+                    text: AppStrings.loginButton,
+                    onPressed: _handleLogin,
+                    isLoading: _isLoading,
                   ),
                   const SizedBox(height: 20),
                 ],

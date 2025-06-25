@@ -7,5 +7,5 @@ namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 public interface IUserService :
     IBaseService<UserResponse, CreateUserRequest, UpdateUserRequest, UserQuery>
 {
-
+    Task<bool> UpdatePasswordAsync(int userId, UpdatePasswordRequest request);
 }

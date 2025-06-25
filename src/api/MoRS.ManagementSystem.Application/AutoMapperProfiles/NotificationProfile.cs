@@ -9,5 +9,6 @@ public class NotificationProfile : Profile
     public NotificationProfile()
     {
         CreateMap<Notification, NotificationResponse>();
+        CreateMap<UpdateNotificationRequest, Notification>();
     }
 }

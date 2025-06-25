@@ -6,7 +6,7 @@ using MoRS.ManagementSystem.Application.Interfaces.Services.BaseInterfaces;
 namespace MoRS.ManagementSystem.Application.Interfaces.Services;
 
 public interface INotificationService :
-    IBaseService<NotificationResponse, EmptyDto, EmptyDto, NotificationQuery>
+    IBaseService<NotificationResponse, EmptyDto, UpdateNotificationRequest, NotificationQuery>
 {
 
 }

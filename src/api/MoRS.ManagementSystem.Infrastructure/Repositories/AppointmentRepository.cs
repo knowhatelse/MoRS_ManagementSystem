@@ -12,10 +12,23 @@ public class AppointmentRepository(MoRSManagementSystemDbContext context) : Base
     {
         if (queryFilter?.Date is not null)
         {
-            query = query.Include(a => a.AppointmentSchedule).Where(a =>
-                a.AppointmentSchedule != null &&
-                a.AppointmentSchedule.Date == queryFilter.DateFrom
-            );
+            query = query.Include(a => a.AppointmentSchedule);
+
+            if (queryFilter.IsRepeating == true)
+            {
+                var dayOfWeek = queryFilter.Date.Value.DayOfWeek;
+                query = query.Where(a =>
+                    (!a.IsRepeating && a.AppointmentSchedule != null && a.AppointmentSchedule.Date == queryFilter.Date) ||
+                    (a.IsRepeating && a.RepeatingDayOfWeek == dayOfWeek)
+                );
+            }
+            else
+            {
+                query = query.Where(a =>
+                    a.AppointmentSchedule != null &&
+                    a.AppointmentSchedule.Date == queryFilter.Date
+                );
+            }
         }
 
         if (queryFilter?.DateFrom is not null)
@@ -50,13 +63,7 @@ public class AppointmentRepository(MoRSManagementSystemDbContext context) : Base
         {
             query = query.Include(a => a.Attendees).Where(a => a.Attendees.Any(u => u.Id == queryFilter.AttendeeId));
         }
-
         if (queryFilter?.IsCancelled is not null)
-        {
-            query = query.Where(a => a.IsCancelled == queryFilter.IsCancelled);
-        }
-
-        if (queryFilter?.IsRepeating is not null)
         {
             query = query.Where(a => a.IsCancelled == queryFilter.IsCancelled);
         }

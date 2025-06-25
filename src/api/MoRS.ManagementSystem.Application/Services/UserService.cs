@@ -74,6 +74,23 @@ public class UserService(IMapper mapper, IUserRepository repository, INotificati
         await base.BeforeUpdateAsync(request, entity);
     }
 
+    public async Task<bool> UpdatePasswordAsync(int userId, UpdatePasswordRequest request)
+    {
+        var user = await _repository.GetByIdAsync(userId);
+        if (user == null)
+        {
+            return false;
+        }
+
+        PasswordHelper.CreatePasswordHash(request.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+
+        user.PasswordHash = passwordHash;
+        user.PasswordSalt = passwordSalt;
+
+        await _repository.UpdateAsync(user);
+        return true;
+    }
+
     private async Task<bool> CheckUserEmails(User request, User entity)
     {
         var existingEmails = await _repository.GetAsync(new UserQuery { Email = request.Email });
