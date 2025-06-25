@@ -6,6 +6,7 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import '../constants/app_constants.dart';
 import '../utils/app_utils.dart';
+import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -104,11 +105,12 @@ class _LoginScreenState extends State<LoginScreen> {
       final userResponse = await _authService.login(loginRequest);
 
       if (mounted) {
-        AppUtils.showSuccessSnackbar(context, 'Uspješna prijava!');
-        // Navigator.pushReplacementNamed(context, '/dashboard', arguments: userResponse);
-
-        // ignore: unused_local_variable
-        final user = userResponse;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DashboardScreen(user: userResponse),
+          ),
+        );
       }
     } on ApiException catch (e) {
       if (mounted) {
@@ -146,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final isWideScreen = screenSize.width > 800;
-   
+
     final maxContentWidth = isWideScreen ? 400.0 : 320.0;
     final logoSize = isWideScreen ? 180.0 : 150.0;
     final horizontalPadding = isWideScreen ? 64.0 : 32.0;
