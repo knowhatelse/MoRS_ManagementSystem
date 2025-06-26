@@ -17,6 +17,7 @@ class MalfunctionReportResponse {
 
   int? get roomId => room?['id'];
   String get roomName => room?['name'] ?? '';
+  String get roomColor => room?['color'] ?? '#FFFFFF';
   int? get reportedByUserId => reportedByUser?['id'];
   String get reportedByUserName => reportedByUser?['name'] ?? '';
 

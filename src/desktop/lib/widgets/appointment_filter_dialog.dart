@@ -94,9 +94,18 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
       if (mounted) {
         setState(() {
           _rooms = rooms.where((room) => room.isActive).toList();
-          if (_selectedRoom != null &&
-              !_rooms.any((room) => room.id == _selectedRoom!.id)) {
-            _selectedRoom = null;
+
+          if (_selectedRoom != null) {
+            final matchingRoom = _rooms.firstWhere(
+              (room) => room.id == _selectedRoom!.id,
+              orElse: () => _selectedRoom!,
+            );
+
+            if (_rooms.any((room) => room.id == _selectedRoom!.id)) {
+              _selectedRoom = matchingRoom;
+            } else {
+              _selectedRoom = null;
+            }
           }
         });
       }
@@ -114,11 +123,21 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
       if (mounted) {
         setState(() {
           _appointmentTypes = appointmentTypes;
-          if (_selectedAppointmentType != null &&
-              !_appointmentTypes.any(
-                (type) => type.id == _selectedAppointmentType!.id,
-              )) {
-            _selectedAppointmentType = null;
+
+          if (_selectedAppointmentType != null) {
+            final matchingType = _appointmentTypes.firstWhere(
+              (type) => type.id == _selectedAppointmentType!.id,
+              orElse: () =>
+                  _selectedAppointmentType!,
+            );
+
+            if (_appointmentTypes.any(
+              (type) => type.id == _selectedAppointmentType!.id,
+            )) {
+              _selectedAppointmentType = matchingType;
+            } else {
+              _selectedAppointmentType = null;
+            }
           }
         });
       }
@@ -144,9 +163,18 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
       if (mounted) {
         setState(() {
           _users = users;
-          if (_selectedUser != null &&
-              !_users.any((user) => user.id == _selectedUser!.id)) {
-            _selectedUser = null;
+
+          if (_selectedUser != null) {
+            final matchingUser = _users.firstWhere(
+              (user) => user.id == _selectedUser!.id,
+              orElse: () => _selectedUser!,
+            );
+
+            if (_users.any((user) => user.id == _selectedUser!.id)) {
+              _selectedUser = matchingUser;
+            } else {
+              _selectedUser = null;
+            }
           }
         });
       }
@@ -170,7 +198,6 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
             Container(
               padding: const EdgeInsets.all(24.0),
               decoration: BoxDecoration(
