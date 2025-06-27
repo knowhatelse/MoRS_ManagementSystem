@@ -109,7 +109,9 @@ class AnnouncementService extends BaseApiService {
         '${ApiConfig.announcements}/$id',
         body: request.toJson(),
       );
-      return AnnouncementResponse.fromJson(response);
+
+      final result = AnnouncementResponse.fromJson(response);
+      return result;
     } on ApiException catch (e) {
       if (e.statusCode == 404) {
         return null;
@@ -120,32 +122,13 @@ class AnnouncementService extends BaseApiService {
     }
   }
 
-  Future<AnnouncementResponse?> deleteAnnouncement(int id) async {
-    final currentAnnouncement = await getAnnouncementById(id);
-    if (currentAnnouncement == null) return null;
-
-    return updateAnnouncement(
-      id,
-      UpdateAnnouncementRequest(
-        title: currentAnnouncement.title,
-        content: currentAnnouncement.content,
-        isDeleted: true,
-      ),
-    );
-  }
-
-  Future<AnnouncementResponse?> restoreAnnouncement(int id) async {
-    final currentAnnouncement = await getAnnouncementById(id);
-    if (currentAnnouncement == null) return null;
-
-    return updateAnnouncement(
-      id,
-      UpdateAnnouncementRequest(
-        title: currentAnnouncement.title,
-        content: currentAnnouncement.content,
-        isDeleted: false,
-      ),
-    );
+  Future<bool> deleteAnnouncementById(int id) async {
+    try {
+      await delete('${ApiConfig.announcements}/$id');
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<List<AnnouncementResponse>> getActiveAnnouncements() async {

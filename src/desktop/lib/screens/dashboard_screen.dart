@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../constants/app_constants.dart';
 import '../widgets/desktop_header.dart';
+import '../pages/announcements_page.dart';
 import '../pages/planer_page.dart';
 import '../pages/room_page.dart';
 import '../pages/report_page.dart';
@@ -59,6 +60,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildBody() {
     switch (_selectedIndex) {
+      case 0:
+        return AnnouncementsPage(user: widget.user);
       case 1:
         return PlanerPage(user: widget.user);
       case 2:

@@ -29,6 +29,6 @@ class UpdateAnnouncementRequest {
 
   @override
   String toString() {
-    return 'UpdateAnnouncementRequest(isDeleted: $isDeleted)';
+    return 'UpdateAnnouncementRequest(title: $title, content: $content, isDeleted: $isDeleted)';
   }
 }

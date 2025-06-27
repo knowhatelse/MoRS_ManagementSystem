@@ -11,7 +11,5 @@ namespace MoRS.ManagementSystem.API.Controllers;
 public class AnnouncementController(IAnnouncementService service)
     : BaseController<Announcement, AnnouncementResponse, CreateAnnouncementRequest, UpdateAnnouncementRequest, AnnouncementQuery>(service)
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [NonAction]
-    public override Task<IActionResult> Delete(int id) => base.Delete(id);
+
 }

@@ -5,6 +5,7 @@ class AnnouncementResponse {
   final String title;
   final String content;
   final DateTime createdAt;
+  final bool isDeleted;
   final UserResponse? user;
 
   AnnouncementResponse({
@@ -12,6 +13,7 @@ class AnnouncementResponse {
     required this.title,
     required this.content,
     required this.createdAt,
+    this.isDeleted = false,
     this.user,
   });
 
@@ -21,6 +23,7 @@ class AnnouncementResponse {
       title: json['title'] as String,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      isDeleted: json['isDeleted'] as bool? ?? false,
       user: json['user'] != null
           ? UserResponse.fromJson(json['user'] as Map<String, dynamic>)
           : null,
@@ -33,6 +36,7 @@ class AnnouncementResponse {
       'title': title,
       'content': content,
       'createdAt': createdAt.toIso8601String(),
+      'isDeleted': isDeleted,
       'user': user?.toJson(),
     };
   }
