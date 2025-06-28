@@ -6,6 +6,7 @@ import '../pages/announcements_page.dart';
 import '../pages/planer_page.dart';
 import '../pages/room_page.dart';
 import '../pages/report_page.dart';
+import '../pages/users_page.dart';
 import 'login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -68,6 +69,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return RoomPage(user: widget.user);
       case 3:
         return ReportPage(user: widget.user);
+      case 5:
+        return UsersPage(user: widget.user);
       default:
         return Center(
           child: Column(
