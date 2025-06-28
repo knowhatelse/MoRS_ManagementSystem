@@ -23,6 +23,7 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   bool _isSubmitting = false;
+  final Map<String, bool> _touched = {'title': false, 'content': false};
 
   @override
   void dispose() {
@@ -78,6 +79,8 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final titleError = _touched['title']! ? _validateTitle(_titleController.text) : null;
+    final contentError = _touched['content']! ? _validateContent(_contentController.text) : null;
     return AlertDialog(
       backgroundColor: Colors.white,
       titlePadding: EdgeInsets.zero,
@@ -87,8 +90,8 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
         decoration: BoxDecoration(
           color: AppConstants.primaryBlue,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4),
-            topRight: Radius.circular(4),
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
         ),
         child: Row(
@@ -122,28 +125,46 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: AnnouncementConstants.titleFieldLabel,
-                  hintText: AnnouncementConstants.titleFieldHint,
-                  border: OutlineInputBorder(),
+              Focus(
+                onFocusChange: (hasFocus) {
+                  if (!hasFocus) setState(() => _touched['title'] = true);
+                },
+                child: TextFormField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    labelText: AnnouncementConstants.titleFieldLabel,
+                    hintText: AnnouncementConstants.titleFieldHint,
+                    border: const OutlineInputBorder(),
+                    errorText: titleError,
+                  ),
+                  onChanged: (_) => setState(() {}),
+                  enabled: !_isSubmitting,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  onTap: () => setState(() => _touched['title'] = true),
+                  maxLength: 100,
                 ),
-                validator: _validateTitle,
-                maxLength: 100,
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _contentController,
-                decoration: const InputDecoration(
-                  labelText: AnnouncementConstants.contentFieldLabel,
-                  hintText: AnnouncementConstants.contentFieldHint,
-                  border: OutlineInputBorder(),
-                  alignLabelWithHint: true,
+              Focus(
+                onFocusChange: (hasFocus) {
+                  if (!hasFocus) setState(() => _touched['content'] = true);
+                },
+                child: TextFormField(
+                  controller: _contentController,
+                  decoration: InputDecoration(
+                    labelText: AnnouncementConstants.contentFieldLabel,
+                    hintText: AnnouncementConstants.contentFieldHint,
+                    border: const OutlineInputBorder(),
+                    alignLabelWithHint: true,
+                    errorText: contentError,
+                  ),
+                  onChanged: (_) => setState(() {}),
+                  enabled: !_isSubmitting,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  onTap: () => setState(() => _touched['content'] = true),
+                  maxLines: 8,
+                  maxLength: 2000,
                 ),
-                validator: _validateContent,
-                maxLines: 8,
-                maxLength: 2000,
               ),
             ],
           ),

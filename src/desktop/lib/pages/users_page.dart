@@ -7,6 +7,7 @@ import '../utils/avatar_utils.dart';
 import '../widgets/create_user_dialog.dart';
 import '../widgets/edit_user_dialog.dart';
 import '../widgets/search_user_dialog.dart';
+import '../utils/app_utils.dart';
 
 class UsersPage extends StatefulWidget {
   final UserResponse user;
@@ -42,9 +43,7 @@ class _UsersPageState extends State<UsersPage> {
         _isLoading = false;
       });
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Greška pri učitavanju korisnika.')),
-        );
+        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju korisnika');
       }
     }
   }
@@ -146,7 +145,7 @@ class _UsersPageState extends State<UsersPage> {
                         : _users.isEmpty
                         ? const Center(
                             child: Text(
-                              'Nema korisnika.',
+                              'Nema korisnika za prikaz',
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.grey,
@@ -355,9 +354,9 @@ class _UsersPageState extends State<UsersPage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.blue.withValues(alpha: 0.05),
+        color: Colors.blue.shade50,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.blue.withValues(alpha: 0.1), width: 1),
+        border: Border.all(color: Colors.blue.shade100, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),

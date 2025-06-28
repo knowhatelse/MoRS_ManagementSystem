@@ -17,7 +17,7 @@ class PlanerConstants {
   static const int userColumnFlex = 2;
   static const double deleteColumnWidth = 60.0;
 
-  static const String pageTitle = 'Svi termini';
+  static const String pageTitle = 'Termini';
   static const String noDataMessage = 'Nema termina za prikaz';
   static const String loadingErrorMessage = 'Greška pri učitavanju termina';
   static const String deleteErrorMessage = 'Greška pri brisanju termina';

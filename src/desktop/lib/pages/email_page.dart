@@ -173,7 +173,7 @@ class _EmailPageState extends State<EmailPage> {
                         EmailConstants.pageTitle,
                         style: TextStyle(
                           fontSize: AnnouncementConstants.titleFontSize,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppConstants.primaryBlue,
                         ),
                       ),

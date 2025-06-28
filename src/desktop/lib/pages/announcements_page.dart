@@ -32,22 +32,23 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
       _isLoading = true;
     });
     try {
-      final announcements = await _announcementService.getAnnouncements();
+      final announcements = await _announcementService.getAnnouncements(
+        query: AnnouncementQuery.all(),
+      );
       announcements.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       setState(() {
         _announcements = announcements;
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
-      if (mounted) {
-        AppUtils.showErrorSnackBar(
-          context,
-          AnnouncementConstants.loadingErrorMessage,
-        );
-      }
+      AppUtils.showErrorSnackBar(
+        context,
+        AnnouncementConstants.loadingErrorMessage,
+      );
     }
   }
 
@@ -194,16 +195,36 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
           Positioned(
             bottom: 24,
             right: 24,
-            child: FloatingActionButton(
-              onPressed: _showCreateAnnouncementDialog,
-              backgroundColor: AppConstants.primaryBlue,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
+            child: Material(
+              color: Colors.transparent,
               elevation: 8,
-              tooltip: AnnouncementConstants.createTooltip,
-              child: const Icon(
-                Icons.add,
-                size: AnnouncementConstants.fabIconSize,
+              shape: const CircleBorder(),
+              child: Tooltip(
+                message: AnnouncementConstants.createTooltip,
+                child: InkWell(
+                  onTap: _showCreateAnnouncementDialog,
+                  customBorder: const CircleBorder(),
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: AppConstants.primaryBlue,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          offset: const Offset(0, 2),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

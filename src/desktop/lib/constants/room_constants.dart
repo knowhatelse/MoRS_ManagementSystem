@@ -11,15 +11,15 @@ class RoomConstants {
   static const double deleteIconSize = 20.0;
   static const double clearIconSize = 18.0;
 
-  static const int nameColumnFlex = 3;
-  static const int typeColumnFlex = 2;
+  static const int nameColumnFlex = 1;
+  static const int typeColumnFlex = 1;
   static const int colorColumnFlex = 1;
   static const int statusColumnFlex = 1;
-  static const double toggleColumnWidth = 120.0;
+  static const double toggleColumnWidth = 220.0;
   static const double deleteColumnWidth = 60.0;
 
   static const List<String> roomTypes = ['Studio', 'Room', 'Control Room'];
- 
+
   static const String pageTitle = 'Prostorije';
   static const String noDataMessage = 'Nema prostorija za prikaz';
   static const String loadingErrorMessage = 'Greška pri učitavanju prostorija';

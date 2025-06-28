@@ -256,14 +256,37 @@ class _RoomPageState extends State<RoomPage> {
           Positioned(
             bottom: 24,
             right: 24,
-            child: FloatingActionButton(
-              onPressed: _showCreateRoomDialog,
-              backgroundColor: AppConstants.primaryBlue,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
+            child: Material(
+              color: Colors.transparent,
               elevation: 8,
-              tooltip: RoomConstants.addRoomTooltip,
-              child: const Icon(Icons.add, size: RoomConstants.fabIconSize),
+              shape: const CircleBorder(),
+              child: Tooltip(
+                message: RoomConstants.addRoomTooltip,
+                child: InkWell(
+                  onTap: _showCreateRoomDialog,
+                  customBorder: const CircleBorder(),
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: AppConstants.primaryBlue,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          offset: const Offset(0, 2),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],

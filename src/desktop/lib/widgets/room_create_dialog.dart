@@ -23,6 +23,7 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
   String _selectedType = RoomConstants.roomTypes.first;
   Color _selectedColor = Colors.blue;
   bool _isLoading = false;
+  final Map<String, bool> _touched = {'name': false};
 
   @override
   void dispose() {
@@ -41,6 +42,19 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
         _selectedColor = selectedColor;
       });
     }
+  }
+
+  String? _validateName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return RoomConstants.nameRequiredMessage;
+    }
+    if (value.trim().length < 2) {
+      return RoomConstants.nameMinLengthMessage;
+    }
+    if (value.trim().length > 50) {
+      return RoomConstants.nameMaxLengthMessage;
+    }
+    return null;
   }
 
   Future<void> _createRoom() async {
@@ -84,6 +98,7 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final nameError = _touched['name']! ? _validateName(_nameController.text) : null;
     return AlertDialog(
       backgroundColor: Colors.white,
       titlePadding: EdgeInsets.zero,
@@ -93,8 +108,8 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
         decoration: BoxDecoration(
           color: AppConstants.primaryBlue,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4),
-            topRight: Radius.circular(4),
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
           ),
         ),
         child: Row(
@@ -127,25 +142,23 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: RoomConstants.nameLabel,
-                  hintText: RoomConstants.nameHint,
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return RoomConstants.nameRequiredMessage;
-                  }
-                  if (value.trim().length < 2) {
-                    return RoomConstants.nameMinLengthMessage;
-                  }
-                  if (value.trim().length > 50) {
-                    return RoomConstants.nameMaxLengthMessage;
-                  }
-                  return null;
+              Focus(
+                onFocusChange: (hasFocus) {
+                  if (!hasFocus) setState(() => _touched['name'] = true);
                 },
+                child: TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: RoomConstants.nameLabel,
+                    hintText: RoomConstants.nameHint,
+                    border: const OutlineInputBorder(),
+                    errorText: nameError,
+                  ),
+                  onChanged: (_) => setState(() {}),
+                  enabled: !_isLoading,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  onTap: () => setState(() => _touched['name'] = true),
+                ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(

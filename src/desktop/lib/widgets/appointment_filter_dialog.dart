@@ -3,6 +3,7 @@ import '../models/models.dart';
 import '../constants/app_constants.dart';
 import '../services/services.dart';
 import '../utils/app_utils.dart';
+import '../utils/avatar_utils.dart';
 import 'filter_dropdown.dart';
 import 'filter_date_time_field.dart';
 
@@ -70,6 +71,10 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
   List<AppointmentTypeResponse> _appointmentTypes = [];
   List<UserResponse> _users = [];
 
+  final TextEditingController _userSearchController = TextEditingController();
+  final FocusNode _userSearchFocusNode = FocusNode();
+  bool _isUserSearching = false;
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +87,13 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
     _selectedIsRepeating = widget.initialIsRepeating;
     _selectedUser = widget.initialUser;
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    _userSearchController.dispose();
+    _userSearchFocusNode.dispose();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -127,8 +139,7 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
           if (_selectedAppointmentType != null) {
             final matchingType = _appointmentTypes.firstWhere(
               (type) => type.id == _selectedAppointmentType!.id,
-              orElse: () =>
-                  _selectedAppointmentType!,
+              orElse: () => _selectedAppointmentType!,
             );
 
             if (_appointmentTypes.any(
@@ -185,6 +196,23 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
     }
   }
 
+  Future<List<UserResponse>> _searchUsers(String query) async {
+    if (query.trim().isEmpty || query.length < 2) {
+      return [];
+    }
+    setState(() => _isUserSearching = true);
+    try {
+      final users = await _userService.searchUsers(query);
+      setState(() {
+        _isUserSearching = false;
+      });
+      return users;
+    } catch (e) {
+      setState(() => _isUserSearching = false);
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -193,8 +221,8 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
         borderRadius: BorderRadius.circular(AppConstants.borderRadius),
       ),
       child: Container(
-        width: 600,
-        constraints: const BoxConstraints(maxHeight: 700),
+        width: 1100,
+        constraints: const BoxConstraints(maxHeight: 1000),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -637,28 +665,120 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
   }
 
   Widget _buildUserFilter() {
-    return FilterDropdown<UserResponse>(
-      label: 'Korisnik',
-      hint: 'Odaberite korisnika',
-      value: _selectedUser,
-      onChanged: (user) => setState(() => _selectedUser = user),
-      items: [
-        const DropdownMenuItem<UserResponse?>(
-          value: null,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Svi korisnici'),
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Korisnik',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
-        ..._users.map(
-          (user) => DropdownMenuItem<UserResponse?>(
-            value: user,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(user.fullName),
+        const SizedBox(height: 8),
+        RawAutocomplete<UserResponse>(
+          textEditingController: _userSearchController,
+          focusNode: _userSearchFocusNode,
+          displayStringForOption: (u) => u.fullName,
+          optionsBuilder: (TextEditingValue textEditingValue) async {
+            if (textEditingValue.text.length < 2) {
+              return const [];
+            }
+            return await _searchUsers(textEditingValue.text);
+          },
+          onSelected: (UserResponse user) {
+            setState(() {
+              _selectedUser = user;
+            });
+            _userSearchController.clear();
+          },
+          fieldViewBuilder:
+              (context, controller, focusNode, onFieldSubmitted) {
+                return TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  decoration: InputDecoration(
+                    labelText: 'Pretraži korisnike',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    suffixIcon: _isUserSearching
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          )
+                        : (controller.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    controller.clear();
+                                    setState(() {
+                                      _selectedUser = null;
+                                    });
+                                  },
+                                )
+                              : null),
+                  ),
+                  onChanged: (value) {},
+                );
+              },
+          optionsViewBuilder: (context, onSelected, options) {
+            return Material(
+              elevation: 4,
+              child: ListView.separated(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: options.length,
+                separatorBuilder: (_, __) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  final user = options.elementAt(index);
+                  return ListTile(
+                    onTap: () => onSelected(user),
+                    leading: AvatarUtils.buildUserAvatar(user),
+                    title: Text(
+                      user.fullName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    subtitle: Text(
+                      user.email,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
+                    minVerticalPadding: 0,
+                    dense: true,
+                  );
+                },
+              ),
+            );
+          },
+        ),
+        if (_selectedUser != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Chip(
+              label: Text(_selectedUser!.fullName),
+              onDeleted: () => setState(() => _selectedUser = null),
+              deleteIcon: const Icon(Icons.close, size: 18),
+              backgroundColor: Color.fromRGBO(
+                (AppConstants.primaryBlue.r * 255.0).round() & 0xff,
+                (AppConstants.primaryBlue.g * 255.0).round() & 0xff,
+                (AppConstants.primaryBlue.b * 255.0).round() & 0xff,
+                0.08,
+              ),
             ),
           ),
-        ),
       ],
     );
   }

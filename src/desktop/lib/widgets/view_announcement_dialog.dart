@@ -23,8 +23,8 @@ class ViewAnnouncementDialog extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppConstants.primaryBlue,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4),
-            topRight: Radius.circular(4),
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
         ),
         child: Row(
