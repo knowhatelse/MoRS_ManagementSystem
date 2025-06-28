@@ -5,16 +5,21 @@ using MoRS.ManagementSystem.Application.Interfaces.Repositories;
 using MoRS.ManagementSystem.Application.Interfaces.Services;
 using MoRS.ManagementSystem.Application.Utils;
 using MoRS.ManagementSystem.Domain.Entities;
+using MoRS.ManagementSystem.Domain.Enums;
 
 namespace MoRS.ManagementSystem.Application.Services;
 
-public class AppointmentService(IMapper mapper, IAppointmentRepository appointmentRepository, IUserRepository userRepository) :
+public class AppointmentService(IMapper mapper, IAppointmentRepository appointmentRepository, IUserRepository userRepository, INotificationRepository notificationRepository, IRoomRepository roomRepository) :
     BaseService<Appointment, AppointmentResponse, CreateAppointmentRequest, UpdateAppointmentRequest, AppointmentQuery>(mapper, appointmentRepository),
     IAppointmentService
 {
     private readonly IMapper _mapper = mapper;
     private readonly IAppointmentRepository _appointmentRepository = appointmentRepository;
-    private readonly IUserRepository _userRepository = userRepository; protected override async Task BeforeInsertAsync(CreateAppointmentRequest request, Appointment entity)
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly INotificationRepository _notificationRepository = notificationRepository;
+    private readonly IRoomRepository _roomRepository = roomRepository;
+
+    protected override async Task BeforeInsertAsync(CreateAppointmentRequest request, Appointment entity)
     {
         if (request.AppointmentSchedule?.Date != null)
         {
@@ -211,7 +216,7 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository appointme
         while (currentDate <= dateTo)
         {
             if (currentDate >= startDate && currentDate.DayOfWeek == targetDayOfWeek)
-            {               
+            {
                 var occurrence = new Appointment
                 {
                     Id = repeatingAppointment.Id,
@@ -240,5 +245,27 @@ public class AppointmentService(IMapper mapper, IAppointmentRepository appointme
         }
 
         return occurrences;
+    }
+
+    protected override async Task AfterInsertAsync(CreateAppointmentRequest request, Appointment entity)
+    {
+        var attendees = request.AttendeesIds;
+        var bookedBy = await _userRepository.GetByIdAsync(request.BookedByUserId);
+        var room = await _roomRepository.GetByIdAsync(request.RoomId);
+
+        foreach (var a in attendees!)
+        {
+            var failNotification = new Notification
+            {
+                Title = "Dodani ste na termin",
+                Message = $"{bookedBy!.Name} {bookedBy.Surname} vas je dodao/la na termin zakazan za {request.AppointmentSchedule!.Date} u {room!.Name}.",
+                Type = NotificationType.Podsjetnik,
+                Date = DateTime.Now,
+                UserId = a
+            };
+
+
+            await _notificationRepository.AddAsync(failNotification);
+        }
     }
 }

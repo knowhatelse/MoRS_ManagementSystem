@@ -77,7 +77,6 @@ class _SchedulePageState extends State<SchedulePage> {
             },
             child: CustomScrollView(
               slivers: [
-
                 const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
                 SliverToBoxAdapter(
@@ -86,9 +85,9 @@ class _SchedulePageState extends State<SchedulePage> {
                     child: _buildFilterSection(provider),
                   ),
                 ),
-                
+
                 const SliverToBoxAdapter(child: SizedBox(height: 16)),
-                
+
                 if (provider.hasAppointments)
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -140,8 +139,12 @@ class _SchedulePageState extends State<SchedulePage> {
       ),
       floatingActionButton: widget.currentUser != null
           ? FloatingActionButton(
-              onPressed: _showCreateAppointmentBottomSheet,
-              backgroundColor: const Color(0xFF525FE1),
+              onPressed: (widget.currentUser?.isRestricted == true)
+                  ? null
+                  : _showCreateAppointmentBottomSheet,
+              backgroundColor: (widget.currentUser?.isRestricted == true)
+                  ? Colors.grey[400]
+                  : const Color(0xFF525FE1),
               foregroundColor: Colors.white,
               shape: const CircleBorder(),
               elevation: 8,

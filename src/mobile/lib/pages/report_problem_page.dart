@@ -422,7 +422,8 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
         _selectedRoom != null &&
         description.isNotEmpty &&
         description.length >= _minDescriptionLength &&
-        description.length <= _maxDescriptionLength;
+        description.length <= _maxDescriptionLength &&
+        (widget.currentUser?.isRestricted != true);
   }
 
   Widget _buildSubmitButton() {
@@ -434,13 +435,13 @@ class _ReportProblemPageState extends State<ReportProblemPage> {
       child: ElevatedButton(
         onPressed: isEnabled ? _submitReport : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppConstants.primaryBlue,
-          foregroundColor: Colors.white,
+          backgroundColor: isEnabled
+              ? AppConstants.primaryBlue
+              : Colors.grey.shade300,
+          foregroundColor: isEnabled ? Colors.white : Colors.grey.shade600,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.borderRadius),
           ),
-          disabledBackgroundColor: Colors.grey.shade300,
-          disabledForegroundColor: Colors.grey.shade600,
         ),
         child: _isSubmitting
             ? const SizedBox(
