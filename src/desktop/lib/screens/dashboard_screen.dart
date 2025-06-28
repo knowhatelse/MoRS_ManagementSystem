@@ -7,6 +7,7 @@ import '../pages/planer_page.dart';
 import '../pages/room_page.dart';
 import '../pages/report_page.dart';
 import '../pages/users_page.dart';
+import '../pages/email_page.dart';
 import 'login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -69,6 +70,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return RoomPage(user: widget.user);
       case 3:
         return ReportPage(user: widget.user);
+      case 4:
+        return EmailPage(user: widget.user);
       case 5:
         return UsersPage(user: widget.user);
       default:

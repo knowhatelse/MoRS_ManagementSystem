@@ -3,12 +3,10 @@ import '../models/user/user_response.dart';
 import '../services/user_service.dart';
 import '../constants/app_constants.dart';
 import '../constants/room_constants.dart';
-import '../utils/app_utils.dart';
 import '../utils/avatar_utils.dart';
 import '../widgets/create_user_dialog.dart';
 import '../widgets/edit_user_dialog.dart';
 import '../widgets/search_user_dialog.dart';
-import '../constants/users_page_constants.dart';
 
 class UsersPage extends StatefulWidget {
   final UserResponse user;
@@ -185,7 +183,7 @@ class _UsersPageState extends State<UsersPage> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
+                              color: Colors.black.withValues(alpha: 0.15),
                               offset: const Offset(0, 2),
                               blurRadius: 8,
                             ),
@@ -218,7 +216,7 @@ class _UsersPageState extends State<UsersPage> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
+                              color: Colors.black.withValues(alpha: 0.15),
                               offset: const Offset(0, 2),
                               blurRadius: 8,
                             ),
@@ -243,15 +241,13 @@ class _UsersPageState extends State<UsersPage> {
 
   Widget _buildUsersTable() {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 0,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             offset: const Offset(0, 2),
             blurRadius: 8,
             spreadRadius: 0,
@@ -359,12 +355,12 @@ class _UsersPageState extends State<UsersPage> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
+        color: Colors.blue.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.blue.shade100, width: 1),
+        border: Border.all(color: Colors.blue.withValues(alpha: 0.1), width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             offset: const Offset(0, 1),
             blurRadius: 3,
             spreadRadius: 0,
@@ -383,9 +379,7 @@ class _UsersPageState extends State<UsersPage> {
                 height: 40,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AvatarUtils.buildUserAvatar(user),
-                  ],
+                  children: [AvatarUtils.buildUserAvatar(user)],
                 ),
               ),
               const SizedBox(width: 16),
@@ -393,10 +387,7 @@ class _UsersPageState extends State<UsersPage> {
               Expanded(flex: 2, child: Text(user.surname)),
               Expanded(flex: 3, child: Text(user.email)),
               Expanded(flex: 2, child: Text(user.phoneNumber)),
-              Expanded(
-                flex: 2,
-                child: Text(user.role?.name ?? ''),
-              ),
+              Expanded(flex: 2, child: Text(user.role?.name ?? '')),
             ],
           ),
         ),

@@ -9,8 +9,9 @@ import '../constants/app_constants.dart';
 class EditUserDialog extends StatefulWidget {
   final UserResponse user;
   final void Function(UserResponse) onUserUpdated;
-  final VoidCallback onUserDeleted;
+  final Future<void> Function() onUserDeleted;
   const EditUserDialog({
+    super.key,
     required this.user,
     required this.onUserUpdated,
     required this.onUserDeleted,
@@ -54,6 +55,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
     _emailController.addListener(_onFieldChanged);
     _phoneController.addListener(_onFieldChanged);
   }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -62,9 +64,11 @@ class _EditUserDialogState extends State<EditUserDialog> {
     _phoneController.dispose();
     super.dispose();
   }
+
   void _onFieldChanged() {
     setState(() {});
   }
+
   String? _validateName(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Ime je obavezno';
@@ -77,6 +81,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
     }
     return null;
   }
+
   String? _validateSurname(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Prezime je obavezno';
@@ -89,6 +94,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
     }
     return null;
   }
+
   String? _validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Email je obavezan';
@@ -99,6 +105,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
     }
     return null;
   }
+
   String? _validatePhone(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Broj telefona je obavezan';
@@ -109,6 +116,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
     }
     return null;
   }
+
   String? _validateRole(int? value) {
     if (value == null) {
       return 'Tip korisnika je obavezan';
@@ -118,6 +126,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
     }
     return null;
   }
+
   bool _validateForm() {
     return _validateName(_nameController.text) == null &&
         _validateSurname(_surnameController.text) == null &&
@@ -125,6 +134,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
         _validatePhone(_phoneController.text) == null &&
         _validateRole(_roleId) == null;
   }
+
   Future<void> _submit() async {
     if (!_validateForm()) return;
     setState(() {
@@ -180,6 +190,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final nameError = _touched['name']!
@@ -199,9 +210,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
       backgroundColor: Colors.white,
       titlePadding: EdgeInsets.zero,
       contentPadding: const EdgeInsets.all(24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -325,10 +334,12 @@ class _EditUserDialogState extends State<EditUserDialog> {
                   ),
                   value: [2, 3].contains(_roleId) ? _roleId : null,
                   items: UsersPageConstants.userRoles
-                      .map((role) => DropdownMenuItem<int>(
-                            value: role['id'],
-                            child: Text(role['label']),
-                          ))
+                      .map(
+                        (role) => DropdownMenuItem<int>(
+                          value: role['id'],
+                          child: Text(role['label']),
+                        ),
+                      )
                       .toList(),
                   onChanged: _isLoading
                       ? null

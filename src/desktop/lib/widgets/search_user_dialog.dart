@@ -7,7 +7,7 @@ import '../constants/app_constants.dart';
 
 class SearchUserDialog extends StatefulWidget {
   final void Function(UserResponse?) onUserSelected;
-  const SearchUserDialog({required this.onUserSelected});
+  const SearchUserDialog({super.key, required this.onUserSelected});
 
   @override
   State<SearchUserDialog> createState() => _SearchUserDialogState();
@@ -38,11 +38,13 @@ class _SearchUserDialogState extends State<SearchUserDialog> {
     });
     try {
       final users = await _userService.searchUsers(searchTerm);
+      if (!mounted) return;
       setState(() {
         _searchedUsers = users;
         _isSearching = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isSearching = false;
       });
@@ -56,9 +58,7 @@ class _SearchUserDialogState extends State<SearchUserDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
         width: 500,
         constraints: const BoxConstraints(maxHeight: 500),
