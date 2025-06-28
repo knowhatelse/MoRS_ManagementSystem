@@ -6,6 +6,8 @@ import '../constants/planer_constants.dart';
 import '../utils/app_utils.dart';
 import '../widgets/appointment_attendees_dialog.dart';
 import '../widgets/appointment_filter_dialog.dart';
+import '../widgets/appointment_graph_dialog.dart';
+import '../constants/appointment_constants.dart';
 
 class PlanerPage extends StatefulWidget {
   final UserResponse user;
@@ -181,6 +183,14 @@ class _PlanerPageState extends State<PlanerPage> {
     );
   }
 
+  void _showGraphDialog() {
+    showDialog(
+      context: context,
+      builder: (context) =>
+          AppointmentGraphDialog(appointments: _filteredAppointments),
+    );
+  }
+
   List<AppointmentResponse> _applyFilters(
     List<AppointmentResponse> appointments,
   ) {
@@ -234,7 +244,7 @@ class _PlanerPageState extends State<PlanerPage> {
           return false;
         }
       }
- 
+
       if (_filterAppointmentType != null) {
         if (appointment.appointmentType.id != _filterAppointmentType!.id) {
           return false;
@@ -301,7 +311,7 @@ class _PlanerPageState extends State<PlanerPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: PlanerConstants.tableSidePadding,
-                  ), 
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -315,6 +325,13 @@ class _PlanerPageState extends State<PlanerPage> {
                       ),
                       Row(
                         children: [
+                          IconButton(
+                            onPressed: _showGraphDialog,
+                            icon: const Icon(Icons.show_chart),
+                            tooltip: AppointmentConstants.graphButtonTooltip,
+                            color: AppConstants.primaryBlue,
+                          ),
+                          const SizedBox(width: 8),
                           if (_hasActiveFilters())
                             TextButton.icon(
                               onPressed: _clearFilters,
@@ -380,6 +397,8 @@ class _PlanerPageState extends State<PlanerPage> {
               foregroundColor: Colors.white,
               shape: const CircleBorder(),
               elevation: 8,
+              heroTag: 'filter',
+              tooltip: 'Filtriraj termine',
               child: const Icon(
                 Icons.filter_list,
                 size: PlanerConstants.fabIconSize,
