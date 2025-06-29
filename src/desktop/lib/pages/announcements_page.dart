@@ -113,7 +113,10 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
   void _showAnnouncementDetails(AnnouncementResponse announcement) {
     showDialog(
       context: context,
-      builder: (context) => ViewAnnouncementDialog(announcement: announcement),
+      builder: (context) => ViewAnnouncementDialog(
+        announcement: announcement,
+        onAnnouncementUpdated: _loadAnnouncements,
+      ),
     );
   }
 
@@ -218,11 +221,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                      size: 28,
-                    ),
+                    child: const Icon(Icons.add, color: Colors.white, size: 28),
                   ),
                 ),
               ),

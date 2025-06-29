@@ -50,6 +50,9 @@ class _EditUserDialogState extends State<EditUserDialog> {
     _roleId = [2, 3].contains(widget.user.role?.id)
         ? widget.user.role?.id
         : null;
+    if (_roleId == 2) {
+      _isRestricted = false;
+    }
     _nameController.addListener(_onFieldChanged);
     _surnameController.addListener(_onFieldChanged);
     _emailController.addListener(_onFieldChanged);
@@ -149,7 +152,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
           surname: _surnameController.text.trim(),
           email: _emailController.text.trim(),
           phoneNumber: _phoneController.text.trim(),
-          isRestricted: _isRestricted,
+          isRestricted: _roleId == 2 ? false : _isRestricted,
           roleId: _roleId!,
         ),
       );
@@ -353,11 +356,12 @@ class _EditUserDialogState extends State<EditUserDialog> {
                 ),
               ),
               const SizedBox(height: 16),
-              SwitchListTile(
-                title: const Text('Ograničen pristup'),
-                value: _isRestricted,
-                onChanged: (v) => setState(() => _isRestricted = v),
-              ),
+              if (_roleId != 2)
+                SwitchListTile(
+                  title: const Text('Ograničen pristup'),
+                  value: _isRestricted,
+                  onChanged: (v) => setState(() => _isRestricted = v),
+                ),
               if (_error != null) ...[
                 const SizedBox(height: 12),
                 Text(_error!, style: const TextStyle(color: Colors.red)),

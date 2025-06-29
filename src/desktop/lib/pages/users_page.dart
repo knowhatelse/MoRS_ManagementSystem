@@ -239,6 +239,7 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   Widget _buildUsersTable() {
+    final visibleUsers = _users.where((u) => u.role?.id != 1).toList();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 0),
       decoration: BoxDecoration(
@@ -258,9 +259,9 @@ class _UsersPageState extends State<UsersPage> {
           _buildTableHeader(),
           Expanded(
             child: ListView.builder(
-              itemCount: _users.length,
+              itemCount: visibleUsers.length,
               itemBuilder: (context, index) {
-                return _buildUserRow(_users[index], index);
+                return _buildUserRow(visibleUsers[index], index);
               },
             ),
           ),
@@ -345,9 +346,58 @@ class _UsersPageState extends State<UsersPage> {
               ),
             ),
           ),
+          SizedBox(
+            width: 60,
+            child: Text(
+              'Obriši',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> _deleteUser(UserResponse user) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Potvrda brisanja'),
+        content: Text(
+          'Da li ste sigurni da želite obrisati korisnika ${user.name} ${user.surname}?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Otkaži'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Obriši'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      try {
+        await _userService.deleteUser(user.id);
+        if (mounted) {
+          AppUtils.showSuccessSnackbar(context, 'Korisnik uspješno obrisan.');
+          await _loadUsers();
+        }
+      } catch (e) {
+        if (mounted) {
+          AppUtils.showErrorSnackBar(context, 'Greška pri brisanju korisnika.');
+        }
+      }
+    }
   }
 
   Widget _buildUserRow(UserResponse user, int index) {
@@ -366,30 +416,47 @@ class _UsersPageState extends State<UsersPage> {
           ),
         ],
       ),
-      child: InkWell(
-        onTap: () => _showEditUserDialog(user),
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 102,
-                height: 40,
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () => _showEditUserDialog(user),
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [AvatarUtils.buildUserAvatar(user)],
+                  children: [
+                    SizedBox(
+                      width: 102,
+                      height: 40,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [AvatarUtils.buildUserAvatar(user)],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(flex: 2, child: Text(user.name)),
+                    Expanded(flex: 2, child: Text(user.surname)),
+                    Expanded(flex: 3, child: Text(user.email)),
+                    Expanded(flex: 2, child: Text(user.phoneNumber)),
+                    Expanded(flex: 2, child: Text(user.role?.name ?? '')),
+                  ],
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(flex: 2, child: Text(user.name)),
-              Expanded(flex: 2, child: Text(user.surname)),
-              Expanded(flex: 3, child: Text(user.email)),
-              Expanded(flex: 2, child: Text(user.phoneNumber)),
-              Expanded(flex: 2, child: Text(user.role?.name ?? '')),
-            ],
+            ),
           ),
-        ),
+          SizedBox(
+            width: 60,
+            child: IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              tooltip: 'Obriši korisnika',
+              onPressed: () => _deleteUser(user),
+            ),
+          ),
+        ],
       ),
     );
   }

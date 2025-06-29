@@ -34,9 +34,6 @@ class PlanerConstants {
     String roomName,
     String dateTime,
   ) {
-    return 'Da li ste sigurni da želite obrisati termin:\\n\\n'
-        '$typeName\\n'
-        '$roomName\\n'
-        '$dateTime?';
+    return 'Da li ste sigurni da želite obrisati termin odabrani termin?';
   }
 }
