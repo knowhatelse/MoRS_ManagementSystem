@@ -5,6 +5,7 @@ import '../constants/app_constants.dart';
 import '../constants/report_constants.dart';
 import '../utils/app_utils.dart';
 import '../widgets/report_filter_dialog.dart';
+import '../widgets/view_report_dialog.dart';
 
 class ReportPage extends StatefulWidget {
   final UserResponse user;
@@ -54,9 +55,7 @@ class _ReportPageState extends State<ReportPage> {
 
       reports.sort((a, b) {
         if (a.isArchived != b.isArchived) {
-          return a.isArchived
-              ? 1
-              : -1;
+          return a.isArchived ? 1 : -1;
         }
         return b.date.compareTo(a.date);
       });
@@ -503,95 +502,104 @@ class _ReportPageState extends State<ReportPage> {
         ? Colors.grey.withValues(alpha: 0.3)
         : roomColor.withValues(alpha: 0.3);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: borderColor, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            offset: const Offset(0, 1),
-            blurRadius: 3,
-            spreadRadius: 0,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => ViewReportDialog(report: report),
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: borderColor, width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                offset: const Offset(0, 1),
+                blurRadius: 3,
+                spreadRadius: 0,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Text(
-                report.roomName,
-                style: const TextStyle(
-                  fontSize: ReportConstants.tableRowFontSize,
-                  fontWeight: FontWeight.w500,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    report.roomName,
+                    style: const TextStyle(
+                      fontSize: ReportConstants.tableRowFontSize,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(
-                report.reportedByUserName,
-                style: const TextStyle(
-                  fontSize: ReportConstants.tableRowFontSize,
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    report.reportedByUserName,
+                    style: const TextStyle(
+                      fontSize: ReportConstants.tableRowFontSize,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Text(
-                _formatDate(report.date),
-                style: const TextStyle(
-                  fontSize: ReportConstants.tableRowFontSize,
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    _formatDate(report.date),
+                    style: const TextStyle(
+                      fontSize: ReportConstants.tableRowFontSize,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Text(
-                _formatTime(report.date),
-                style: const TextStyle(
-                  fontSize: ReportConstants.tableRowFontSize,
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    _formatTime(report.date),
+                    style: const TextStyle(
+                      fontSize: ReportConstants.tableRowFontSize,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(
-              width: ReportConstants.archiveColumnWidth,
-              child: IconButton(
-                onPressed: () => _toggleArchiveReport(report),
-                icon: Icon(
-                  report.isArchived
-                      ? Icons.unarchive_outlined
-                      : Icons.archive_outlined,
-                  color: report.isArchived
-                      ? Colors
-                            .grey
-                            .shade600
-                      : Colors.orange, 
-                  size: ReportConstants.archiveIconSize,
+                SizedBox(
+                  width: ReportConstants.archiveColumnWidth,
+                  child: IconButton(
+                    onPressed: () => _toggleArchiveReport(report),
+                    icon: Icon(
+                      report.isArchived
+                          ? Icons.unarchive_outlined
+                          : Icons.archive_outlined,
+                      color: report.isArchived
+                          ? Colors.grey.shade600
+                          : Colors.orange,
+                      size: ReportConstants.archiveIconSize,
+                    ),
+                    tooltip: report.isArchived
+                        ? ReportConstants.unarchiveTooltip
+                        : ReportConstants.archiveTooltip,
+                  ),
                 ),
-                tooltip: report.isArchived
-                    ? ReportConstants.unarchiveTooltip
-                    : ReportConstants.archiveTooltip,
-              ),
-            ),
-            SizedBox(
-              width: ReportConstants.deleteColumnWidth,
-              child: IconButton(
-                onPressed: () => _deleteReport(report),
-                icon: const Icon(
-                  Icons.delete_outline,
-                  color: Colors.red,
-                  size: ReportConstants.deleteIconSize,
+                SizedBox(
+                  width: ReportConstants.deleteColumnWidth,
+                  child: IconButton(
+                    onPressed: () => _deleteReport(report),
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      color: Colors.red,
+                      size: ReportConstants.deleteIconSize,
+                    ),
+                    tooltip: ReportConstants.deleteTooltip,
+                  ),
                 ),
-                tooltip: ReportConstants.deleteTooltip,
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
