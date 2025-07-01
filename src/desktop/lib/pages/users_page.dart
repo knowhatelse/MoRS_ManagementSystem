@@ -29,16 +29,19 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   Future<void> _loadUsers() async {
+    
     setState(() {
       _isLoading = true;
     });
     try {
       final users = await _userService.getUsers();
+     ;
       setState(() {
         _users = users;
         _isLoading = false;
       });
     } catch (e) {
+     
       setState(() {
         _isLoading = false;
       });
@@ -61,33 +64,50 @@ class _UsersPageState extends State<UsersPage> {
     );
   }
 
-  void _showCreateUserDialog() {
-    showDialog(
+  void _showCreateUserDialog() async {
+    final result = await showDialog<bool>(
       context: context,
       builder: (context) => CreateUserDialog(
         onUserCreated: (user) async {
-          Navigator.of(context).pop();
-          await _loadUsers();
+          return true;
         },
       ),
     );
+    if (result == true) {
+      await _loadUsers();
+      if (mounted) {
+        AppUtils.showSuccessSnackbar(context, 'Korisnik uspješno kreiran.');
+      }
+    } else if (result == false) {
+      if (mounted) {
+        AppUtils.showErrorSnackBar(context, 'Greška pri kreiranju korisnika.');
+      }
+    }
   }
 
-  void _showEditUserDialog(UserResponse user) {
-    showDialog(
+  void _showEditUserDialog(UserResponse user) async {
+    final result = await showDialog<bool>(
       context: context,
       builder: (context) => EditUserDialog(
         user: user,
         onUserUpdated: (updatedUser) async {
-          Navigator.of(context).pop();
-          await _loadUsers();
+          return true;
         },
         onUserDeleted: () async {
-          Navigator.of(context).pop();
-          await _loadUsers();
+          return true;
         },
       ),
     );
+    if (result == true) {
+      await _loadUsers();
+      if (mounted) {
+        AppUtils.showSuccessSnackbar(context, 'Korisnik uspješno ažuriran.');
+      }
+    } else if (result == false) {
+      if (mounted) {
+        AppUtils.showErrorSnackBar(context, 'Greška pri ažuriranju korisnika.');
+      }
+    }
   }
 
   @override

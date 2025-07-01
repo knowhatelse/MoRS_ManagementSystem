@@ -104,46 +104,48 @@ class AppointmentGraphDialog extends StatelessWidget {
       ),
       content: SizedBox(
         width: 1100,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 540,
-              child: RepaintBoundary(
-                key: chartKey,
-                child: AppointmentTypeChart(
-                  appointments: appointments.cast<AppointmentResponse>(),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () => _saveAsPdf(context),
-                  icon: const Icon(Icons.picture_as_pdf),
-                  label: const Text('Spremi kao PDF'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppConstants.primaryBlue,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 540,
+                child: RepaintBoundary(
+                  key: chartKey,
+                  child: AppointmentTypeChart(
+                    appointments: appointments.cast<AppointmentResponse>(),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Text(
-                DateFormat('dd.MM.yyyy').format(now),
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () => _saveAsPdf(context),
+                    icon: const Icon(Icons.picture_as_pdf),
+                    label: const Text('Spremi kao PDF'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppConstants.primaryBlue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  DateFormat('dd.MM.yyyy').format(now),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

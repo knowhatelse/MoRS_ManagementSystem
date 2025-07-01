@@ -29,6 +29,8 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _passwordVisible = false;
   bool _hasChanges = false;
   String? _passwordError;
+  String? _phoneError;
+  String? _emailError;
 
   UserResponse? _currentUserData;
 
@@ -61,13 +63,33 @@ class _ProfilePageState extends State<ProfilePage> {
         _passwordController.text.trim() != _originalPassword;
 
     _validatePassword();
+    _validatePhone(_phoneController.text.trim());
+    _validateEmail(_emailController.text.trim());
 
     final hasAnyChanges =
-        hasEmailChanged || hasPhoneChanged || hasPasswordChanged;
+        (hasEmailChanged && _emailError == null) ||
+        (hasPhoneChanged && _phoneError == null) ||
+        (hasPasswordChanged && _passwordError == null);
 
     if (_hasChanges != hasAnyChanges) {
       setState(() {
         _hasChanges = hasAnyChanges;
+      });
+    }
+  }
+
+  void _validateEmail(String? value) {
+    String? error;
+    if (value == null || value.trim().isEmpty) {
+      error = 'Email je obavezan';
+    } else {
+      if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value.trim())) {
+        error = 'Neispravan email';
+      }
+    }
+    if (_emailError != error) {
+      setState(() {
+        _emailError = error;
       });
     }
   }
@@ -81,6 +103,14 @@ class _ProfilePageState extends State<ProfilePage> {
         error = 'Lozinka mora imati najmanje 6 karaktera';
       } else if (password.length > 100) {
         error = 'Lozinka može imati najviše 100 karaktera';
+      } else if (!RegExp(r'[A-Z]').hasMatch(password)) {
+        error = 'Lozinka mora sadržavati barem jedno veliko slovo';
+      } else if (!RegExp(r'[a-z]').hasMatch(password)) {
+        error = 'Lozinka mora sadržavati barem jedno malo slovo';
+      } else if (!RegExp(r'\d').hasMatch(password)) {
+        error = 'Lozinka mora sadržavati barem jednu cifru';
+      } else if (!RegExp(r'[^a-zA-Z0-9]').hasMatch(password)) {
+        error = 'Lozinka mora sadržavati barem jedan specijalni znak';
       }
     }
 
@@ -89,6 +119,33 @@ class _ProfilePageState extends State<ProfilePage> {
         _passwordError = error;
       });
     }
+  }
+
+  String? _validatePhone(String? value) {
+    String? error;
+    if (value == null || value.trim().isEmpty) {
+      error = 'Broj telefona je obavezan';
+    } else {
+      final trimmed = value.trim();
+      if (trimmed.contains(' ')) {
+        error = 'Broj telefona ne smije sadržavati razmake';
+      } else if (!RegExp(r'^06').hasMatch(trimmed)) {
+        error = 'Broj telefona mora počinjati sa 06';
+      } else if (RegExp(r'[^0-9]').hasMatch(trimmed)) {
+        error =
+            'Broj telefona ne smije sadržavati slova ili specijalne znakove';
+      } else if (trimmed.length < 9) {
+        error = 'Broj telefona mora imati najmanje 9 cifara';
+      } else if (trimmed.length > 10) {
+        error = 'Broj telefona može imati najviše 10 cifara';
+      }
+    }
+    if (_phoneError != error) {
+      setState(() {
+        _phoneError = error;
+      });
+    }
+    return error;
   }
 
   Future<void> _loadUserData() async {
@@ -253,6 +310,16 @@ class _ProfilePageState extends State<ProfilePage> {
         context,
         'Molimo ispravite greške prije snimanja promjena',
       );
+
+      return;
+    }
+
+    if (_phoneError != null) {
+      AppUtils.showErrorSnackBar(
+        context,
+        'Molimo ispravite greške u broju telefona prije snimanja promjena',
+      );
+
       return;
     }
 
@@ -429,6 +496,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   label: 'Email',
                   icon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
+                  errorText: _emailError,
                 ),
 
                 const SizedBox(height: 10),
@@ -438,6 +506,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   label: 'Telefon',
                   icon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
+                  errorText: _phoneError,
                 ),
 
                 const SizedBox(height: 10),
@@ -658,13 +727,16 @@ class _ProfilePageState extends State<ProfilePage> {
     bool hasError = errorText != null;
 
     if (controller == _emailController) {
-      fieldChanged = controller.text.trim() != _originalEmail;
+      fieldChanged =
+          controller.text.trim() != _originalEmail && _emailError == null;
     } else if (controller == _phoneController) {
-      fieldChanged = controller.text.trim() != _originalPhone;
+      fieldChanged =
+          controller.text.trim() != _originalPhone && _phoneError == null;
     } else if (controller == _passwordController) {
       fieldChanged =
           controller.text.trim().isNotEmpty &&
-          controller.text.trim() != _originalPassword;
+          controller.text.trim() != _originalPassword &&
+          _passwordError == null;
     }
 
     return Column(

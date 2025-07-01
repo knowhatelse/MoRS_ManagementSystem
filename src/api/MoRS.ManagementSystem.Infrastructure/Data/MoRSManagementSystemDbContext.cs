@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MoRS.ManagementSystem.Domain.Entities;
+using MoRS.ManagementSystem.Infrastructure.Identity;
 
 namespace MoRS.ManagementSystem.Infrastructure.Data;
 
-public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystemDbContext> options) : DbContext(options)
+public class MoRSManagementSystemDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
 {
+    public MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystemDbContext> options) : base(options) { }
+
     public DbSet<Announcement> Announcements { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<AppointmentSchedule> AppointmentSchedules { get; set; }
@@ -15,28 +19,24 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<ProfilePicture> ProfilePictures { get; set; }
-    public DbSet<Role> Roles { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<TimeSlot> Times { get; set; }
-    public DbSet<User> Users { get; set; }
-
+    public DbSet<User> DomainUsers { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+       
+        modelBuilder.Entity<User>().ToTable("DomainUsers");
+        modelBuilder.Entity<User>()
+            .Property(u => u.Id)
+            .ValueGeneratedNever();
+
         modelBuilder.Entity<Appointment>()
             .HasOne(a => a.BookedByUser)
             .WithMany(u => u.CreatedAppointments)
             .HasForeignKey(a => a.BookedByUserId)
             .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.AttendingAppointments)
-            .WithMany(a => a.Attendees)
-            .UsingEntity(j => j.ToTable("UserAppointments"));
-
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email)
-            .IsUnique();
 
         modelBuilder.Entity<Email>()
             .HasMany(e => e.Users)
@@ -57,6 +57,5 @@ public class MoRSManagementSystemDbContext(DbContextOptions<MoRSManagementSystem
         modelBuilder.Entity<MembershipFee>()
             .Property(mf => mf.MembershipType)
             .HasConversion<string>();
-
     }
 }

@@ -5,7 +5,7 @@ import '../constants/announcement_constants.dart';
 
 class CreateAnnouncementDialog extends StatefulWidget {
   final UserResponse currentUser;
-  final Function(CreateAnnouncementRequest) onCreateAnnouncement;
+  final Future<bool> Function(CreateAnnouncementRequest) onCreateAnnouncement;
 
   const CreateAnnouncementDialog({
     super.key,
@@ -68,19 +68,29 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
         userId: widget.currentUser.id,
       );
 
-      widget.onCreateAnnouncement(request);
-      Navigator.of(context).pop();
+      final result = await widget.onCreateAnnouncement(request);
+      if (result) {
+        Navigator.of(context).pop(true);
+      } else {
+        Navigator.of(context).pop(false);
+      }
     } finally {
-      setState(() {
-        _isSubmitting = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final titleError = _touched['title']! ? _validateTitle(_titleController.text) : null;
-    final contentError = _touched['content']! ? _validateContent(_contentController.text) : null;
+    final titleError = _touched['title']!
+        ? _validateTitle(_titleController.text)
+        : null;
+    final contentError = _touched['content']!
+        ? _validateContent(_contentController.text)
+        : null;
     return AlertDialog(
       backgroundColor: Colors.white,
       titlePadding: EdgeInsets.zero,

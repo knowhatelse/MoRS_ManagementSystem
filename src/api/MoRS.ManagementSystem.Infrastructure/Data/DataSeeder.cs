@@ -1,33 +1,35 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MoRS.ManagementSystem.Application.Utils;
 using MoRS.ManagementSystem.Domain.Entities;
 using MoRS.ManagementSystem.Domain.Enums;
+using MoRS.ManagementSystem.Infrastructure.Identity;
 
 namespace MoRS.ManagementSystem.Infrastructure.Data;
 
-public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeeder> logger)
+public class DataSeeder
 {
-    private readonly MoRSManagementSystemDbContext _context = context;
-    private readonly ILogger<DataSeeder> _logger = logger;
+    private readonly MoRSManagementSystemDbContext _context;
+    private readonly ILogger<DataSeeder> _logger;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    private byte[]? _passwordHash;
-    private byte[]? _passwordSalt;
     private static readonly int[] sourceArray = [9, 10, 11, 12, 13, 14];
+
+    public DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeeder> logger, UserManager<ApplicationUser> userManager)
+    {
+        _context = context;
+        _logger = logger;
+        _userManager = userManager;
+    }
 
     public async Task SeedData()
     {
-        var defaultPassword = "Test123$";
-
-        PasswordHelper.CreatePasswordHash(defaultPassword, out byte[] passwordHash, out byte[] passwordSalt);
-
-        _passwordHash = passwordHash;
-        _passwordSalt = passwordSalt;
-
         _logger.LogInformation("Seeding data...");
 
+        var seededDomainRoles = await SeedDomainRolesAsync();
         var seededRoles = await SeedRolesAsync();
-        var seededUsers = await SeedUsersAsync(seededRoles);
+        var seededUsers = await SeedUsersAsync(seededRoles, seededDomainRoles);
         var seededAnnouncements = await SeedAnnouncementsAsync(seededUsers);
         var seededRooms = await SeedRooms();
         var seededAppointmentTypes = await SeedAppointmentType();
@@ -44,205 +46,138 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
         _logger.LogInformation("Data seeded!");
     }
 
-    private async Task<IEnumerable<Role>> SeedRolesAsync()
+    private async Task<IEnumerable<Role>> SeedDomainRolesAsync()
     {
-        if (_context.Roles.Any())
+        var requiredRoles = new[]
         {
-            _logger.LogInformation("Roles already seeded!");
-            return await _context.Roles.ToListAsync();
+            new Role { Id = 1, Name = "Admin" },
+            new Role { Id = 2, Name = "Osoblje" },
+            new Role { Id = 3, Name = "Polaznik" }
+        };
+
+        var existingRoles = await _context.Set<Role>().ToListAsync();
+        foreach (var reqRole in requiredRoles)
+        {
+            var dbRole = existingRoles.FirstOrDefault(r => r.Id == reqRole.Id);
+            if (dbRole != null)
+            {
+                if (dbRole.Name != reqRole.Name)
+                {
+                    dbRole.Name = reqRole.Name;
+                }
+            }
+            else
+            {
+                var wrongIdRole = existingRoles.FirstOrDefault(r => r.Name == reqRole.Name && r.Id != reqRole.Id);
+                if (wrongIdRole != null)
+                {
+                    _context.Set<Role>().Remove(wrongIdRole);
+                    await _context.SaveChangesAsync();
+                }
+                await _context.Database.ExecuteSqlRawAsync(
+                    "SET IDENTITY_INSERT [Role] ON; INSERT INTO [Role] ([Id], [Name]) VALUES ({0}, {1}); SET IDENTITY_INSERT [Role] OFF;",
+                    reqRole.Id, reqRole.Name
+                );
+            }
         }
-
-        _logger.LogInformation("Seeding roles...");
-
-        IEnumerable<Role> roles =
-        [
-            new Role { Name = "Admin"},
-            new Role { Name = "Osoblje"},
-            new Role { Name = "Polaznik"},
-        ];
-
-        await _context.Roles.AddRangeAsync(roles);
         await _context.SaveChangesAsync();
-
-        _logger.LogInformation("Roles seeded!");
-
-        return roles;
+        return await _context.Set<Role>().ToListAsync();
     }
 
-    private async Task<IEnumerable<User>> SeedUsersAsync(IEnumerable<Role> roles)
+    private async Task<IEnumerable<User>> SeedUsersAsync(IEnumerable<ApplicationRole> identityRoles, IEnumerable<Role> domainRoles)
     {
-        if (_context.Users.Any())
+        if (_context.Set<User>().Any())
         {
             _logger.LogInformation("Users already seeded!");
-            return await _context.Users.ToListAsync();
+            return await _context.Set<User>().ToListAsync();
         }
 
         _logger.LogInformation("Seeding users...");
 
-        IEnumerable<User> users =
-        [
-            new User
-            {
-                Name = "Naida",
-                Surname = "Kurtovic",
-                Email = "naida.kurtovic@gmail.com",
-                PhoneNumber = "061123456",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Admin").Id
-            },
-            new User
-            {
-                Name = "Semin",
-                Surname = "Merzic",
-                Email = "semin.merzic@gmail.com",
-                PhoneNumber = "061546987",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Osoblje").Id
-            },
-            new User
-            {
-                Name = "Ivan",
-                Surname = "Kovacevic",
-                Email = "ivan.kovacevic@gmail.com",
-                PhoneNumber = "061321654",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Osoblje").Id
-            },
-            new User
-            {
-                Name = "Emin",
-                Surname = "Cevra",
-                Email = "emin.cevra@gmail.com",
-                PhoneNumber = "061546321",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Osoblje").Id
-            },
-            new User
-            {
-                Name = "Hrvoje",
-                Surname = "Caculovic",
-                Email = "hrvoje.caculovic@gmail.com",
-                PhoneNumber = "063852147",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Osoblje").Id
-            },
-            new User
-            {
-                Name = "Ivan",
-                Surname = "Zovko",
-                Email = "ivan.zovko@gmail.com",
-                PhoneNumber = "063456789",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Osoblje").Id
-            },
-            new User
-            {
-                Name = "Djeno",
-                Surname = "Mujic",
-                Email = "djeno.mujic@gmail.com",
-                PhoneNumber = "061987654",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Osoblje").Id
-            },
-            new User
-            {
-                Name = "Ilija",
-                Surname = "Soldo",
-                Email = "ilija.soldo@gmail.com",
-                PhoneNumber = "063654987",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Osoblje").Id
-            },
-            new User
-            {
-                Name = "Kenan",
-                Surname = "Kajtazovic",
-                Email = "kenan.kajtazovic@gmail.com",
-                PhoneNumber = "061478523",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Polaznik").Id
-            },
-            new User
-            {
-                Name = "Petar",
-                Surname = "Zovko",
-                Email = "petar.zovko@gmail.com",
-                PhoneNumber = "063874512",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Polaznik").Id
-            },
-            new User
-            {
-                Name = "Gojko",
-                Surname = "Prusina",
-                Email = "gojko.prusina@gmail.com",
-                PhoneNumber = "063987456",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Polaznik").Id
-            },
-            new User
-            {
-                Name = "Dora",
-                Surname = "Sesar",
-                Email = "dora.sesar@gmail.com",
-                PhoneNumber = "063987456",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Polaznik").Id
-            },
-            new User
-            {
-                Name = "Nika",
-                Surname = "Banovic",
-                Email = "nika.banovic@gmail.com",
-                PhoneNumber = "063408456",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Polaznik").Id
-            },
-            new User
-            {
-                Name = "Leo",
-                Surname = "Cerkez",
-                Email = "leo.cerkez@gmail.com",
-                PhoneNumber = "063937456",
-                PasswordHash = _passwordHash!,
-                PasswordSalt = _passwordSalt!,
-                IsRestricted = false,
-                RoleId = roles.First(r => r.Name == "Polaznik").Id
-            },
-        ];
+        var userList = new List<User>();
+        var usersToSeed = new[]
+        {
+            new { Name = "Naida", Surname = "Kurtovic", Email = "naida.kurtovic@gmail.com", PhoneNumber = "061123456", RoleName = "Admin" },
+            new { Name = "Semin", Surname = "Merzic", Email = "semin.merzic@gmail.com", PhoneNumber = "061546987", RoleName = "Osoblje" },
+            new { Name = "Ivan", Surname = "Kovacevic", Email = "ivan.kovacevic@gmail.com", PhoneNumber = "061321654", RoleName = "Osoblje" },
+            new { Name = "Emin", Surname = "Cevra", Email = "emin.cevra@gmail.com", PhoneNumber = "061546321", RoleName = "Osoblje" },
+            new { Name = "Hrvoje", Surname = "Caculovic", Email = "hrvoje.caculovic@gmail.com", PhoneNumber = "063852147", RoleName = "Osoblje" },
+            new { Name = "Ivan", Surname = "Zovko", Email = "ivan.zovko@gmail.com", PhoneNumber = "063456789", RoleName = "Osoblje" },
+            new { Name = "Djeno", Surname = "Mujic", Email = "djeno.mujic@gmail.com", PhoneNumber = "061987654", RoleName = "Osoblje" },
+            new { Name = "Ilija", Surname = "Soldo", Email = "ilija.soldo@gmail.com", PhoneNumber = "063654987", RoleName = "Osoblje" },
+            new { Name = "Kenan", Surname = "Kajtazovic", Email = "kenan.kajtazovic@gmail.com", PhoneNumber = "061478523", RoleName = "Polaznik" },
+            new { Name = "Petar", Surname = "Zovko", Email = "petar.zovko@gmail.com", PhoneNumber = "063874512", RoleName = "Polaznik" },
+            new { Name = "Gojko", Surname = "Prusina", Email = "gojko.prusina@gmail.com", PhoneNumber = "063987456", RoleName = "Polaznik" },
+            new { Name = "Dora", Surname = "Sesar", Email = "dora.sesar@gmail.com", PhoneNumber = "063987456", RoleName = "Polaznik" },
+            new { Name = "Nika", Surname = "Banovic", Email = "nika.banovic@gmail.com", PhoneNumber = "063408456", RoleName = "Polaznik" },
+            new { Name = "Leo", Surname = "Cerkez", Email = "leo.cerkez@gmail.com", PhoneNumber = "063937456", RoleName = "Polaznik" },
+        };
 
-        await _context.Users.AddRangeAsync(users);
+        foreach (var u in usersToSeed)
+        {
+            var identityRole = identityRoles.FirstOrDefault(r => (r.Name?.ToLower() ?? "") == u.RoleName.ToLower());
+            var domainRole = domainRoles.FirstOrDefault(r => (r.Name?.ToLower() ?? "") == u.RoleName.ToLower());
+            if (identityRole == null || domainRole == null)
+            {
+                continue;
+            }
+            var roleId = domainRole.Id; 
+            var dbRoleName = identityRole.Name ?? string.Empty;
+            var password = "Test123$";
+            var identityUser = new ApplicationUser
+            {
+                UserName = u.Email,
+                Email = u.Email,
+                Name = u.Name,
+                Surname = u.Surname,
+                PhoneNumber = u.PhoneNumber
+            };
+            var result = await _userManager.CreateAsync(identityUser, password);
+            if (result.Succeeded)
+            {
+                var domainUser = new User
+                {
+                    Id = identityUser.Id,
+                    Name = u.Name,
+                    Surname = u.Surname,
+                    Email = u.Email, 
+                    PhoneNumber = u.PhoneNumber,
+                    RoleId = roleId,
+                    ProfilePicture = null,
+                    IsRestricted = false,
+                };
+                userList.Add(domainUser);
+                _context.Set<User>().Add(domainUser);
+            }
+        }
         await _context.SaveChangesAsync();
+        return userList;
+    }
 
-        _logger.LogInformation("Users seeded!");
-
-        return users;
+    private async Task<IEnumerable<ApplicationRole>> SeedRolesAsync()
+    {
+        var requiredRoles = new[] { "Admin", "Osoblje", "Polaznik" };
+        var existingRoles = await _context.Roles.ToListAsync();
+        var rolesToAdd = requiredRoles.Except(existingRoles.Select(r => r.Name)).ToList();
+        if (rolesToAdd.Any())
+        {
+            foreach (var roleName in rolesToAdd)
+            {
+                await _context.Roles.AddAsync(new ApplicationRole { Name = roleName ?? string.Empty, NormalizedName = (roleName ?? string.Empty).ToUpperInvariant() });
+            }
+            await _context.SaveChangesAsync();
+        }
+     
+        foreach (var role in _context.Roles)
+        {
+            var expectedNorm = (role.Name?.ToUpperInvariant()) ?? string.Empty;
+            if (role.NormalizedName != expectedNorm)
+            {
+                role.NormalizedName = expectedNorm;
+            }
+        }
+        await _context.SaveChangesAsync();
+        return await _context.Roles.ToListAsync();
     }
 
     private async Task<IEnumerable<Announcement>> SeedAnnouncementsAsync(IEnumerable<User> users)
@@ -255,6 +190,10 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
 
         _logger.LogInformation("Seeding announcements...");
 
+        var adminUser = users.FirstOrDefault(u => u.RoleId == 1);
+        if (adminUser == null)
+            throw new InvalidOperationException("No admin user found for announcement seeding.");
+
         IEnumerable<Announcement> announcements =
         [
             new Announcement
@@ -263,7 +202,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Content = "Muzicki Centar Pavarotti nece raditi u ponedeljak 25.11.2024. godine.",
                 CreatedAt = new DateTime(2024, 11, 23, 13, 14, 32),
                 IsDeleted = false,
-                UserId = users.First(u => u.RoleId == 1).Id
+                UserId = adminUser.Id
             },
             new Announcement
             {
@@ -271,7 +210,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Content = "Muzicki Centar Pavarotti nece raditi u subotu 01.03.2025. godine.",
                 CreatedAt = new DateTime(2025, 02, 27, 12, 31, 56),
                 IsDeleted = false,
-                UserId = users.First(u => u.RoleId == 1).Id
+                UserId = adminUser.Id
             },
             new Announcement
             {
@@ -279,7 +218,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Content = "Radno vrijeme u subotu 22.03.2025. godine je od 08:00 do 12:00 sati.",
                 CreatedAt = new DateTime(2025, 03, 20, 14, 46, 13),
                 IsDeleted = false,
-                UserId = users.First(u => u.RoleId == 1).Id
+                UserId = adminUser.Id
             },
             new Announcement
             {
@@ -287,7 +226,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Content = "Prijave za jazz masterclass su otvorene do 01.04.2025. godine.",
                 CreatedAt = new DateTime(2025, 03, 23, 09, 52, 25),
                 IsDeleted = false,
-                UserId = users.First(u => u.RoleId == 1).Id
+                UserId = adminUser.Id
             },
             new Announcement
             {
@@ -295,7 +234,7 @@ public class DataSeeder(MoRSManagementSystemDbContext context, ILogger<DataSeede
                 Content = "Nastava se nece odrzati u cetvrtak 27.03.2025. godine zbog programskog koncerta.",
                 CreatedAt = new DateTime(2025, 03, 25, 11, 10, 36),
                 IsDeleted = false,
-                UserId = users.First(u => u.RoleId == 1).Id
+                UserId = adminUser.Id
             },
         ];
 

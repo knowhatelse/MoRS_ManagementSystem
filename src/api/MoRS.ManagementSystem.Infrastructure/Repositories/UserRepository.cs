@@ -12,7 +12,7 @@ public class UserRepository(MoRSManagementSystemDbContext context) : BaseReposit
 
     public override async Task<User?> GetByIdAsync(int id)
     {
-        return await _context.Users
+        return await _context.DomainUsers
             .Include(u => u.Role)
             .Include(u => u.ProfilePicture)
             .FirstOrDefaultAsync(u => u.Id == id);
@@ -20,7 +20,6 @@ public class UserRepository(MoRSManagementSystemDbContext context) : BaseReposit
 
     protected override IQueryable<User> ApplyQueryFilters(IQueryable<User> query, UserQuery? queryFilter = null)
     {
-
         if (!string.IsNullOrWhiteSpace(queryFilter?.Name))
         {
             query = query.Where(u => u.Name == queryFilter.Name);
@@ -29,16 +28,6 @@ public class UserRepository(MoRSManagementSystemDbContext context) : BaseReposit
         if (!string.IsNullOrWhiteSpace(queryFilter?.Surname))
         {
             query = query.Where(u => u.Surname == queryFilter.Surname);
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryFilter?.Email))
-        {
-            query = query.Where(u => u.Email == queryFilter.Email);
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryFilter?.PhoneNumber))
-        {
-            query = query.Where(u => u.PhoneNumber == queryFilter.PhoneNumber);
         }
 
         if (queryFilter?.IsRoleIncluded is true)

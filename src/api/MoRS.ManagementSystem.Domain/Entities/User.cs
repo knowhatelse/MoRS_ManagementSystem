@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace MoRS.ManagementSystem.Domain.Entities;
 
 public class User
@@ -8,8 +10,6 @@ public class User
     public required string Surname { get; set; }
     public required string Email { get; set; }
     public required string PhoneNumber { get; set; }
-    public required byte[] PasswordHash { get; set; }
-    public required byte[] PasswordSalt { get; set; }
     public bool IsRestricted { get; set; } = false;
     public ProfilePicture? ProfilePicture { get; set; }
 
@@ -23,5 +23,4 @@ public class User
     public ICollection<Payment> Payments { get; set; } = [];
     public List<Appointment> AttendingAppointments { get; set; } = [];
     public List<Email> Emails { get; set; } = [];
-
 }

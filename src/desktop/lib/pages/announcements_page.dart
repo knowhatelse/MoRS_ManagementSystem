@@ -35,6 +35,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
       final announcements = await _announcementService.getAnnouncements(
         query: AnnouncementQuery.all(),
       );
+     
       announcements.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       setState(() {
         _announcements = announcements;
@@ -120,17 +121,37 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
     );
   }
 
-  void _showCreateAnnouncementDialog() {
-    showDialog(
+  void _showCreateAnnouncementDialog() async {
+    final result = await showDialog<bool>(
       context: context,
       builder: (context) => CreateAnnouncementDialog(
         currentUser: widget.user,
         onCreateAnnouncement: (request) async {
-          await _announcementService.createAnnouncement(request);
-          await _loadAnnouncements();
+          try {
+            await _announcementService.createAnnouncement(request);
+            await _loadAnnouncements();
+            return true;
+          } catch (e) {
+            return false;
+          }
         },
       ),
     );
+    if (result == true) {
+      if (mounted) {
+        AppUtils.showSuccessSnackbar(
+          context,
+          AnnouncementConstants.createSuccessMessage,
+        );
+      }
+    } else if (result == false) {
+      if (mounted) {
+        AppUtils.showErrorSnackBar(
+          context,
+          AnnouncementConstants.createErrorMessage,
+        );
+      }
+    }
   }
 
   String _formatDate(DateTime date) {
