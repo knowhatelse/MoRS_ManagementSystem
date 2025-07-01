@@ -56,14 +56,12 @@ class UserService extends BaseApiService {
 
   Future<UserResponse?> getUserById(int id) async {
     try {
+     
       final response = await get('${ApiConfig.users}/$id');
+     
       return UserResponse.fromJson(response);
-    } on ApiException catch (e) {
-      if (e.statusCode == 404) {
-        return null;
-      }
-      rethrow;
     } catch (e) {
+     
       rethrow;
     }
   }

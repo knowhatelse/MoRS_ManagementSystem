@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'api_config.dart';
+import 'token_service.dart';
 
 abstract class BaseApiService {
   Future<dynamic> get(
@@ -15,9 +16,9 @@ abstract class BaseApiService {
       if (queryParameters != null && queryParameters.isNotEmpty) {
         url = url.replace(queryParameters: queryParameters);
       }
-
+      final effectiveHeaders = headers ?? TokenService().getAuthHeaders();
       final response = await http
-          .get(url, headers: headers ?? ApiConfig.defaultHeaders)
+          .get(url, headers: effectiveHeaders)
           .timeout(ApiConfig.requestTimeout);
 
       return _handleResponse(response);
@@ -33,11 +34,11 @@ abstract class BaseApiService {
   }) async {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-
+      final effectiveHeaders = headers ?? TokenService().getAuthHeaders();
       final response = await http
           .post(
             url,
-            headers: headers ?? ApiConfig.defaultHeaders,
+            headers: effectiveHeaders,
             body: body != null ? jsonEncode(body) : null,
           )
           .timeout(ApiConfig.requestTimeout);
@@ -55,11 +56,11 @@ abstract class BaseApiService {
   }) async {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-
+      final effectiveHeaders = headers ?? TokenService().getAuthHeaders();
       final response = await http
           .put(
             url,
-            headers: headers ?? ApiConfig.defaultHeaders,
+            headers: effectiveHeaders,
             body: body != null ? jsonEncode(body) : null,
           )
           .timeout(ApiConfig.requestTimeout);
@@ -76,9 +77,9 @@ abstract class BaseApiService {
   }) async {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-
+      final effectiveHeaders = headers ?? TokenService().getAuthHeaders();
       final response = await http
-          .delete(url, headers: headers ?? ApiConfig.defaultHeaders)
+          .delete(url, headers: effectiveHeaders)
           .timeout(ApiConfig.requestTimeout);
 
       return _handleResponse(response);

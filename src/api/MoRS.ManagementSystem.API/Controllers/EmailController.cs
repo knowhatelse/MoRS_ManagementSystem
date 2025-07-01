@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoRS.ManagementSystem.Application.DTOs;
 using MoRS.ManagementSystem.Application.DTOs.Email;
@@ -9,6 +10,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class EmailController(IEmailService service)
     : BaseController<Email, EmailResponse, CreateEmailRequest, EmptyDto, EmptyQuery>(service)
 {

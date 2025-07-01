@@ -7,7 +7,7 @@ import '../../utils/app_utils.dart';
 import '../constants/app_constants.dart';
 
 class CreateUserDialog extends StatefulWidget {
-  final void Function(UserResponse) onUserCreated;
+  final Future<bool> Function(UserResponse) onUserCreated;
   const CreateUserDialog({super.key, required this.onUserCreated});
 
   @override
@@ -77,34 +77,11 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
           roleId: _roleId!,
         ),
       );
-      widget.onUserCreated(user);
+      final result = await widget.onUserCreated(user);
+      Navigator.of(context).pop(result);
     } catch (e) {
       if (mounted) {
-        String message = 'Greška pri kreiranju korisnika.';
-        if (e is Exception &&
-            e.toString().contains(
-              'Korisnik sa unesenim brojem telefona već postoji',
-            )) {
-          message =
-              'Korisnik sa unesenim brojem telefona već postoji u sistemu.';
-        } else if (e is Exception && e.toString().isNotEmpty) {
-          message = e.toString();
-          message = message.replaceAll(RegExp(r'ApiException: ?'), '');
-          message = message.replaceAll(RegExp(r'\[\d+\]'), '');
-          message = message.replaceAll(RegExp(r'^Exception: ?'), '');
-          message = message.replaceAll(RegExp(r'\(Status: ?\d+\)'), '');
-          message = message.replaceAll(
-            RegExp(r'\(status: ?\d+\)', caseSensitive: false),
-            '',
-          );
-          message = message.replaceAll(
-            RegExp(r'\(.*?status.*?\d+.*?\)', caseSensitive: false),
-            '',
-          );
-          message = message.replaceAll(RegExp(r'^:|^\s+|\s+\u00000$'), '');
-          message = message.trim();
-        }
-        AppUtils.showErrorSnackBar(context, message);
+        Navigator.of(context).pop(false);
       }
     } finally {
       if (mounted) {
@@ -156,9 +133,21 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
     if (value == null || value.trim().isEmpty) {
       return 'Broj telefona je obavezan';
     }
-    final phoneRegex = RegExp(r'^(\+387|00387)?\s?0?6[0-9]\s?\d{3}\s?\d{3,4}$');
-    if (!phoneRegex.hasMatch(value.trim())) {
-      return 'Neispravan broj telefona';
+    final trimmed = value.trim();
+    if (trimmed.contains(' ')) {
+      return 'Broj telefona ne smije sadržavati razmake';
+    }
+    if (!RegExp(r'^06').hasMatch(trimmed)) {
+      return 'Broj telefona mora počinjati sa 06';
+    }
+    if (RegExp(r'[^0-9]').hasMatch(trimmed)) {
+      return 'Broj telefona ne smije sadržavati slova ili specijalne znakove';
+    }
+    if (trimmed.length < 9) {
+      return 'Broj telefona mora imati najmanje 9 cifara';
+    }
+    if (trimmed.length > 10) {
+      return 'Broj telefona može imati najviše 10 cifara';
     }
     return null;
   }

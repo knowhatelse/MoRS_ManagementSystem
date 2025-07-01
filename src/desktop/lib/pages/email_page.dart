@@ -41,17 +41,21 @@ class _EmailPageState extends State<EmailPage> {
   }
 
   Future<List<UserResponse>> _searchUsers(String query) async {
+   
     if (query.trim().isEmpty || query.length < 2) {
+      
       return [];
     }
     setState(() => _isSearching = true);
     try {
       final users = await UserService().searchUsers(query);
+    
       setState(() {
         _isSearching = false;
       });
       return users;
     } catch (e) {
+      
       setState(() => _isSearching = false);
       return [];
     }

@@ -10,7 +10,7 @@ class ApiConfig {
   static const String rooms = '/Room';
   static const String appointmentTypes = '/AppointmentType';
   static const String timeSlots = '/TimeSlot';
-  static const String users = '/User';
+  static const String users = '/user';
   static const String profilePicture = '/ProfilePicture';
   static const String malfunctionReports = '/MalfunctionReport';
   static const String notifications = '/Notification';

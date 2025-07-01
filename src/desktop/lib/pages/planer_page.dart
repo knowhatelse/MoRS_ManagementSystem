@@ -40,6 +40,7 @@ class _PlanerPageState extends State<PlanerPage> {
   }
 
   Future<void> _loadAppointments() async {
+  
     setState(() {
       _isLoading = true;
     });
@@ -57,27 +58,18 @@ class _PlanerPageState extends State<PlanerPage> {
       final appointments = await _appointmentService.getAppointments(
         query: query,
       );
-
-      appointments.sort(
-        (a, b) =>
-            b.appointmentSchedule.date.compareTo(a.appointmentSchedule.date),
-      );
-
+     
       setState(() {
         _appointments = appointments;
-        _filteredAppointments = _applyFilters(appointments);
+        _filteredAppointments = appointments;
         _isLoading = false;
       });
     } catch (e) {
+      
       setState(() {
         _isLoading = false;
       });
-      if (mounted) {
-        AppUtils.showErrorSnackBar(
-          context,
-          PlanerConstants.loadingErrorMessage,
-        );
-      }
+      AppUtils.showErrorSnackBar(context, PlanerConstants.loadingErrorMessage);
     }
   }
 

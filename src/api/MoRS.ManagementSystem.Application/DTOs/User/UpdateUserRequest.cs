@@ -17,7 +17,7 @@ public class UpdateUserRequest
     [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
     public required string Email { get; set; }
     [Required]
-    [RegularExpression(@"^(\+387|00387)?\s?0?6[0-9]\s?\d{3}\s?\d{3,4}$")]
+    [RegularExpression(@"^06[0-9]{7,8}$", ErrorMessage = "Broj telefona mora počinjati sa 06 i imati ukupno 9 ili 10 cifara bez razmaka i specijalnih znakova.")]
     public required string PhoneNumber { get; set; }
 
     [Required]

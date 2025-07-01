@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoRS.ManagementSystem.Application.DTOs.Authentication;
 using MoRS.ManagementSystem.Application.DTOs.User;
@@ -7,6 +8,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class AuthenticationController(IAuthenticationService service) : ControllerBase
 {
     private readonly IAuthenticationService _service = service;

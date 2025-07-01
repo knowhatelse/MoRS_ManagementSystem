@@ -24,16 +24,7 @@ public class AuthenticationService(IMapper mapper, IUserRepository repository) :
         {
             throw new UnauthorizedAccessException(Messages.InvalidCredentials);
         }
-
-        var result = PasswordHelper.VerifyPassword(request.Password, user.First().PasswordHash, user.First().PasswordSalt);
-
-        if (result)
-        {
-            return _mapper.Map<UserResponse>(user.First());
-        }
-        else
-        {
-            throw new UnauthorizedAccessException(Messages.InvalidCredentials);
-        }
+       
+        return _mapper.Map<UserResponse>(user.First());
     }
 }

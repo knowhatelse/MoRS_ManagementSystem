@@ -100,13 +100,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final loginRequest = LoginRequest(email: email, password: password);
-      final userResponse = await _authService.login(loginRequest);
+      final loginResponse = await _authService.login(loginRequest);
 
       if (mounted) {
         Navigator.pushReplacementNamed(
           context,
           '/main',
-          arguments: userResponse,
+          arguments: loginResponse.user,
         );
       }
     } on ApiException catch (e) {

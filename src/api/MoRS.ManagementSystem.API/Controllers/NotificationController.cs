@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoRS.ManagementSystem.Application.DTOs;
 using MoRS.ManagementSystem.Application.DTOs.Notification;
@@ -9,6 +10,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class NotificationController(INotificationService service)
     : BaseController<Notification, NotificationResponse, EmptyDto, UpdateNotificationRequest, NotificationQuery>(service)
 {

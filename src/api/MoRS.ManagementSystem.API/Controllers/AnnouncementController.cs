@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoRS.ManagementSystem.Application.DTOs.Announcement;
 using MoRS.ManagementSystem.Application.Filters;
@@ -8,6 +9,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class AnnouncementController(IAnnouncementService service)
     : BaseController<Announcement, AnnouncementResponse, CreateAnnouncementRequest, UpdateAnnouncementRequest, AnnouncementQuery>(service)
 {

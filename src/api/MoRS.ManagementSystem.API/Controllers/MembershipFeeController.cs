@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoRS.ManagementSystem.Application.DTOs;
 using MoRS.ManagementSystem.Application.DTOs.MembershipFee;
@@ -9,6 +10,7 @@ namespace MoRS.ManagementSystem.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class MembershipFeeController(IMembershipFeeService service)
     : BaseController<MembershipFee, MembershipFeeResponse, EmptyDto, EmptyDto, EmptyQuery>(service)
 {

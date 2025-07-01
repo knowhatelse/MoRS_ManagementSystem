@@ -29,6 +29,7 @@ class _RoomPageState extends State<RoomPage> {
   }
 
   Future<void> _loadRooms() async {
+   
     setState(() {
       _isLoading = true;
     });
@@ -38,7 +39,7 @@ class _RoomPageState extends State<RoomPage> {
       
       rooms.sort((a, b) {
         if (a.isActive != b.isActive) {
-          return a.isActive ? -1 : 1; 
+          return a.isActive ? -1 : 1;
         }
         return a.name.compareTo(b.name);
       });
@@ -49,6 +50,7 @@ class _RoomPageState extends State<RoomPage> {
         _isLoading = false;
       });
     } catch (e) {
+      
       setState(() {
         _isLoading = false;
       });
@@ -279,11 +281,7 @@ class _RoomPageState extends State<RoomPage> {
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                      size: 28,
-                    ),
+                    child: const Icon(Icons.add, color: Colors.white, size: 28),
                   ),
                 ),
               ),

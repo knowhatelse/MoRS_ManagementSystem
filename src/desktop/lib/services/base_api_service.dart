@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'api_config.dart';
+import 'authentication_service.dart';
 
 abstract class BaseApiService {
   Future<dynamic> get(
@@ -15,11 +16,11 @@ abstract class BaseApiService {
       if (queryParameters != null && queryParameters.isNotEmpty) {
         url = url.replace(queryParameters: queryParameters);
       }
-
+      final authHeaders = headers ?? _getAuthHeadersWithToken();
+  
       final response = await http
-          .get(url, headers: headers ?? ApiConfig.defaultHeaders)
+          .get(url, headers: authHeaders)
           .timeout(ApiConfig.requestTimeout);
-
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -33,13 +34,11 @@ abstract class BaseApiService {
   }) async {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-      final requestHeaders = headers ?? ApiConfig.defaultHeaders;
+      final authHeaders = headers ?? _getAuthHeadersWithToken();
       final requestBody = body != null ? jsonEncode(body) : null;
-
       final response = await http
-          .post(url, headers: requestHeaders, body: requestBody)
+          .post(url, headers: authHeaders, body: requestBody)
           .timeout(ApiConfig.requestTimeout);
-
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -53,15 +52,15 @@ abstract class BaseApiService {
   }) async {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-
+      final authHeaders = headers ?? _getAuthHeadersWithToken();
+      
       final response = await http
           .put(
             url,
-            headers: headers ?? ApiConfig.defaultHeaders,
+            headers: authHeaders,
             body: body != null ? jsonEncode(body) : null,
           )
           .timeout(ApiConfig.requestTimeout);
-
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
@@ -74,15 +73,23 @@ abstract class BaseApiService {
   }) async {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
-
+      final authHeaders = headers ?? _getAuthHeadersWithToken();
+      
       final response = await http
-          .delete(url, headers: headers ?? ApiConfig.defaultHeaders)
+          .delete(url, headers: authHeaders)
           .timeout(ApiConfig.requestTimeout);
-
       return _handleResponse(response);
     } catch (e) {
       throw _handleError(e);
     }
+  }
+
+  Map<String, String> _getAuthHeadersWithToken() {
+    final token = AuthenticationService.accessToken;
+    if (token != null && token.isNotEmpty) {
+      return ApiConfig.getAuthHeaders(token);
+    }
+    return ApiConfig.defaultHeaders;
   }
 
   dynamic _handleResponse(http.Response response) {
