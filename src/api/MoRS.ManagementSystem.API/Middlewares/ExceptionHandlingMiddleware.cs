@@ -17,7 +17,6 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An unexpected error occurred");
             await HandleExceptionAsync(context, ex);
         }
     }
