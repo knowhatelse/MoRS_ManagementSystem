@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MoRS.ManagementSystem.API.Extensions;
 using MoRS.ManagementSystem.Infrastructure.Extensions;
 using MoRS.ManagementSystem.Application.Extensions;
+using MoRS.ManagementSystem.Application.Events;
 using MoRS.ManagementSystem.Infrastructure.Data;
 using MoRS.ManagementSystem.Infrastructure.Identity;
 using MoRS.ManagementSystem.API.IdentityConfig;
@@ -85,6 +86,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddUserManagementService();
+
+builder.Services.AddSingleton<IEventBus>(new RabbitMqEventBus(builder.Configuration["RabbitMQ:HostName"] ?? "localhost"));
 
 var app = builder.Build();
 
