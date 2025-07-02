@@ -40,7 +40,6 @@ class _PlanerPageState extends State<PlanerPage> {
   }
 
   Future<void> _loadAppointments() async {
-  
     setState(() {
       _isLoading = true;
     });
@@ -58,18 +57,22 @@ class _PlanerPageState extends State<PlanerPage> {
       final appointments = await _appointmentService.getAppointments(
         query: query,
       );
-     
+
       setState(() {
         _appointments = appointments;
         _filteredAppointments = appointments;
         _isLoading = false;
       });
     } catch (e) {
-      
       setState(() {
         _isLoading = false;
       });
-      AppUtils.showErrorSnackBar(context, PlanerConstants.loadingErrorMessage);
+      if (mounted) {
+        AppUtils.showErrorSnackBar(
+          context,
+          PlanerConstants.loadingErrorMessage,
+        );
+      }
     }
   }
 

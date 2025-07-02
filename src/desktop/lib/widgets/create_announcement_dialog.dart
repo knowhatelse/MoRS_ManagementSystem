@@ -69,10 +69,12 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
       );
 
       final result = await widget.onCreateAnnouncement(request);
-      if (result) {
-        Navigator.of(context).pop(true);
-      } else {
-        Navigator.of(context).pop(false);
+      if (mounted) {
+        if (result) {
+          Navigator.of(context).pop(true);
+        } else {
+          Navigator.of(context).pop(false);
+        }
       }
     } finally {
       if (mounted) {

@@ -3,7 +3,6 @@ import '../../constants/users_page_constants.dart';
 import '../../models/user/user_response.dart';
 import '../../models/user/create_user_request.dart';
 import '../../services/user_service.dart';
-import '../../utils/app_utils.dart';
 import '../constants/app_constants.dart';
 
 class CreateUserDialog extends StatefulWidget {
@@ -78,7 +77,9 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
         ),
       );
       final result = await widget.onUserCreated(user);
-      Navigator.of(context).pop(result);
+      if (mounted) {
+        Navigator.of(context).pop(result);
+      }
     } catch (e) {
       if (mounted) {
         Navigator.of(context).pop(false);

@@ -1,10 +1,12 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
 using EmailWorker.Models;
+using EmailWorker.Configuration;
 
 namespace EmailWorker.Services;
 
@@ -13,19 +15,24 @@ public class EmailWorkerService : BackgroundService
     private readonly ILogger<EmailWorkerService> _logger;
     private readonly IEmailSender _emailSender;
     private readonly ConnectionFactory _connectionFactory;
+    private readonly RabbitMqSettings _rabbitMqSettings;
     private IConnection? _connection;
     private IChannel? _channel;
 
-    public EmailWorkerService(ILogger<EmailWorkerService> logger, IEmailSender emailSender)
+    public EmailWorkerService(
+        ILogger<EmailWorkerService> logger,
+        IEmailSender emailSender,
+        IOptions<RabbitMqSettings> rabbitMqSettings)
     {
         _logger = logger;
         _emailSender = emailSender;
+        _rabbitMqSettings = rabbitMqSettings.Value;
         _connectionFactory = new ConnectionFactory
         {
-            HostName = "localhost",
-            Port = 5672,
-            UserName = "guest",
-            Password = "guest"
+            HostName = _rabbitMqSettings.HostName,
+            Port = _rabbitMqSettings.Port,
+            UserName = _rabbitMqSettings.UserName,
+            Password = _rabbitMqSettings.Password
         };
     }
 

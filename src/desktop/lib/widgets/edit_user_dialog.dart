@@ -170,10 +170,17 @@ class _EditUserDialogState extends State<EditUserDialog> {
       );
       if (updatedUser != null) {
         final result = await widget.onUserUpdated(updatedUser);
-        Navigator.of(context).pop(result);
+        if (mounted) {
+          Navigator.of(context).pop(result);
+        }
       } else {
-        AppUtils.showErrorSnackBar(context, 'Greška pri ažuriranju korisnika.');
-        Navigator.of(context).pop(false);
+        if (mounted) {
+          AppUtils.showErrorSnackBar(
+            context,
+            'Greška pri ažuriranju korisnika.',
+          );
+          Navigator.of(context).pop(false);
+        }
       }
     } catch (e) {
       if (mounted) {

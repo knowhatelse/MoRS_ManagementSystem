@@ -45,9 +45,9 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuers = new[] { "http://localhost:5000", "http://192.168.0.7:5000" },
+        ValidIssuers = builder.Configuration.GetSection("JWT:ValidIssuers").Get<string[]>(),
         ValidateAudience = true,
-        ValidAudience = "api",
+        ValidAudience = builder.Configuration["JWT:ValidAudience"],
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = rsaSecurityKey,
         ValidateLifetime = true
@@ -75,7 +75,7 @@ builder.Services.AddIdentityServer()
     .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
     .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
     .AddInMemoryApiResources(IdentityServerConfig.ApiResources)
-    .AddInMemoryClients(IdentityServerConfig.Clients)
+    .AddInMemoryClients(IdentityServerConfig.GetClients(builder.Configuration))
     .AddAspNetIdentity<ApplicationUser>();
 
 builder.Services.AddDataSeeder();

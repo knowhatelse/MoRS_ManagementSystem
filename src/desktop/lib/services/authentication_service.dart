@@ -1,27 +1,25 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/models.dart';
-import '../constants/app_constants.dart';
+import '../config/app_config.dart';
 import 'api_config.dart';
 import 'base_api_service.dart';
 
 class AuthenticationService extends BaseApiService {
-  static String? _accessToken;
-  static String? get accessToken => _accessToken;
-  static set accessToken(String? value) => _accessToken = value;
+  static String? accessToken;
 
   Future<UserResponse> login(LoginRequest loginRequest) async {
     try {
       final tokenResponse = await http.post(
-        Uri.parse('http://localhost:5000/connect/token'),
+        Uri.parse(AppConfig.authTokenUrl),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: {
-          'grant_type': 'password',
-          'client_id': 'mors_client_desktop',
-          'client_secret': 'desktop_secret',
+          'grant_type': AppConfig.grantType,
+          'client_id': AppConfig.clientId,
+          'client_secret': AppConfig.clientSecret,
           'username': loginRequest.email,
           'password': loginRequest.password,
-          'scope': 'api openid profile',
+          'scope': AppConfig.scope,
         },
       );
 

@@ -5,7 +5,7 @@ namespace MoRS.ManagementSystem.Application.DTOs.User;
 
 public class PasswordComplexityAttribute : ValidationAttribute
 {
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         var password = value as string;
         if (string.IsNullOrEmpty(password))

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
+import '../config/app_config.dart';
 
 class AppUtils {
   static bool isValidEmail(String email) {
@@ -16,7 +17,9 @@ class AppUtils {
       SnackBar(
         content: Text(message),
         backgroundColor: backgroundColor ?? AppConstants.primaryBlue,
-        duration: duration,
+        duration: duration.inSeconds > 0
+            ? duration
+            : AppConfig.snackBarDuration,
       ),
     );
   }

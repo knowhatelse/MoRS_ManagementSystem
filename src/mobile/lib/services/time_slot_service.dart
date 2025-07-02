@@ -1,4 +1,5 @@
 import '../models/models.dart';
+import '../config/app_config.dart';
 import 'api_config.dart';
 import 'base_api_service.dart';
 
@@ -97,48 +98,22 @@ class TimeSlotService extends BaseApiService {
   }
 
   List<CreateTimeSlotRequest> getCommonTimeSlots() {
-    return [
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 8),
-        timeTo: const Duration(hours: 9),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 9),
-        timeTo: const Duration(hours: 10),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 10),
-        timeTo: const Duration(hours: 11),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 11),
-        timeTo: const Duration(hours: 12),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 12),
-        timeTo: const Duration(hours: 13),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 13),
-        timeTo: const Duration(hours: 14),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 14),
-        timeTo: const Duration(hours: 15),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 15),
-        timeTo: const Duration(hours: 16),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 16),
-        timeTo: const Duration(hours: 17),
-      ),
-      CreateTimeSlotRequest(
-        timeFrom: const Duration(hours: 17),
-        timeTo: const Duration(hours: 18),
-      ),
-    ];
+    List<CreateTimeSlotRequest> timeSlots = [];
+
+    for (
+      int hour = AppConfig.businessHoursStart;
+      hour < AppConfig.businessHoursEnd;
+      hour++
+    ) {
+      timeSlots.add(
+        CreateTimeSlotRequest(
+          timeFrom: Duration(hours: hour),
+          timeTo: Duration(hours: hour + AppConfig.timeSlotDurationHours),
+        ),
+      );
+    }
+
+    return timeSlots;
   }
 
   bool timeSlotsOverlap(TimeSlotResponse slot1, TimeSlotResponse slot2) {

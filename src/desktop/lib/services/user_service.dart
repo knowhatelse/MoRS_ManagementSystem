@@ -43,16 +43,15 @@ class UserService extends BaseApiService {
 
   Future<UserResponse> createUser(CreateUserRequest request) async {
     try {
-      
-      final response = await post('/account/register', body: request.toJson());
-      
+      await post('/account/register', body: request.toJson());
+
       final users = await get(ApiConfig.users);
-      
+
       final userList = (users as List)
           .map((u) => UserResponse.fromJson(u))
           .toList();
       final user = userList.firstWhere((u) => u.email == request.email);
-      
+
       return user;
     } catch (e) {
       rethrow;
@@ -64,12 +63,11 @@ class UserService extends BaseApiService {
     UpdateUserRequest request,
   ) async {
     try {
-     
       final response = await put(
         '${ApiConfig.users}/$userId',
         body: request.toJson(),
       );
-      
+
       return UserResponse.fromJson(response);
     } on ApiException catch (e) {
       if (e.statusCode == 404) {

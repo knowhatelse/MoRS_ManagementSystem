@@ -29,19 +29,16 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   Future<void> _loadUsers() async {
-    
     setState(() {
       _isLoading = true;
     });
     try {
       final users = await _userService.getUsers();
-     ;
       setState(() {
         _users = users;
         _isLoading = false;
       });
     } catch (e) {
-     
       setState(() {
         _isLoading = false;
       });

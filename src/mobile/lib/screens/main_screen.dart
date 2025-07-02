@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
+import '../config/app_config.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_bottom_navigation.dart';
 import '../widgets/notification_sidebar.dart';
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<NotificationProvider>().startPolling(
         userId: widget.user.id,
-        interval: const Duration(seconds: 30),
+        interval: AppConfig.notificationPollingInterval,
       );
     });
   }

@@ -11,6 +11,9 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
 
+builder.Services.Configure<RabbitMqSettings>(
+    builder.Configuration.GetSection("RabbitMQ"));
+
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSingleton<EmailWorkerService>();
 builder.Services.AddHostedService<EmailWorkerService>();

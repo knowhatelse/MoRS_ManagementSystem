@@ -1,4 +1,5 @@
 using IdentityServer4.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace MoRS.ManagementSystem.API.IdentityConfig;
 
@@ -23,28 +24,38 @@ public static class IdentityServerConfig
         }
     };
 
-    public static IEnumerable<Client> Clients => new List<Client>
+    public static IEnumerable<Client> GetClients(IConfiguration configuration)
     {
-        new Client
+        var desktopClientId = configuration["IdentityServer:Clients:Desktop:ClientId"];
+        var desktopClientSecret = configuration["IdentityServer:Clients:Desktop:ClientSecret"];
+        var mobileClientId = configuration["IdentityServer:Clients:Mobile:ClientId"];
+        var mobileClientSecret = configuration["IdentityServer:Clients:Mobile:ClientSecret"];
+        var genericClientId = configuration["IdentityServer:Clients:Generic:ClientId"];
+        var genericClientSecret = configuration["IdentityServer:Clients:Generic:ClientSecret"];
+
+        return new List<Client>
         {
-            ClientId = "mors_client_desktop",
-            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-            ClientSecrets = { new Secret("desktop_secret".Sha256()) },
-            AllowedScopes = { "api", "openid", "profile" }
-        },
-        new Client
-        {
-            ClientId = "mors_client_mobile",
-            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-            ClientSecrets = { new Secret("mobile_secret".Sha256()) },
-            AllowedScopes = { "api", "openid", "profile" }
-        },
-        new Client
-        {
-            ClientId = "mors_client",
-            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-            ClientSecrets = { new Secret("secret".Sha256()) },
-            AllowedScopes = { "api", "openid", "profile" }
-        }
-    };
+            new Client
+            {
+                ClientId = desktopClientId,
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                ClientSecrets = { new Secret(desktopClientSecret.Sha256()) },
+                AllowedScopes = { "api", "openid", "profile" }
+            },
+            new Client
+            {
+                ClientId = mobileClientId,
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                ClientSecrets = { new Secret(mobileClientSecret.Sha256()) },
+                AllowedScopes = { "api", "openid", "profile" }
+            },
+            new Client
+            {
+                ClientId = genericClientId,
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                ClientSecrets = { new Secret(genericClientSecret.Sha256()) },
+                AllowedScopes = { "api", "openid", "profile" }
+            }
+        };
+    }
 }

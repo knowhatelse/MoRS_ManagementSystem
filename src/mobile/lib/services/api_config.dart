@@ -1,9 +1,10 @@
-class ApiConfig {
-  static const String _baseUrl = 'http://192.168.0.7:5000/api';
-  static String get baseUrl => _baseUrl;
+import '../config/app_config.dart';
 
-  static const Duration connectionTimeout = Duration(seconds: 10);
-  static const Duration requestTimeout = Duration(seconds: 5);
+class ApiConfig {
+  static String get baseUrl => AppConfig.apiBaseUrl;
+
+  static Duration get connectionTimeout => AppConfig.connectionTimeout;
+  static Duration get requestTimeout => AppConfig.requestTimeout;
   static const String authentication = '/Authentication';
   static const String announcements = '/Announcement';
   static const String appointments = '/Appointment';

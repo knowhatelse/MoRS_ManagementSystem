@@ -52,7 +52,7 @@ class _ReportPageState extends State<ReportPage> {
       final reports = await _malfunctionReportService.getMalfunctionReports(
         query,
       );
-     
+
       reports.sort((a, b) {
         if (a.isArchived != b.isArchived) {
           return a.isArchived ? 1 : -1;
@@ -66,11 +66,15 @@ class _ReportPageState extends State<ReportPage> {
         _isLoading = false;
       });
     } catch (e) {
-     
       setState(() {
         _isLoading = false;
       });
-      AppUtils.showErrorSnackBar(context, ReportConstants.loadingErrorMessage);
+      if (mounted) {
+        AppUtils.showErrorSnackBar(
+          context,
+          ReportConstants.loadingErrorMessage,
+        );
+      }
     }
   }
 
