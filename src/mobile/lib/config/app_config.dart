@@ -1,5 +1,5 @@
 class AppConfig {
-  // API Configuration
+  // API Configuration (Updated for Docker)
   static const String apiBaseUrl = 'http://192.168.0.7:5000/api';
   static const String authTokenUrl = 'http://192.168.0.7:5000/connect/token';
 

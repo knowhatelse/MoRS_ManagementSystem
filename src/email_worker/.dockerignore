@@ -1,0 +1,42 @@
+# .NET specific
+**/bin/
+**/obj/
+**/out/
+**/TestResults/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.cache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# NuGet packages
+*.nupkg
+**/packages/*
+!**/packages/build/
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Git
+.git/
+.gitignore
+
+# Other
+*.md
+LICENSE

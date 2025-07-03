@@ -1,0 +1,116 @@
+services:
+  # SQL Server Database
+  mors-database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mors-database
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "MoRS_Database123!"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - mors_database_data:/var/opt/mssql
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - mors-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P 'MoRS_Database123!' -Q 'SELECT 1' -C",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # RabbitMQ Message Queue
+  mors-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: mors-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: mors_user
+      RABBITMQ_DEFAULT_PASS: mors_password123
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI port
+    volumes:
+      - mors_rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - mors-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # MoRS API Service
+  mors-api:
+    build:
+      context: ./src/api
+      dockerfile: Dockerfile
+    container_name: mors-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__MoRSManagementSystemDatabase=Server=mors-database,1433;Database=IB200154;User Id=SA;Password=MoRS_Database123!;TrustServerCertificate=True;
+      - RabbitMQ__HostName=mors-rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=mors_user
+      - RabbitMQ__Password=mors_password123
+      - JWT__ValidIssuers__0=http://localhost:5000
+      - JWT__ValidIssuers__1=http://192.168.0.7:5000
+      - JWT__ValidIssuers__2=http://mors-api:80
+      - JWT__ValidAudience=api
+      - IdentityServer__Clients__Desktop__ClientId=mors_client_desktop
+      - IdentityServer__Clients__Desktop__ClientSecret=desktop_secret
+      - IdentityServer__Clients__Mobile__ClientId=mors_client_mobile
+      - IdentityServer__Clients__Mobile__ClientSecret=mobile_secret
+      - IdentityServer__Clients__Generic__ClientId=mors_client
+      - IdentityServer__Clients__Generic__ClientSecret=secret
+    ports:
+      - "5000:80"
+    depends_on:
+      mors-database:
+        condition: service_healthy
+      mors-rabbitmq:
+        condition: service_healthy
+    networks:
+      - mors-network
+    restart: unless-stopped
+
+  # Email Worker Service
+  mors-email-worker:
+    build:
+      context: ./src/email_worker
+      dockerfile: Dockerfile
+    container_name: mors-email-worker
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+      - RabbitMQ__HostName=mors-rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=mors_user
+      - RabbitMQ__Password=mors_password123
+      - EmailSettings__SmtpServer=smtp.gmail.com
+      - EmailSettings__SmtpPort=587
+      - EmailSettings__SenderEmail=mors.management.system@gmail.com
+      - EmailSettings__SenderPassword=urki eggg hmbv tfsr
+      - EmailSettings__SenderName=MoRS Management System
+      - EmailSettings__EnableSsl=true
+    depends_on:
+      mors-rabbitmq:
+        condition: service_healthy
+    networks:
+      - mors-network
+    restart: unless-stopped
+
+volumes:
+  mors_database_data:
+    driver: local
+  mors_rabbitmq_data:
+    driver: local
+
+networks:
+  mors-network:
+    driver: bridge

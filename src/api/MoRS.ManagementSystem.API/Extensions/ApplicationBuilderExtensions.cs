@@ -21,7 +21,6 @@ public static class ApplicationBuilderExtensions
         app.UseCors("MoRSCorsPolicy");
         app.UseAuthorization();
         app.MapControllers();
-        app.SeedDatabaseAsync().Wait();
 
         return app;
     }

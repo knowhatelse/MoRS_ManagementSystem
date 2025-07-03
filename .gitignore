@@ -238,7 +238,7 @@ ClientBin/
 *.dbmdl
 *.dbproj.schemaview
 *.jfm
-*.pfx
+# *.pfx  # Commented out for Docker deployment - certificates needed
 *.publishsettings
 orleans.codegen.cs
 
@@ -538,3 +538,14 @@ coverage/
 !**/ios/**/default.movov3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
+
+# Note: For this educational project, all credentials are included in the repository
+# for easy sharing and setup. In production, these should be externalized.
+
+# Certificate files (INCLUDED for demo/development Docker deployment)
+# Note: In production, these should be managed via Docker secrets or external config
+# *.pfx
+# *.p12
+# identityserver_signing_cert.pfx
+# identityserver_signing_key.xml
+# tempkey.jwk

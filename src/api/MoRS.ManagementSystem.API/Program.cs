@@ -91,6 +91,47 @@ builder.Services.AddSingleton<IEventBus>(new RabbitMqEventBus(builder.Configurat
 
 var app = builder.Build();
 
+
+if (args.Contains("--seed"))
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+        await dataSeeder.SeedData();
+        Console.WriteLine("Database seeding completed successfully!");
+        return; 
+    }
+}
+
+
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var context = scope.ServiceProvider.GetRequiredService<MoRSManagementSystemDbContext>();
+
+        await context.Database.MigrateAsync();
+        Console.WriteLine("Database migrations applied successfully!");
+
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        if (!userManager.Users.Any())
+        {
+            Console.WriteLine("Database is empty, starting seeding process...");
+            var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+            await dataSeeder.SeedData();
+            Console.WriteLine("Database seeding completed successfully!");
+        }
+        else
+        {
+            Console.WriteLine("Database already contains data, skipping seeding.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error during database initialization: {ex.Message}");
+    }
+}
+
 app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
