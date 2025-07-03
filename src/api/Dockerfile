@@ -31,6 +31,9 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# Copy Images folder for profile pictures
+COPY MoRS.ManagementSystem.API/Images/ ./Images/
+
 # Create directory for SSL certificates
 RUN mkdir -p /https
 

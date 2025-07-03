@@ -111,6 +111,11 @@ public class DataSeeder
             new { Name = "Dora", Surname = "Sesar", Email = "dora.sesar@gmail.com", PhoneNumber = "063987456", RoleName = "Polaznik" },
             new { Name = "Nika", Surname = "Banovic", Email = "nika.banovic@gmail.com", PhoneNumber = "063408456", RoleName = "Polaznik" },
             new { Name = "Leo", Surname = "Cerkez", Email = "leo.cerkez@gmail.com", PhoneNumber = "063937456", RoleName = "Polaznik" },
+            new { Name = "Denis", Surname = "Music", Email = "denis.music@edu.fit.ba", PhoneNumber = "061111111", RoleName = "Polaznik" },
+            new { Name = "Elmir", Surname = "Babovic", Email = "elmir.babovic@edu.fit.ba", PhoneNumber = "061222222", RoleName = "Polaznik" },
+            new { Name = "Amel", Surname = "Music", Email = "amel.music@edu.fit.ba", PhoneNumber = "061333333", RoleName = "Polaznik" },
+            new { Name = "Adil", Surname = "Joldic", Email = "adil.joldic@edu.fit.ba", PhoneNumber = "061444444", RoleName = "Polaznik" },
+            new { Name = "Elda", Surname = "Sultic", Email = "elda.sultic@edu.fit.ba", PhoneNumber = "061555555", RoleName = "Polaznik" },
         };
 
         foreach (var u in usersToSeed)
@@ -121,7 +126,7 @@ public class DataSeeder
             {
                 continue;
             }
-            var roleId = domainRole.Id; 
+            var roleId = domainRole.Id;
             var dbRoleName = identityRole.Name ?? string.Empty;
             var password = "Test123$";
             var identityUser = new ApplicationUser
@@ -140,7 +145,7 @@ public class DataSeeder
                     Id = identityUser.Id,
                     Name = u.Name,
                     Surname = u.Surname,
-                    Email = u.Email, 
+                    Email = u.Email,
                     PhoneNumber = u.PhoneNumber,
                     RoleId = roleId,
                     ProfilePicture = null,
@@ -167,7 +172,7 @@ public class DataSeeder
             }
             await _context.SaveChangesAsync();
         }
-     
+
         foreach (var role in _context.Roles)
         {
             var expectedNorm = (role.Name?.ToUpperInvariant()) ?? string.Empty;
@@ -194,45 +199,48 @@ public class DataSeeder
         if (adminUser == null)
             throw new InvalidOperationException("No admin user found for announcement seeding.");
 
+        var now = DateTime.Now;
+        var baseDate = now.AddDays(-30); 
+
         IEnumerable<Announcement> announcements =
         [
             new Announcement
             {
                 Title = "Obavijest o neradnom danu",
-                Content = "Muzicki Centar Pavarotti nece raditi u ponedeljak 25.11.2024. godine.",
-                CreatedAt = new DateTime(2024, 11, 23, 13, 14, 32),
+                Content = "Muzicki Centar Pavarotti nece raditi u ponedeljak.",
+                CreatedAt = baseDate.AddDays(2),
                 IsDeleted = false,
                 UserId = adminUser.Id
             },
             new Announcement
             {
                 Title = "Obavijest o neradnom danu",
-                Content = "Muzicki Centar Pavarotti nece raditi u subotu 01.03.2025. godine.",
-                CreatedAt = new DateTime(2025, 02, 27, 12, 31, 56),
+                Content = "Muzicki Centar Pavarotti nece raditi u subotu.",
+                CreatedAt = baseDate.AddDays(5),
                 IsDeleted = false,
                 UserId = adminUser.Id
             },
             new Announcement
             {
                 Title = "Obavijest o radnom vremenu studentske sluzbe",
-                Content = "Radno vrijeme u subotu 22.03.2025. godine je od 08:00 do 12:00 sati.",
-                CreatedAt = new DateTime(2025, 03, 20, 14, 46, 13),
+                Content = "Radno vrijeme u subotu je od 08:00 do 12:00 sati.",
+                CreatedAt = baseDate.AddDays(8),
                 IsDeleted = false,
                 UserId = adminUser.Id
             },
             new Announcement
             {
                 Title = "Prijave za jazz masterclass",
-                Content = "Prijave za jazz masterclass su otvorene do 01.04.2025. godine.",
-                CreatedAt = new DateTime(2025, 03, 23, 09, 52, 25),
+                Content = "Prijave za jazz masterclass su otvorene.",
+                CreatedAt = baseDate.AddDays(12),
                 IsDeleted = false,
                 UserId = adminUser.Id
             },
             new Announcement
             {
                 Title = "Programski koncert IV",
-                Content = "Nastava se nece odrzati u cetvrtak 27.03.2025. godine zbog programskog koncerta.",
-                CreatedAt = new DateTime(2025, 03, 25, 11, 10, 36),
+                Content = "Nastava se nece odrzati u cetvrtak zbog programskog koncerta.",
+                CreatedAt = baseDate.AddDays(15),
                 IsDeleted = false,
                 UserId = adminUser.Id
             },
@@ -329,17 +337,24 @@ public class DataSeeder
 
         _logger.LogInformation("Seeding appointments...");
 
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var daysFromMonday = (int)today.DayOfWeek - 1;
+        if (daysFromMonday < 0) daysFromMonday = 6;
+
+        var mondayOfCurrentWeek = today.AddDays(-daysFromMonday);
 
         var scheduleDates = new DateOnly[]
         {
-            new(2025, 03, 24),
-            new(2025, 03, 25),
-            new(2025, 03, 26),
-            new(2025, 03, 27),
-            new(2025, 03, 28),
-            new(2025, 03, 29),
-            new(2025, 03, 20)
+            mondayOfCurrentWeek,
+            mondayOfCurrentWeek.AddDays(1),
+            mondayOfCurrentWeek.AddDays(2),
+            mondayOfCurrentWeek.AddDays(3),
+            mondayOfCurrentWeek.AddDays(4),
+            mondayOfCurrentWeek.AddDays(5),
+            mondayOfCurrentWeek.AddDays(6)
         };
+
+        _logger.LogInformation($"Seeding appointments for week of {mondayOfCurrentWeek} to {mondayOfCurrentWeek.AddDays(6)}");
 
         IEnumerable<Appointment> appointments =
         [   new Appointment
@@ -544,15 +559,22 @@ public class DataSeeder
 
         _logger.LogInformation("Seeding appointment schedules...");
 
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var daysFromMonday = (int)today.DayOfWeek - 1; 
+        if (daysFromMonday < 0) daysFromMonday = 6; 
+
+        var mondayOfCurrentWeek = today.AddDays(-daysFromMonday);
+
         var scheduleDates = new DateOnly[]
         {
-            new(2025, 03, 24),
-            new(2025, 03, 25),
-            new(2025, 03, 26),
-            new(2025, 03, 27),
-            new(2025, 03, 28),
-            new(2025, 03, 29),
-            new(2025, 03, 20)
+            mondayOfCurrentWeek,           
+            mondayOfCurrentWeek.AddDays(1), 
+            mondayOfCurrentWeek.AddDays(2), 
+            mondayOfCurrentWeek.AddDays(3), 
+            mondayOfCurrentWeek.AddDays(4), 
+            mondayOfCurrentWeek.AddDays(5), 
+            mondayOfCurrentWeek.AddDays(6)  
         };
 
         var appointmentSchedules = new List<AppointmentSchedule>();
@@ -627,12 +649,15 @@ public class DataSeeder
 
         _logger.LogInformation("Seeding malfunction reports...");
 
+        var now = DateTime.Now;
+        var baseDate = now.AddDays(-7);
+
         IEnumerable<MalfunctionReport> malfunctionReports =
         [
             new MalfunctionReport
             {
                 Description = "Ne radi klavijatura u Studiju 24.",
-                Date = new DateTime(2025, 03, 24, 10, 15, 00),
+                Date = baseDate.AddDays(1),
                 IsArchived = false,
                 RoomId = rooms.First(r => r.Name == "Studio 24").Id,
                 ReportedByUserId = users.First(u => u.Name == "Nika" && u.Surname == "Banovic").Id,
@@ -640,7 +665,7 @@ public class DataSeeder
             new MalfunctionReport
             {
                 Description = "Ne radi mikrofon u DK Studiju.",
-                Date = new DateTime(2025, 03, 25, 11, 30, 00),
+                Date = baseDate.AddDays(2),
                 IsArchived = false,
                 RoomId = rooms.First(r => r.Name == "DK Studio").Id,
                 ReportedByUserId = users.First(u => u.Name == "Gojko" && u.Surname == "Prusina").Id,
@@ -648,7 +673,7 @@ public class DataSeeder
             new MalfunctionReport
             {
                 Description = "Ne radi gitara u Studiju B.",
-                Date = new DateTime(2025, 03, 26, 12, 45, 00),
+                Date = baseDate.AddDays(3),
                 IsArchived = false,
                 RoomId = rooms.First(r => r.Name == "Studio B").Id,
                 ReportedByUserId = users.First(u => u.Name == "Petar" && u.Surname == "Zovko").Id,
@@ -657,7 +682,7 @@ public class DataSeeder
             new MalfunctionReport
             {
                 Description = "Svi kablovi za instrumente su neispravni u Guitar Room 2",
-                Date = new DateTime(2025, 03, 27, 14, 00, 00),
+                Date = baseDate.AddDays(4),
                 IsArchived = true,
                 RoomId = rooms.First(r => r.Name == "Guitar Room 2").Id,
                 ReportedByUserId = users.First(u => u.Name == "Ivan" && u.Surname == "Kovacevic").Id,
@@ -665,7 +690,7 @@ public class DataSeeder
             new MalfunctionReport
             {
                 Description = "Ne radi gitarsko pojačalo u Studiju B.",
-                Date = new DateTime(2025, 03, 28, 15, 15, 00),
+                Date = baseDate.AddDays(5),
                 IsArchived = true,
                 RoomId = rooms.First(r => r.Name == "Guitar Room 2").Id,
                 ReportedByUserId = users.First(u => u.Name == "Kenan" && u.Surname == "Kajtazovic").Id,
@@ -673,7 +698,7 @@ public class DataSeeder
             new MalfunctionReport
             {
                 Description = "Ne radi mikseta u Studiju B.",
-                Date = new DateTime(2025, 03, 29, 16, 30, 00),
+                Date = baseDate.AddDays(6),
                 IsArchived = true,
                 RoomId = rooms.First(r => r.Name == "Studio B").Id,
                 ReportedByUserId = users.First(u => u.Name == "Semin" && u.Surname == "Merzic").Id,
@@ -698,11 +723,14 @@ public class DataSeeder
 
         _logger.LogInformation("Seeding payments...");
 
+        var now = DateTime.Now;
+        var baseDate = now.AddDays(-5);
+
         IEnumerable<Payment> payments =
         [
             new Payment
             {
-                PaidAt = new DateTime(2025, 03, 24, 10, 15, 00),
+                PaidAt = baseDate.AddDays(1),
                 Amount = 50.00m,
                 Status = PaymentStatus.Zavrseno,
                 PaymentMethod = PaymentMethod.PayPal,
@@ -711,7 +739,7 @@ public class DataSeeder
             },
             new Payment
             {
-                PaidAt = new DateTime(2025, 03, 25, 11, 30, 00),
+                PaidAt = baseDate.AddDays(2),
                 Amount = 50.00m,
                 Status = PaymentStatus.NaCekanju,
                 PaymentMethod = PaymentMethod.KreditnaKartica,
@@ -720,7 +748,7 @@ public class DataSeeder
             },
             new Payment
             {
-                PaidAt = new DateTime(2025, 03, 26, 12, 45, 00),
+                PaidAt = baseDate.AddDays(3),
                 Amount = 50.00m,
                 Status = PaymentStatus.Neuspjesno,
                 PaymentMethod = PaymentMethod.BankovniTransfer,
@@ -729,7 +757,7 @@ public class DataSeeder
             },
             new Payment
             {
-                PaidAt = new DateTime(2025, 03, 27, 14, 00, 00),
+                PaidAt = baseDate.AddDays(4),
                 Amount = 50.00m,
                 Status = PaymentStatus.Zavrseno,
                 PaymentMethod = PaymentMethod.PayPal,
@@ -738,7 +766,7 @@ public class DataSeeder
             },
             new Payment
             {
-                PaidAt = new DateTime(2025, 03, 28, 15, 15, 00),
+                PaidAt = baseDate.AddDays(5),
                 Amount = 50.00m,
                 Status = PaymentStatus.Neuspjesno,
                 PaymentMethod = PaymentMethod.KreditnaKartica,
@@ -747,7 +775,7 @@ public class DataSeeder
             },
             new Payment
             {
-                PaidAt = new DateTime(2025, 03, 29, 16, 30, 00),
+                PaidAt = now,
                 Amount = 50.00m,
                 Status = PaymentStatus.NaCekanju,
                 PaymentMethod = PaymentMethod.BankovniTransfer,
@@ -832,6 +860,9 @@ public class DataSeeder
 
         _logger.LogInformation("Seeding notifications...");
 
+        var now = DateTime.Now;
+        var baseDate = now.AddDays(-3); 
+
         IEnumerable<Notification> notifications =
         [
             new Notification
@@ -839,7 +870,7 @@ public class DataSeeder
                 Title = "Obavijest o placanju",
                 Message = "Obavještavamo vas da je uplata za clanarinu uspjesno izvrsena.",
                 Type = NotificationType.Uspjesno,
-                Date = new DateTime(2025, 03, 24, 10, 20, 00),
+                Date = baseDate.AddDays(1),
                 IsRead = false,
                 UserId = users.First(u => u.Name == "Kenan" && u.Surname == "Kajtazovic").Id,
             },
@@ -848,7 +879,7 @@ public class DataSeeder
                 Title = "Obavijest o placanju",
                 Message = "Obavještavamo vas da je uplata za clanarinu na cekanju.",
                 Type = NotificationType.Informacija,
-                Date = new DateTime(2025, 03, 25, 11, 35, 00),
+                Date = baseDate.AddDays(2),
                 IsRead = false,
                 UserId = users.First(u => u.Name == "Petar" && u.Surname == "Zovko").Id,
             },
@@ -857,7 +888,7 @@ public class DataSeeder
                 Title = "Obavijest o placanju",
                 Message = "Obavještavamo vas da je uplata za clanarinu neuspijesna.",
                 Type = NotificationType.Uspjesno,
-                Date = new DateTime(2025, 03, 27, 12, 50, 00),
+                Date = baseDate.AddDays(3),
                 IsRead = false,
                 UserId = users.First(u => u.Name == "Gojko" && u.Surname == "Prusina").Id,
             },
@@ -866,7 +897,7 @@ public class DataSeeder
                 Title = "Obavijest o placanju",
                 Message = "Obavještavamo vas da je uplata za clanarinu uspjesno izvrsena.",
                 Type = NotificationType.Uspjesno,
-                Date = new DateTime(2025, 03, 24, 14, 05, 00),
+                Date = now.AddHours(-12),
                 IsRead = false,
                 UserId = users.First(u => u.Name == "Dora" && u.Surname == "Sesar").Id,
             },
@@ -875,7 +906,7 @@ public class DataSeeder
                 Title = "Obavijest o placanju",
                 Message = "Obavještavamo vas da je uplata za clanarinu uspjesno izvrsena.",
                 Type = NotificationType.Informacija,
-                Date = new DateTime(2025, 03, 24, 15, 20, 00),
+                Date = now.AddHours(-6),
                 IsRead = false,
                 UserId = users.First(u => u.Name == "Nika" && u.Surname == "Banovic").Id,
             },
@@ -884,7 +915,7 @@ public class DataSeeder
                 Title = "Obavijest o placanju",
                 Message = "Obavještavamo vas da je uplata za clanarinu na cekanju.",
                 Type = NotificationType.Informacija,
-                Date = new DateTime(2025, 03, 24, 16, 35, 00),
+                Date = now.AddHours(-2),
                 IsRead = false,
                 UserId = users.First(u => u.Name == "Leo" && u.Surname == "Cerkez").Id,
             },
@@ -908,7 +939,7 @@ public class DataSeeder
         _logger.LogInformation("Seeding profile pictures...");
 
         var profilePictures = new List<ProfilePicture>();
-
+      
         var minimalPngData = new byte[]
         {
             0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
@@ -926,27 +957,97 @@ public class DataSeeder
             0x49, 0x45, 0x4E, 0x44,
             0xAE, 0x42, 0x60, 0x82
         };
+      
+        var profilePicturesPath = Path.Combine(Directory.GetCurrentDirectory(), "Images");
 
-        foreach (var u in users)
+        _logger.LogInformation($"Looking for profile pictures in: {profilePicturesPath}");
+       
+        var profilePicturesExist = Directory.Exists(profilePicturesPath);
+        if (!profilePicturesExist)
         {
-            profilePictures.Add
-            (
-                new ProfilePicture
+            _logger.LogWarning($"Images directory not found at {profilePicturesPath}. Using default images.");
+        }
+
+        foreach (var user in users)
+        {
+            byte[] imageData = minimalPngData;
+            string fileName = $"{user.Name}_{user.Surname}.png";
+            string contentType = "image/png";
+           
+            if (profilePicturesExist)
+            {
+                var loadedImage = await TryLoadUserProfilePicture(profilePicturesPath, user.Name, user.Surname);
+                if (loadedImage.HasValue)
                 {
-                    Data = minimalPngData,
-                    FileName = $"{u.Name}_{u.Surname}.png",
-                    FileType = "image/png",
-                    UserId = u.Id
+                    imageData = loadedImage.Value.Data;
+                    fileName = loadedImage.Value.FileName;
+                    contentType = loadedImage.Value.ContentType;
+                    _logger.LogInformation($"Loaded profile picture for {user.Name} {user.Surname}: {fileName}");
                 }
-            );
+                else
+                {
+                    _logger.LogInformation($"No profile picture found for {user.Name} {user.Surname}. Using default image.");
+                }
+            }
+
+            profilePictures.Add(new ProfilePicture
+            {
+                Data = imageData,
+                FileName = fileName,
+                FileType = contentType,
+                UserId = user.Id
+            });
         }
 
         await _context.ProfilePictures.AddRangeAsync(profilePictures);
         await _context.SaveChangesAsync();
 
-        _logger.LogInformation("Profile pictures seeded!");
+        _logger.LogInformation($"Profile pictures seeded! {profilePictures.Count} pictures added.");
 
         return profilePictures;
+    }
+
+    private async Task<(byte[] Data, string FileName, string ContentType)?> TryLoadUserProfilePicture(string profilePicturesPath, string name, string surname)
+    {
+        try
+        {
+            var extensions = new[] { ".png", ".jpg", ".jpeg", ".gif", ".bmp" };
+            var userNamePattern = $"{name}_{surname}";
+
+            foreach (var extension in extensions)
+            {
+                var filePath = Path.Combine(profilePicturesPath, $"{userNamePattern}{extension}");
+                if (File.Exists(filePath))
+                {
+                    var data = await File.ReadAllBytesAsync(filePath);
+                    var contentType = GetContentType(extension);
+                    var fileName = Path.GetFileName(filePath);
+
+                    _logger.LogInformation($"Found profile picture: {filePath} ({data.Length} bytes)");
+                    return (data, fileName, contentType);
+                }
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error loading profile picture for {name} {surname}");
+            return null;
+        }
+    }
+
+    private static string GetContentType(string extension)
+    {
+        return extension.ToLower() switch
+        {
+            ".png" => "image/png",
+            ".jpg" => "image/jpeg",
+            ".jpeg" => "image/jpeg",
+            ".gif" => "image/gif",
+            ".bmp" => "image/bmp",
+            _ => "application/octet-stream"
+        };
     }
     private async Task<IEnumerable<TimeSlot>> SeedTimes(IEnumerable<AppointmentSchedule> appointmentSchedules)
     {
