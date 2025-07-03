@@ -1,7 +1,6 @@
 class AppConfig {
-  // API Configuration (Updated for Docker)
-  static const String apiBaseUrl = 'http://192.168.0.7:5000/api';
-  static const String authTokenUrl = 'http://192.168.0.7:5000/connect/token';
+  static const String apiBaseUrl = 'http://10.0.2.2:5000/api';
+  static const String authTokenUrl = 'http://10.0.2.2:5000/connect/token';
 
   // Timeouts
   static const Duration connectionTimeout = Duration(seconds: 10);
