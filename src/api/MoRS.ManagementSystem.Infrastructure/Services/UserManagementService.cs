@@ -4,6 +4,7 @@ using MoRS.ManagementSystem.Infrastructure.Identity;
 using MoRS.ManagementSystem.Application.DTOs.User;
 using MoRS.ManagementSystem.Application.Interfaces.Repositories;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace MoRS.ManagementSystem.Infrastructure.Services
 {
