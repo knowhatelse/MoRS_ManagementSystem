@@ -19,9 +19,6 @@ echo "Building and starting all services..."
 docker-compose up --build -d
 
 echo
-echo "Waiting for services to be ready..."
-
-echo
 echo "MoRS Management System is now running!"
 echo
 echo "Available services:"
@@ -29,6 +26,6 @@ echo "   API: http://localhost:5000"
 echo "   RabbitMQ Management: http://localhost:15672 (user: mors_user, pass: mors_password123)"
 echo "   SQL Server: localhost:1433 (user: SA, pass: MoRS_Database123!)"
 echo
-echo "You can now run your Flutter desktop and mobile apps!"
+echo "You can now run the MoRS Management System desktop and mobile apps!"
 echo
 echo "To stop all services, run: ./stop-docker.sh"

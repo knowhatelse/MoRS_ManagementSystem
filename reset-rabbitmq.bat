@@ -30,10 +30,6 @@ echo Starting system with fresh RabbitMQ...
 docker-compose up --build -d
 
 echo.
-echo Waiting for services to initialize...
-timeout /t 30
-
-echo.
 echo RabbitMQ reset complete!
 echo.
 echo What happened:
@@ -47,4 +43,3 @@ echo    API: http://localhost:5000
 echo    RabbitMQ Management: http://localhost:15672 (user: mors_user, pass: mors_password123)
 echo    SQL Server: localhost:1433 (user: SA, pass: MoRS_Database123!)
 echo.
-echo You can now run your Flutter desktop and mobile apps!
