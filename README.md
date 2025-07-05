@@ -10,7 +10,7 @@ Također u samom repository-u se nalazi Word dokument pod nazivom **IdentityServ
 
 ### Backend:
 
-1. Preuzmite repozitoriji na lokalnu mašinu uz komandu _git clone_.
+1. Preuzmite repozitoriji na lokalnu mašinu uz komandu **git clone**: (_git clone https://github.com/knowhatelse/MoRS_ManagementSystem.git_).
 2. Preuzeti repozitoriji (_folder MoRS_ManagementSytem_) otvorite u **terminalu**.
 3. U otvorenom terminalu unesite komandu za pokretanje backend-a:
 	- **.\start-docker.bat** ako koristite Windows
