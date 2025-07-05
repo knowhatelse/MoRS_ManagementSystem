@@ -24,8 +24,8 @@ U preuzetom repozitoriju se nalazi .zip arhiva pod nazivom **fit-build-2025-07-0
 
 ## Login podaci
 
-Šifra za sve generisane korisnike je: **Test123$**
-Šifra za sve korisnike kojis u kreirani preko desktop aplikacije je u formatu: **ImeKeorisnika.PrezimeKorisnia1 **npr. ako ste napravili korisnika sa imenom i prezimenom **Mujo Mujic**, šifra tog korisnika je **Mujo.Mujic1**
+Šifra za sve generisane korisnike je: **Test123$** . <br>
+Šifra za sve korisnike kojis u kreirani preko desktop aplikacije je u formatu: **ImeKeorisnika.PrezimeKorisnia1** npr. ako ste napravili korisnika sa imenom i prezimenom **Mujo Mujic**, šifra tog korisnika je **Mujo.Mujic1**
 
 ### Admin (Desktop aplikacija):
 - naida.kurtovic@gmail.com
