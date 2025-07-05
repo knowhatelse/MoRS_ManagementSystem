@@ -9,9 +9,14 @@ namespace MoRS.ManagementSystem.Application.Events
     {
         private readonly ConnectionFactory _factory;
 
-        public RabbitMqEventBus(string hostname = "localhost")
+        public RabbitMqEventBus(string hostname = "localhost", string username = "guest", string password = "guest")
         {
-            _factory = new ConnectionFactory { HostName = hostname };
+            _factory = new ConnectionFactory
+            {
+                HostName = hostname,
+                UserName = username,
+                Password = password
+            };
         }
 
         public async Task PublishAsync<T>(string queueName, T message)

@@ -61,7 +61,8 @@ services:
       - RabbitMQ__Password=mors_password123
       - JWT__ValidIssuers__0=http://localhost:5000
       - JWT__ValidIssuers__1=http://192.168.0.7:5000
-      - JWT__ValidIssuers__2=http://mors-api:80
+      - JWT__ValidIssuers__2=http://10.0.2.2:5000
+      - JWT__ValidIssuers__3=http://mors-api:80
       - JWT__ValidAudience=api
       - IdentityServer__Clients__Desktop__ClientId=mors_client_desktop
       - IdentityServer__Clients__Desktop__ClientSecret=desktop_secret

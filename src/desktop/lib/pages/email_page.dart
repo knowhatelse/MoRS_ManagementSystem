@@ -241,7 +241,7 @@ class _EmailPageState extends State<EmailPage> {
                   setState(() {
                     _selectedUsers.add(user);
                   });
-                }
+                } 
                 _userSearchController.clear();
                 _userSearchFocusNode.requestFocus();
               },

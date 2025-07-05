@@ -47,78 +47,31 @@ class MyAppointmentsProvider extends ChangeNotifier {
     _setLoading(true);
     _clearError();
     try {
-      final futures = await Future.wait([
-        _appointmentService.getAppointments(
-          query: AppointmentQuery(
-            bookedByUserId: userId,
-            isCancelled: false,
-            isRoomIncluded: true,
-            isAppointmentTypeIncluded: true,
-            isAppointmentScheduleIncluded: true,
-            isUserIncluded: true,
-            areAttendeesIncluded: true,
-          ),
-        ),
-        _appointmentService.getAppointments(
-          query: AppointmentQuery(
-            bookedByUserId: userId,
-            isCancelled: true,
-            isRoomIncluded: true,
-            isAppointmentTypeIncluded: true,
-            isAppointmentScheduleIncluded: true,
-            isUserIncluded: true,
-            areAttendeesIncluded: true,
-          ),
-        ),
-        _appointmentService.getAppointments(
-          query: AppointmentQuery(
-            attendeeId: userId,
-            isCancelled: false,
-            isRoomIncluded: true,
-            isAppointmentTypeIncluded: true,
-            isAppointmentScheduleIncluded: true,
-            isUserIncluded: true,
-            areAttendeesIncluded: true,
-          ),
-        ),
-        _appointmentService.getAppointments(
-          query: AppointmentQuery(
-            attendeeId: userId,
-            isCancelled: true,
-            isRoomIncluded: true,
-            isAppointmentTypeIncluded: true,
-            isAppointmentScheduleIncluded: true,
-            isUserIncluded: true,
-            areAttendeesIncluded: true,
-          ),
-        ),
-      ]);
+      final bookedAppointments = await _appointmentService.getAppointments(
+        query: AppointmentQuery.forUser(userId),
+      );
+      final todaysAppointments = await _appointmentService.getAppointments(
+        query: AppointmentQuery.forDate(DateTime.now()),
+      );
+      final attendeeAppointments = todaysAppointments.where((appointment) {
+        final isAttendee = appointment.attendees.any(
+          (attendee) => attendee.id == userId,
+        );
+        final isNotBooker = appointment.bookedByUser?.id != userId;
+        return isAttendee && isNotBooker;
+      }).toList();
+      final allUserAppointments = <AppointmentResponse>[];
+      allUserAppointments.addAll(bookedAppointments);
 
-      final myNonCancelledAppointments = futures[0];
-      final myCancelledAppointments = futures[1];
-      final attendeeNonCancelledAppointments = futures[2];
-      final attendeeCancelledAppointments = futures[3];
-
-      final allAppointments = <AppointmentResponse>[];
-      allAppointments.addAll(myNonCancelledAppointments);
-      allAppointments.addAll(myCancelledAppointments);
-
-      for (final appointment in attendeeNonCancelledAppointments) {
-        if (!allAppointments.any((a) => a.id == appointment.id)) {
-          allAppointments.add(appointment);
-        }
-      }
-
-      for (final appointment in attendeeCancelledAppointments) {
-        if (!allAppointments.any((a) => a.id == appointment.id)) {
-          allAppointments.add(appointment);
+      for (final appointment in attendeeAppointments) {
+        if (!allUserAppointments.any((a) => a.id == appointment.id)) {
+          allUserAppointments.add(appointment);
         }
       }
 
       List<AppointmentResponse> filteredAppointments = _applyFilters(
-        allAppointments,
+        allUserAppointments,
       );
-
       filteredAppointments = _sortAppointmentsByTime(filteredAppointments);
 
       _appointments = filteredAppointments;

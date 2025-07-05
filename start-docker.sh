@@ -20,7 +20,6 @@ docker-compose up --build -d
 
 echo
 echo "Waiting for services to be ready..."
-sleep 30
 
 echo
 echo "MoRS Management System is now running!"

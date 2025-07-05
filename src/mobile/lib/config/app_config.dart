@@ -3,12 +3,12 @@ class AppConfig {
   static const String authTokenUrl = 'http://10.0.2.2:5000/connect/token';
 
   // Timeouts
-  static const Duration connectionTimeout = Duration(seconds: 10);
-  static const Duration requestTimeout = Duration(seconds: 5);
+  static const Duration connectionTimeout = Duration(seconds: 30);
+  static const Duration requestTimeout = Duration(seconds: 15);
 
   // Authentication
-  static const String clientId = 'mors_client';
-  static const String clientSecret = 'secret';
+  static const String clientId = 'mors_client_mobile';
+  static const String clientSecret = 'mobile_secret';
   static const String grantType = 'password';
   static const String scope = 'api openid profile';
 

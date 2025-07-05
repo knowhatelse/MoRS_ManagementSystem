@@ -17,7 +17,7 @@ abstract class BaseApiService {
         url = url.replace(queryParameters: queryParameters);
       }
       final authHeaders = headers ?? _getAuthHeadersWithToken();
-  
+
       final response = await http
           .get(url, headers: authHeaders)
           .timeout(ApiConfig.requestTimeout);
@@ -53,7 +53,7 @@ abstract class BaseApiService {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
       final authHeaders = headers ?? _getAuthHeadersWithToken();
-      
+
       final response = await http
           .put(
             url,
@@ -74,7 +74,7 @@ abstract class BaseApiService {
     try {
       final url = Uri.parse('${ApiConfig.baseUrl}$endpoint');
       final authHeaders = headers ?? _getAuthHeadersWithToken();
-      
+
       final response = await http
           .delete(url, headers: authHeaders)
           .timeout(ApiConfig.requestTimeout);
@@ -129,7 +129,7 @@ abstract class BaseApiService {
               errorData['Message'] ??
               'HTTP ${response.statusCode}';
         }
-      }
+      } 
     } catch (e) {
       //
     }

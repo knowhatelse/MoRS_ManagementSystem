@@ -87,7 +87,11 @@ builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddUserManagementService();
 
-builder.Services.AddSingleton<IEventBus>(new RabbitMqEventBus(builder.Configuration["RabbitMQ:HostName"] ?? "localhost"));
+builder.Services.AddSingleton<IEventBus>(new RabbitMqEventBus(
+    builder.Configuration["RabbitMQ:HostName"] ?? "localhost",
+    builder.Configuration["RabbitMQ:UserName"] ?? "guest",
+    builder.Configuration["RabbitMQ:Password"] ?? "guest"
+));
 
 var app = builder.Build();
 
@@ -99,7 +103,7 @@ if (args.Contains("--seed"))
         var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
         await dataSeeder.SeedData();
         Console.WriteLine("Database seeding completed successfully!");
-        return; 
+        return;
     }
 }
 
