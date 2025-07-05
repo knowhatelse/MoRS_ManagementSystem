@@ -12,8 +12,8 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 namespace MoRS.ManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(MoRSManagementSystemDbContext))]
-    [Migration("20250705153903_FixUserDeletionConstraint")]
-    partial class FixUserDeletionConstraint
+    [Migration("20250705193358_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
