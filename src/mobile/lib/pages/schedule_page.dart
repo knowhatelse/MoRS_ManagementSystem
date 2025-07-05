@@ -113,9 +113,11 @@ class _SchedulePageState extends State<SchedulePage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          provider.isToday
-                              ? AppStrings.noAppointmentsToday
-                              : AppStrings.noAppointmentsForDate,
+                          provider.hasActiveFilters
+                              ? AppStrings.noAppointmentsForFilters
+                              : (provider.isToday
+                                    ? AppStrings.noAppointmentsToday
+                                    : AppStrings.noAppointmentsForDate),
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey[600],
@@ -123,11 +125,14 @@ class _SchedulePageState extends State<SchedulePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Pokušajte odabrati drugi datum',
+                          provider.hasActiveFilters
+                              ? AppStrings.tryDifferentFilters
+                              : AppStrings.tryDifferentDate,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[500],
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),

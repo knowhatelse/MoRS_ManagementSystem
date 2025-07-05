@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final String? errorText;
+  final Widget? suffixIcon;
 
   const CustomTextField({
     super.key,
@@ -17,6 +18,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.errorText,
+    this.suffixIcon,
   });
 
   @override
@@ -79,6 +81,7 @@ class CustomTextField extends StatelessWidget {
                     ? AppConstants.errorColor
                     : Colors.grey.shade600,
               ),
+              suffixIcon: suffixIcon,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 16,

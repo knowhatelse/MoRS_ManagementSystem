@@ -93,6 +93,15 @@ class AppStrings {
 
   static const String noAppointmentsToday = 'Nema termina za danas.';
   static const String noAppointmentsForDate = 'Nema termina za odabrani datum.';
+  static const String noAppointmentsForFilters =
+      'Nema termina za primenjene filtere.';
+  static const String tryDifferentFilters =
+      'Pokušajte s drugim filterima ili promenite kriterijume pretrage.';
+  static const String tryDifferentDate = 'Pokušajte odabrati drugi datum.';
+  static const String noResultsForCriteria =
+      'Nema rezultata za odabrane kriterijume.';
+  static const String adjustFiltersOrCriteria =
+      'Pokušajte prilagoditi filtere ili kriterijume pretrage.';
   static const String appointmentTime = 'Vrijeme:';
   static const String appointmentRoom = 'Sala:';
   static const String appointmentType = 'Tip:';
@@ -148,7 +157,7 @@ class AppStrings {
       'Notifikacija je označena kao pročitana';
   static const String errorLoadingNotifications =
       'Greška pri učitavanju notifikacija. Server ne odgovara';
-  static const String errorDeletingNotification = 
+  static const String errorDeletingNotification =
       'Greška pri brisanju notifikacije. Server ne odgovara';
   static const String errorMarkingNotification =
       'Greška pri označavanju notifikacije. Server ne odgovara';

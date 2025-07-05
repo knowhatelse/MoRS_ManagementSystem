@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthenticationService _authService = AuthenticationService();
   bool _isLoading = false;
+  bool _isPasswordVisible = false;
 
   String? _emailError;
   String? _passwordError;
@@ -49,6 +50,12 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       });
     }
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
   }
 
   @override
@@ -187,8 +194,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     hintText: AppStrings.password,
                     prefixIcon: Icons.lock_outlined,
-                    obscureText: true,
+                    obscureText: !_isPasswordVisible,
                     errorText: _passwordError,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.grey.shade600,
+                      ),
+                      onPressed: _togglePasswordVisibility,
+                    ),
                   ),
                   const SizedBox(height: 40),
                   CustomButton(
