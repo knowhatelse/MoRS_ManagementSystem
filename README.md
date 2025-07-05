@@ -2,16 +2,16 @@
 
 ## IdentityServer4
 
-U prijavi rada je navedeno da će u ovom radu umjesto **recommended sistema** biti implementirana druga opcija koju studenti mogu izabrati a to je: **Microsoft Identity Server**, odnosno **IdentityServer4**. <\br>
-U ovom radu authorizacija i authentifikacija je implementirana pute **IdentityServer4-a**.<\br>
-Također u samom repository-u se nalazi Word dokument pod nazivom IdentityServer4 sa malo detaljnijim opisom implementacija.<\br>
+U prijavi rada je navedeno da će u ovom radu umjesto **recommended sistema** biti implementirana druga opcija koju studenti mogu izabrati a to je: **Microsoft Identity Server**, odnosno **IdentityServer4**. <br>
+U ovom radu authorizacija i authentifikacija je implementirana putem **IdentityServer4-a**. <br>
+Također u samom repository-u se nalazi Word dokument pod nazivom **IdentityServer4.docx** sa malo detaljnijim opisom implementacija. <br>
 
 ## Upute za pokretanje aplikacije:
 
 ### Backend:
 
-1. Preuzmite repozitoriji na lokalnu mašinu uz komandu git clone.
-2. Preuzeti repozitoriji (folder MoRS_ManagementSytem) otvorite u terminalu.
+1. Preuzmite repozitoriji na lokalnu mašinu uz komandu _git clone_.
+2. Preuzeti repozitoriji (_folder MoRS_ManagementSytem_) otvorite u **terminalu**.
 3. U otvorenom terminalu unesite komandu za pokretanje backend-a:
 	- **.\start-docker.bat** ako koristite Windows
 	- **.\start-docker.sh** ako koristite MacOS ili Linux
