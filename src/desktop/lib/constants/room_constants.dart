@@ -22,21 +22,21 @@ class RoomConstants {
 
   static const String pageTitle = 'Prostorije';
   static const String noDataMessage = 'Nema prostorija za prikaz';
-  static const String loadingErrorMessage = 'Greška pri učitavanju prostorija';
-  static const String deleteErrorMessage = 'Greška pri brisanju prostorije';
+  static const String loadingErrorMessage = 'Greška pri učitavanju prostorija. Server ne odgovara';
+  static const String deleteErrorMessage = 'Greška pri brisanju prostorije. Server ne odgovara';
   static const String deleteSuccessMessage = 'Prostorija je uspješno obrisana';
-  static const String updateErrorMessage = 'Greška pri ažuriranju prostorije';
+  static const String updateErrorMessage = 'Greška pri ažuriranju prostorije. Server ne odgovara';
   static const String updateSuccessMessage = 'Prostorija je uspješno ažurirana';
-  static const String createErrorMessage = 'Greška pri kreiranju prostorije';
+  static const String createErrorMessage = 'Greška pri kreiranju prostorije. Server ne odgovara';
   static const String createSuccessMessage = 'Prostorija je uspješno kreirana';
   static const String activateSuccessMessage =
       'Prostorija je uspješno aktivirana';
   static const String activateErrorMessage =
-      'Greška pri aktiviranju prostorije';
+      'Greška pri aktiviranju prostorije. Server ne odgovara';
   static const String deactivateSuccessMessage =
-      'Prostorija je uspješno deaktivirana';
+      'Prostorija je uspješno deaktivirana. Server ne odgovara';
   static const String deactivateErrorMessage =
-      'Greška pri deaktiviranju prostorije';
+      'Greška pri deaktiviranju prostorije. Server ne odgovara';
   static const String refreshTooltip = 'Osvježi';
   static const String deleteTooltip = 'Obriši prostoriju';
   static const String activateTooltip = 'Aktiviraj prostoriju';

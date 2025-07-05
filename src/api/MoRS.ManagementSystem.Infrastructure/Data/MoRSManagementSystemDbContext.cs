@@ -21,12 +21,12 @@ public class MoRSManagementSystemDbContext : IdentityDbContext<ApplicationUser, 
     public DbSet<ProfilePicture> ProfilePictures { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<TimeSlot> Times { get; set; }
-    public DbSet<User> DomainUsers { get; set; } 
+    public DbSet<User> DomainUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-       
+
         modelBuilder.Entity<User>().ToTable("DomainUsers");
         modelBuilder.Entity<User>()
             .Property(u => u.Id)
@@ -36,7 +36,7 @@ public class MoRSManagementSystemDbContext : IdentityDbContext<ApplicationUser, 
             .HasOne(a => a.BookedByUser)
             .WithMany(u => u.CreatedAppointments)
             .HasForeignKey(a => a.BookedByUserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Email>()
             .HasMany(e => e.Users)

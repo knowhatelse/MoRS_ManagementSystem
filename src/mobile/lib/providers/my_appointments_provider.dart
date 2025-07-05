@@ -303,7 +303,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      _setError('Greška pri otkazivanju termina: $e');
+      _setError('Greška pri otkazivanju termina. Server ne odgovara');
       return false;
     } finally {
       _setLoading(false);
@@ -322,7 +322,7 @@ class MyAppointmentsProvider extends ChangeNotifier {
 
       return true;
     } catch (e) {
-      _setError('Greška pri brisanju termina: $e');
+      _setError('Greška pri brisanju termina. Server ne odgovara');
       return false;
     } finally {
       _setLoading(false);

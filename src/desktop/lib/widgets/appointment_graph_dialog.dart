@@ -58,7 +58,7 @@ class AppointmentGraphDialog extends StatelessWidget {
       );
     } catch (e) {
       scaffoldMessenger.showSnackBar(
-        SnackBar(content: Text('Greška pri spremanju PDF-a: $e')),
+        SnackBar(content: Text('Greška pri spremanju PDF-a. Server ne odgovara')),
       );
     }
   }

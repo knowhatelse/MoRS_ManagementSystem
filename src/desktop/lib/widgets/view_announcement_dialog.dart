@@ -78,8 +78,17 @@ class _ViewAnnouncementDialogState extends State<ViewAnnouncementDialog> {
         _validateContent(_contentController.text) == null;
   }
 
+  bool _hasChanges() {
+    return _titleController.text.trim() != widget.announcement.title.trim() ||
+        _contentController.text.trim() != widget.announcement.content.trim();
+  }
+
+  bool _canSave() {
+    return _validateForm() && _hasChanges();
+  }
+
   Future<void> _submit() async {
-    if (!_validateForm()) return;
+    if (!_canSave()) return;
     setState(() {
       _isLoading = true;
     });
@@ -104,14 +113,14 @@ class _ViewAnnouncementDialogState extends State<ViewAnnouncementDialog> {
       } else if (mounted) {
         AppUtils.showErrorSnackBar(
           context,
-          'Greška pri ažuriranju obavijesti.',
+          'Greška pri ažuriranju obavijesti. Server ne odgovara',
         );
       }
     } catch (e) {
       if (mounted) {
         AppUtils.showErrorSnackBar(
           context,
-          'Greška pri ažuriranju obavijesti.',
+          'Greška pri ažuriranju obavijesti. Server ne odgovara',
         );
       }
     } finally {
@@ -293,7 +302,7 @@ class _ViewAnnouncementDialogState extends State<ViewAnnouncementDialog> {
             ),
             const SizedBox(width: 12),
             ElevatedButton(
-              onPressed: _isLoading || !_validateForm() ? null : _submit,
+              onPressed: _isLoading || !_canSave() ? null : _submit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
                 foregroundColor: Colors.white,

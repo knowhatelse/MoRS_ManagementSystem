@@ -21,16 +21,16 @@ class ReportConstants {
   static const String pageTitle = 'Prijave kvarova';
   static const String noDataMessage = 'Nema prijava kvarova za prikaz';
   static const String loadingErrorMessage =
-      'Greška pri učitavanju prijava kvarova';
+      'Greška pri učitavanju prijava kvarova. Server ne odgovara';
   static const String archiveErrorMessage =
-      'Greška pri arhiviranju prijave kvara';
+      'Greška pri arhiviranju prijave kvara. Server ne odgovara';
   static const String archiveSuccessMessage =
-      'Prijava kvara je uspješno arhivirana';
+      'Prijava kvara je uspješno arhivirana. Server ne odgovara';
   static const String unarchiveErrorMessage =
-      'Greška pri vraćanju prijave kvara iz arhive';
+      'Greška pri vraćanju prijave kvara iz arhive. Server ne odgovara';
   static const String unarchiveSuccessMessage =
       'Prijava kvara je uspješno vraćena iz arhive';
-  static const String deleteErrorMessage = 'Greška pri brisanju prijave kvara';
+  static const String deleteErrorMessage = 'Greška pri brisanju prijave kvara. Server ne odgovara';
   static const String deleteSuccessMessage =
       'Prijava kvara je uspješno obrisana';
   static const String clearFiltersLabel = 'Ukloni filtere';

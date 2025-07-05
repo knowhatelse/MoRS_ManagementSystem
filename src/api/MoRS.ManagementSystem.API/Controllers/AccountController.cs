@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MoRS.ManagementSystem.Infrastructure.Identity;
-using MoRS.ManagementSystem.Infrastructure.Data; 
+using MoRS.ManagementSystem.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoRS.ManagementSystem.API.Controllers;
 
@@ -25,10 +26,17 @@ public class AccountController : ControllerBase
     {
         try
         {
+            var existingUserWithPhone = await _dbContext.Set<MoRS.ManagementSystem.Domain.Entities.User>()
+                .AnyAsync(u => u.PhoneNumber == model.PhoneNumber);
+            if (existingUserWithPhone)
+            {
+                return BadRequest(new { message = "User with this phone number already exists." });
+            }
+
             string formattedName = string.IsNullOrWhiteSpace(model.Name) ? "User" : char.ToUpper(model.Name[0]) + model.Name.Substring(1).ToLowerInvariant();
             string formattedSurname = string.IsNullOrWhiteSpace(model.Surname) ? "User" : char.ToUpper(model.Surname[0]) + model.Surname.Substring(1).ToLowerInvariant();
             var password = $"{formattedName}.{formattedSurname}1";
-          
+
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -39,11 +47,12 @@ public class AccountController : ControllerBase
             };
 
             var result = await _userManager.CreateAsync(user, password);
-            
+
             if (!result.Succeeded)
             {
-
-                return BadRequest(result.Errors);
+                var errors = result.Errors.Select(e => e.Description).ToList();
+                var errorMessage = string.Join("; ", errors);
+                return BadRequest(new { message = errorMessage, errors = errors });
             }
             var domainUser = new MoRS.ManagementSystem.Domain.Entities.User
             {

@@ -43,7 +43,7 @@ class _UsersPageState extends State<UsersPage> {
         _isLoading = false;
       });
       if (mounted) {
-        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju korisnika');
+        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju korisnika. Server ne odgovara');
       }
     }
   }
@@ -75,10 +75,6 @@ class _UsersPageState extends State<UsersPage> {
       if (mounted) {
         AppUtils.showSuccessSnackbar(context, 'Korisnik uspješno kreiran.');
       }
-    } else if (result == false) {
-      if (mounted) {
-        AppUtils.showErrorSnackBar(context, 'Greška pri kreiranju korisnika.');
-      }
     }
   }
 
@@ -99,10 +95,6 @@ class _UsersPageState extends State<UsersPage> {
       await _loadUsers();
       if (mounted) {
         AppUtils.showSuccessSnackbar(context, 'Korisnik uspješno ažuriran.');
-      }
-    } else if (result == false) {
-      if (mounted) {
-        AppUtils.showErrorSnackBar(context, 'Greška pri ažuriranju korisnika.');
       }
     }
   }
@@ -411,7 +403,7 @@ class _UsersPageState extends State<UsersPage> {
         }
       } catch (e) {
         if (mounted) {
-          AppUtils.showErrorSnackBar(context, 'Greška pri brisanju korisnika.');
+          AppUtils.showErrorSnackBar(context, 'Greška pri brisanju korisnika. Server ne odgovara');
         }
       }
     }

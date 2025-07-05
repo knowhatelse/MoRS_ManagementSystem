@@ -36,6 +36,11 @@ class _RoomEditDialogState extends State<RoomEditDialog> {
     _nameController.text = widget.room.name;
     _selectedType = widget.room.type;
     _selectedColor = ColorUtils.hexToColor(widget.room.color);
+    _nameController.addListener(_onFieldChanged);
+  }
+
+  void _onFieldChanged() {
+    setState(() {});
   }
 
   @override
@@ -70,8 +75,22 @@ class _RoomEditDialogState extends State<RoomEditDialog> {
     return null;
   }
 
+  bool _validateForm() {
+    return _validateName(_nameController.text) == null;
+  }
+
+  bool _hasChanges() {
+    return _nameController.text.trim() != widget.room.name.trim() ||
+        _selectedType != widget.room.type ||
+        ColorUtils.colorToHex(_selectedColor) != widget.room.color;
+  }
+
+  bool _canSave() {
+    return _validateForm() && _hasChanges();
+  }
+
   Future<void> _updateRoom() async {
-    if (!_formKey.currentState!.validate()) {
+    if (!_canSave()) {
       return;
     }
 
@@ -111,7 +130,9 @@ class _RoomEditDialogState extends State<RoomEditDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final nameError = _touched['name']! ? _validateName(_nameController.text) : null;
+    final nameError = _touched['name']!
+        ? _validateName(_nameController.text)
+        : null;
     return AlertDialog(
       backgroundColor: Colors.white,
       titlePadding: EdgeInsets.zero,
@@ -237,7 +258,7 @@ class _RoomEditDialogState extends State<RoomEditDialog> {
           child: const Text(RoomConstants.cancelButton),
         ),
         ElevatedButton(
-          onPressed: _isLoading ? null : _updateRoom,
+          onPressed: _isLoading || !_canSave() ? null : _updateRoom,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppConstants.primaryBlue,
             foregroundColor: Colors.white,

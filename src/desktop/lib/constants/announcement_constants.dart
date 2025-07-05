@@ -17,12 +17,12 @@ class AnnouncementConstants {
   static const double deleteColumnWidth = 60.0;
   static const String pageTitle = 'Objave';
   static const String noDataMessage = 'Nema objava za prikaz';
-  static const String loadingErrorMessage = 'Greška pri učitavanju objava';
-  static const String archiveErrorMessage = 'Greška pri arhiviranju objave';
+  static const String loadingErrorMessage = 'Greška pri učitavanju objava. Server ne odgovara';
+  static const String archiveErrorMessage = 'Greška pri arhiviranju objave. Server ne odgovara';
   static const String archiveSuccessMessage = 'Objava je uspješno arhivirana';
-  static const String unarchiveErrorMessage = 'Greška pri vraćanju objave iz arhive';
+  static const String unarchiveErrorMessage = 'Greška pri vraćanju objave iz arhive. Server ne odgovara';
   static const String unarchiveSuccessMessage = 'Objava je uspješno vraćena iz arhive';
-  static const String createErrorMessage = 'Greška pri kreiranju objave';
+  static const String createErrorMessage = 'Greška pri kreiranju objave. Server ne odgovara';
   static const String createSuccessMessage = 'Objava je uspješno kreirana';
   static const String clearFiltersLabel = 'Ukloni filtere';
   static const String refreshTooltip = 'Osvježi';
@@ -71,7 +71,7 @@ class AnnouncementConstants {
 
   static const String deleteTooltip = 'Obriši objavu';
   static const String deleteSuccessMessage = 'Objava je uspješno obrisana';
-  static const String deleteErrorMessage = 'Greška pri brisanju objave';
+  static const String deleteErrorMessage = 'Greška pri brisanju objave. Server ne odgovara';
   static const String deleteConfirmationTitle = 'Potvrda brisanja';
   static String deleteConfirmationMessage(
     String title,

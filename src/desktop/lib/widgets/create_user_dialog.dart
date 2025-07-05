@@ -3,6 +3,8 @@ import '../../constants/users_page_constants.dart';
 import '../../models/user/user_response.dart';
 import '../../models/user/create_user_request.dart';
 import '../../services/user_service.dart';
+import '../../services/base_api_service.dart';
+import '../../utils/app_utils.dart';
 import '../constants/app_constants.dart';
 
 class CreateUserDialog extends StatefulWidget {
@@ -82,6 +84,36 @@ class _CreateUserDialogState extends State<CreateUserDialog> {
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage;
+        if (e is ApiException) {
+          final message = e.message.toLowerCase();
+
+          if (message.contains('email') &&
+              (message.contains('exists') ||
+                  message.contains('već postoji') ||
+                  message.contains('duplicate') ||
+                  message.contains('taken') ||
+                  message.contains('already'))) {
+            errorMessage = 'Korisnik sa unetim emailom već postoji.';
+          } else if ((message.contains('phone') ||
+                  message.contains('telefon')) &&
+              (message.contains('exists') ||
+                  message.contains('već postoji') ||
+                  message.contains('duplicate') ||
+                  message.contains('taken') ||
+                  message.contains('already'))) {
+            errorMessage = 'Korisnik sa unetim brojem telefona već postoji.';
+          } else if (e.statusCode == 400) {
+            errorMessage =
+                'Korisnik sa unetim emailom ili brojem telefona već postoji.';
+          } else {
+            errorMessage = 'Greška pri kreiranju korisnika. Server ne odgovara';
+          }
+        } else {
+          errorMessage = 'Greška pri kreiranju korisnika. Server ne odgovara';
+        }
+
+        AppUtils.showErrorSnackBar(context, errorMessage);
         Navigator.of(context).pop(false);
       }
     } finally {

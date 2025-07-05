@@ -26,6 +26,16 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
   final Map<String, bool> _touched = {'name': false};
 
   @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_onFieldChanged);
+  }
+
+  void _onFieldChanged() {
+    setState(() {});
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     super.dispose();
@@ -57,8 +67,12 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
     return null;
   }
 
+  bool _validateForm() {
+    return _validateName(_nameController.text) == null;
+  }
+
   Future<void> _createRoom() async {
-    if (!_formKey.currentState!.validate()) {
+    if (!_validateForm()) {
       return;
     }
 
@@ -98,7 +112,9 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final nameError = _touched['name']! ? _validateName(_nameController.text) : null;
+    final nameError = _touched['name']!
+        ? _validateName(_nameController.text)
+        : null;
     return AlertDialog(
       backgroundColor: Colors.white,
       titlePadding: EdgeInsets.zero,
@@ -224,7 +240,7 @@ class _RoomCreateDialogState extends State<RoomCreateDialog> {
           child: const Text(RoomConstants.cancelButton),
         ),
         ElevatedButton(
-          onPressed: _isLoading ? null : _createRoom,
+          onPressed: _isLoading || !_validateForm() ? null : _createRoom,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppConstants.primaryBlue,
             foregroundColor: Colors.white,

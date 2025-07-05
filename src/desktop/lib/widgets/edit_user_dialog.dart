@@ -3,6 +3,7 @@ import '../../constants/users_page_constants.dart';
 import '../../models/user/user_response.dart';
 import '../../models/user/update_user_request.dart';
 import '../../services/user_service.dart';
+import '../../services/base_api_service.dart';
 import '../../utils/app_utils.dart';
 import '../constants/app_constants.dart';
 
@@ -150,8 +151,21 @@ class _EditUserDialogState extends State<EditUserDialog> {
         _validateRole(_roleId) == null;
   }
 
+  bool _hasChanges() {
+    return _nameController.text.trim() != widget.user.name.trim() ||
+        _surnameController.text.trim() != widget.user.surname.trim() ||
+        _emailController.text.trim() != widget.user.email.trim() ||
+        _phoneController.text.trim() != widget.user.phoneNumber.trim() ||
+        _roleId != widget.user.role?.id ||
+        (_roleId != 2 && _isRestricted != widget.user.isRestricted);
+  }
+
+  bool _canSave() {
+    return _validateForm() && _hasChanges();
+  }
+
   Future<void> _submit() async {
-    if (!_validateForm()) return;
+    if (!_canSave()) return;
     setState(() {
       _isLoading = true;
       _error = null;
@@ -177,13 +191,43 @@ class _EditUserDialogState extends State<EditUserDialog> {
         if (mounted) {
           AppUtils.showErrorSnackBar(
             context,
-            'Greška pri ažuriranju korisnika.',
+            'Greška pri ažuriranju korisnika. Server ne odgovara',
           );
           Navigator.of(context).pop(false);
         }
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage;
+        if (e is ApiException) {
+          final message = e.message.toLowerCase();
+
+          if (message.contains('email') &&
+              (message.contains('exists') ||
+                  message.contains('već postoji') ||
+                  message.contains('duplicate') ||
+                  message.contains('taken') ||
+                  message.contains('already'))) {
+            errorMessage = 'Korisnik sa unetim emailom već postoji.';
+          } else if ((message.contains('phone') ||
+                  message.contains('telefon')) &&
+              (message.contains('exists') ||
+                  message.contains('već postoji') ||
+                  message.contains('duplicate') ||
+                  message.contains('taken') ||
+                  message.contains('already'))) {
+            errorMessage = 'Korisnik sa unijetim brojem telefona već postoji.';
+          } else if (e.statusCode == 400) {
+            errorMessage =
+                'Korisnik sa unijetim emailom ili brojem telefona već postoji.';
+          } else {
+            errorMessage = 'Greška pri ažuriranju korisnika. Server ne odgovara';
+          }
+        } else {
+          errorMessage = 'Greška pri ažuriranju korisnika. Server ne odgovara';
+        }
+
+        AppUtils.showErrorSnackBar(context, errorMessage);
         Navigator.of(context).pop(false);
       }
     } finally {
@@ -377,7 +421,7 @@ class _EditUserDialogState extends State<EditUserDialog> {
           child: const Text('Otkaži'),
         ),
         ElevatedButton(
-          onPressed: _isLoading || !_validateForm() ? null : _submit,
+          onPressed: _isLoading || !_canSave() ? null : _submit,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppConstants.primaryBlue,
             foregroundColor: Colors.white,

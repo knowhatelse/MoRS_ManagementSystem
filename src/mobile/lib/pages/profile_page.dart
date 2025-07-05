@@ -173,7 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) {
         AppUtils.showErrorSnackBar(
           context,
-          'Greška pri učitavanju korisničkih podataka',
+          'Greška pri učitavanju korisničkih podataka. Server ne odgovara',
         );
       }
     } finally {
@@ -271,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) {
         AppUtils.showErrorSnackBar(
           context,
-          'Greška pri ažuriranju profilne slike',
+          'Greška pri ažuriranju profilne slike. Server ne odgovara',
         );
       }
     }
@@ -296,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) {
         AppUtils.showErrorSnackBar(
           context,
-          'Greška pri uklanjanju profilne slike',
+          'Greška pri uklanjanju profilne slike. Server ne odgovara',
         );
       }
     }
@@ -381,7 +381,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     } catch (e) {
       if (mounted) {
-        AppUtils.showErrorSnackBar(context, 'Greška pri ažuriranju podataka');
+        AppUtils.showErrorSnackBar(context, 'Greška pri ažuriranju podataka. Server ne odgovara');
       }
     } finally {
       setState(() {

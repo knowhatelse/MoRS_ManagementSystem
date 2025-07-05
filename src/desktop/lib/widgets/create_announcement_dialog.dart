@@ -26,10 +26,28 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
   final Map<String, bool> _touched = {'title': false, 'content': false};
 
   @override
+  void initState() {
+    super.initState();
+    _titleController.addListener(_onFieldChanged);
+    _contentController.addListener(_onFieldChanged);
+  }
+
+  @override
   void dispose() {
+    _titleController.removeListener(_onFieldChanged);
+    _contentController.removeListener(_onFieldChanged);
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();
+  }
+
+  void _onFieldChanged() {
+    setState(() {});
+  }
+
+  bool _validateForm() {
+    return _validateTitle(_titleController.text) == null &&
+        _validateContent(_contentController.text) == null;
   }
 
   String? _validateTitle(String? value) {
@@ -188,7 +206,9 @@ class _CreateAnnouncementDialogState extends State<CreateAnnouncementDialog> {
           child: const Text(AnnouncementConstants.cancelButton),
         ),
         ElevatedButton(
-          onPressed: _isSubmitting ? null : _createAnnouncement,
+          onPressed: _isSubmitting || !_validateForm()
+              ? null
+              : _createAnnouncement,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppConstants.primaryBlue,
             foregroundColor: Colors.white,

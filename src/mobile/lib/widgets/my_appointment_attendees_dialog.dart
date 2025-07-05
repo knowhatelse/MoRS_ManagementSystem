@@ -245,7 +245,7 @@ class MyAppointmentAttendeesDialog extends StatelessWidget {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Greška pri brisanju termina'),
+                      content: Text('Greška pri brisanju termina. Server ne odgovara'),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -300,7 +300,7 @@ class MyAppointmentAttendeesDialog extends StatelessWidget {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Greška pri otkazivanju termina'),
+                      content: Text('Greška pri otkazivanju termina. Server ne odgovara'),
                       backgroundColor: Colors.red,
                     ),
                   );

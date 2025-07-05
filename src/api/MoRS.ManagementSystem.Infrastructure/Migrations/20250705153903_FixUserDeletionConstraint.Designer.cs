@@ -12,8 +12,8 @@ using MoRS.ManagementSystem.Infrastructure.Data;
 namespace MoRS.ManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(MoRSManagementSystemDbContext))]
-    [Migration("20250629203801_Updated")]
-    partial class Updated
+    [Migration("20250705153903_FixUserDeletionConstraint")]
+    partial class FixUserDeletionConstraint
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -771,7 +771,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Migrations
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.User", "BookedByUser")
                         .WithMany("CreatedAppointments")
                         .HasForeignKey("BookedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.Room", "Room")
                         .WithMany("Appointments")

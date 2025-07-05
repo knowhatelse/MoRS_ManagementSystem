@@ -19,8 +19,8 @@ class PlanerConstants {
 
   static const String pageTitle = 'Termini';
   static const String noDataMessage = 'Nema termina za prikaz';
-  static const String loadingErrorMessage = 'Greška pri učitavanju termina';
-  static const String deleteErrorMessage = 'Greška pri brisanju termina';
+  static const String loadingErrorMessage = 'Greška pri učitavanju termina. Server ne odgovara';
+  static const String deleteErrorMessage = 'Greška pri brisanju termina. Server ne odgovara';
   static const String deleteSuccessMessage = 'Termin je uspješno obrisan';
   static const String clearFiltersLabel = 'Ukloni filtere';
   static const String refreshTooltip = 'Osvježi';

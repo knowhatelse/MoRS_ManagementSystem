@@ -147,9 +147,9 @@ class AppStrings {
   static const String notificationMarkedAsRead =
       'Notifikacija je označena kao pročitana';
   static const String errorLoadingNotifications =
-      'Greška pri učitavanju notifikacija';
-  static const String errorDeletingNotification =
-      'Greška pri brisanju notifikacije';
+      'Greška pri učitavanju notifikacija. Server ne odgovara';
+  static const String errorDeletingNotification = 
+      'Greška pri brisanju notifikacije. Server ne odgovara';
   static const String errorMarkingNotification =
-      'Greška pri označavanju notifikacije';
+      'Greška pri označavanju notifikacije. Server ne odgovara';
 }

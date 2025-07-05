@@ -124,14 +124,31 @@ abstract class BaseApiService {
           if (errorData.containsKey('detail')) {
             return errorData['detail'] ?? 'HTTP ${response.statusCode}';
           }
+          if (errorData.containsKey('errors')) {
+            final errors = errorData['errors'];
+            if (errors is Map<String, dynamic>) {
+              final allErrors = <String>[];
+              errors.forEach((key, value) {
+                if (value is List) {
+                  allErrors.addAll(value.cast<String>());
+                } else {
+                  allErrors.add(value.toString());
+                }
+              });
+              if (allErrors.isNotEmpty) {
+                return allErrors.join(', ');
+              }
+            }
+          }
           return errorData['message'] ??
               errorData['error'] ??
               errorData['Message'] ??
+              errorData['title'] ??
               'HTTP ${response.statusCode}';
         }
-      } 
+      }
     } catch (e) {
-      //
+      // 
     }
     return 'HTTP ${response.statusCode}';
   }

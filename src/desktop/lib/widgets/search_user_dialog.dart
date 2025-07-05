@@ -49,7 +49,7 @@ class _SearchUserDialogState extends State<SearchUserDialog> {
         _isSearching = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Greška pri pretrazi korisnika.')),
+        const SnackBar(content: Text('Greška pri pretrazi korisnika. Server ne odgovara')),
       );
     }
   }

@@ -91,7 +91,7 @@ class _AppointmentFilterBottomSheetState
       if (mounted) {
         AppUtils.showNetworkErrorSnackbar(
           context,
-          'Greška pri učitavanju prostorija: $e',
+          'Greška pri učitavanju prostorija. Server ne odgovara',
         );
       }
     }
@@ -112,7 +112,7 @@ class _AppointmentFilterBottomSheetState
         setState(() => _isLoading = false);
         AppUtils.showNetworkErrorSnackbar(
           context,
-          'Greška pri učitavanju tipova termina: $e',
+          'Greška pri učitavanju tipova termina. Server ne odgovara',
         );
       }
     }

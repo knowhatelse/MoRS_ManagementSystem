@@ -105,7 +105,7 @@ class _CreateAppointmentBottomSheetState
       if (mounted) {
         AppUtils.showNetworkErrorSnackbar(
           context,
-          'Greška pri učitavanju prostorija: $e',
+          'Greška pri učitavanju prostorija. Server ne odgovara',
         );
       }
     }
@@ -120,7 +120,7 @@ class _CreateAppointmentBottomSheetState
       if (mounted) {
         AppUtils.showNetworkErrorSnackbar(
           context,
-          'Greška pri učitavanju tipova termina: $e',
+          'Greška pri učitavanju tipova termina. Server ne odgovara',
         );
       }
     }
@@ -1425,7 +1425,7 @@ class _CreateAppointmentBottomSheetState
       if (mounted) {
         setState(() => _isLoading = false);
         _showErrorSnackbar(
-          'Dogodila se neočekivana greška pri kreiranju termina.',
+          'Dogodila se neočekivana greška pri kreiranju termina. Server ne odgovara',
         );
       }
     }

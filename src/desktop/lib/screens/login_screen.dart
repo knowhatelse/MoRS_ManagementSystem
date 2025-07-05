@@ -63,7 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
-   
     setState(() {
       _emailError = null;
       _passwordError = null;
@@ -71,7 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-    
 
     bool hasErrors = false;
 
@@ -104,11 +102,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final loginRequest = LoginRequest(email: email, password: password);
-      
+
       final userResponse = await _authService.login(loginRequest);
 
       if (mounted) {
-       
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -117,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } on ApiException catch (e) {
-      
       if (mounted) {
         if (e.statusCode == 401) {
           setState(() {
@@ -204,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: AppStrings.password,
                     prefixIcon: Icons.lock_outlined,
                     obscureText: true,
+                    showPasswordToggle: true,
                     errorText: _passwordError,
                   ),
                   const SizedBox(height: 40),

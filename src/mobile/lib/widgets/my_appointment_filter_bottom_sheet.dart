@@ -80,7 +80,7 @@ class _MyAppointmentFilterBottomSheetState
         setState(() => _isLoading = false);
         AppUtils.showNetworkErrorSnackbar(
           context,
-          'Greška pri učitavanju prostorija: $e',
+          'Greška pri učitavanju prostorija. Server ne odgovara',
         );
       }
     }

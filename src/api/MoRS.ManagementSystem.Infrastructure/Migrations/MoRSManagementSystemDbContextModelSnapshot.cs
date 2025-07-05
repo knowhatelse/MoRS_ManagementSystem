@@ -768,7 +768,7 @@ namespace MoRS.ManagementSystem.Infrastructure.Migrations
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.User", "BookedByUser")
                         .WithMany("CreatedAppointments")
                         .HasForeignKey("BookedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("MoRS.ManagementSystem.Domain.Entities.Room", "Room")
                         .WithMany("Appointments")

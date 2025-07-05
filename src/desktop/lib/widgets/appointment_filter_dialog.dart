@@ -123,7 +123,7 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
       }
     } catch (e) {
       if (mounted) {
-        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju prostorija');
+        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju prostorija. Server ne odgovara');
       }
     }
   }
@@ -156,7 +156,7 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
       if (mounted) {
         AppUtils.showErrorSnackBar(
           context,
-          'Greška pri učitavanju tipova termina',
+          'Greška pri učitavanju tipova termina. Server ne odgovara',
         );
       }
     } finally {
@@ -191,7 +191,7 @@ class _AppointmentFilterDialogState extends State<AppointmentFilterDialog> {
       }
     } catch (e) {
       if (mounted) {
-        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju korisnika');
+        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju korisnika. Server ne odgovara');
       }
     }
   }

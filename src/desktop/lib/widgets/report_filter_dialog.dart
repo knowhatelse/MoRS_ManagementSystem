@@ -96,7 +96,7 @@ class _ReportFilterDialogState extends State<ReportFilterDialog> {
         setState(() {
           _isLoading = false;
         });
-        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju prostorija');
+        AppUtils.showErrorSnackBar(context, 'Greška pri učitavanju prostorija. Server ne odgovara');
       }
     }
   }
@@ -129,7 +129,7 @@ class _ReportFilterDialogState extends State<ReportFilterDialog> {
         });
         AppUtils.showErrorSnackBar(
           context,
-          'Greška pri pretraživanju korisnika',
+          'Greška pri pretraživanju korisnika. Server ne odgovara',
         );
       }
     }
