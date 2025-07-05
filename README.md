@@ -11,7 +11,7 @@ Također u samom repository-u se nalazi Word dokument pod nazivom **IdentityServ
 ### Backend:
 
 1. Preuzmite repozitoriji na lokalnu mašinu uz komandu **git clone**: (_git clone https://github.com/knowhatelse/MoRS_ManagementSystem.git_).
-2. Preuzeti repozitoriji (_folder MoRS_ManagementSytem_) otvorite u **terminalu**.
+2. Preuzeti repozitoriji (_folder MoRS_ManagementSytem_) otvorite u **terminalu** ili **PowerShellu**.
 3. U otvorenom terminalu unesite komandu za pokretanje backend-a:
 	- **.\start-docker.bat** ako koristite Windows
 	- **.\start-docker.sh** ako koristite MacOS ili Linux
@@ -46,7 +46,7 @@ U preuzetom repozitoriju se nalazi .zip arhiva pod nazivom **fit-build-2025-07-0
 - nika.banovic@gmail.com
 
 ### Profesori (Mobila aplikacija):
-Radi mogućnosti testiranja slanja emaila preko sistema, dodani su nalozi profesora: 
+Radi mogućnosti testiranja slanja emaila preko sistema, dodani su nalozi profesora (također šifra je **Test123$**): 
 - Denis Mušić (denis.music@edu.fit.ba)
 - Elmir Babović (elmir.babovic@edu.fit.ba)
 - Amel Music (amel.music@edu.fit.ba)
